@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليلات المحفظة - ForeSmart Analytics</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+    <link rel="stylesheet" href="assets/css/light.css">
+
+    <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/chart.js)"></script>
+
+    <style>
+        .analytics-box {
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 25px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(380px,1fr));
+            gap: 25px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: #000;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            border: 1px solid #222;
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card p {
+            color: #aaa;
+            margin: 0;
+        }
+
+        .chart-container {
+            background: #000;
+            padding: 25px;
+            border-radius: 14px;
+        }
+
+        .gauge {
+            width: 220px;
+            height: 110px;
+            margin: auto;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="transactions.html">العمليات</a></li>
+            <li><a href="analytics.html" class="active">التحليلات</a></li>
+            <li><a href="user-profile.html">الملف الشخصي</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h1>التحليلات المتقدمة للمحفظة</h1>
+            <button id="modeToggle">🌙 / ☀️</button>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid-3">
+
+            <div class="stat-card">
+                <h3>12.5%</h3>
+                <p>العائد السنوي (YoY)</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>-3.1%</h3>
+                <p>أكبر تراجع Drawdown</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>8.7 / 10</h3>
+                <p>تقييم المخاطر</p>
+            </div>
+
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid-2" style="margin-top:35px;">
+
+            <!-- Main Performance Chart -->
+            <div class="chart-container">
+                <h2>أداء المحفظة خلال 12 شهر</h2>
+                <canvas id="performanceChart"></canvas>
+            </div>
+
+            <!-- Asset Allocation -->
+            <div class="chart-container">
+                <h2>توزيع الأصول</h2>
+                <canvas id="allocationChart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- Risk Gauge + Comparison -->
+        <div class="grid-2" style="margin-top:35px;">
+
+            <div class="chart-container">
+                <h2>مؤشر المخاطر Risk Gauge</h2>
+                <canvas id="riskGauge"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>مقارنة الأداء مع السوق</h2>
+                <canvas id="comparisonChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- JS Section -->
+    <script src="assets/js/app.js"></script>
+
+    <script>
+        // Performance Chart
+        new Chart(document.getElementById("performanceChart"), {
+            type: "line",
+            data: {
+                labels: ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"],
+                datasets: [{
+                    label: "أداء المحفظة",
+                    data: [5,6,7,9,8,10,12,11,13,14,15,17],
+                    borderColor: "#10b981",
+                    borderWidth: 3,
+                    tension: .4,
+                    fill: true,
+                    backgroundColor: "rgba(16,185,129,.25)"
+                }]
+            }
+        });
+
+        // Allocation Chart
+        new Chart(document.getElementById("allocationChart"), {
+            type: "pie",
+            data: {
+                labels: ["أسهم","عملات","ذهب","كريبتو","صناديق"],
+                datasets: [{
+                    data: [35, 20, 15, 18, 12],
+                    backgroundColor: ["#10b981","#3b82f6","#f59e0b","#ef4444","#6366f1"]
+                }]
+            }
+        });
+
+        // Risk Gauge (Half Donut)
+        new Chart(document.getElementById("riskGauge"), {
+            type: "doughnut",
+            data: {
+                labels: ["مخاطر"],
+                datasets: [{
+                    data: [85, 15],
+                    backgroundColor: ["#ef4444","#1f2937"],
+                    circumference: 180,
+                    rotation: 270
+                }]
+            }
+        });
+
+        // Comparison Chart (Market vs Portfolio)
+        new Chart(document.getElementById("comparisonChart"), {
+            type: "bar",
+            data: {
+                labels: ["يناير","فبراير","مارس","أبريل","مايو"],
+                datasets: [
+                    {
+                        label: "المحفظة",
+                        data: [4,6,5,7,8],
+                        backgroundColor: "#10b981"
+                    },
+                    {
+                        label: "السوق العام",
+                        data: [3,4,4,5,6],
+                        backgroundColor: "#3b82f6"
+                    }
+                ]
+            }
+        });
+
+    </script>
+
+</body>
+</html>
