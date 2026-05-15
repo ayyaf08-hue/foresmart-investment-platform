@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التحويل البنكي - ForeSmart Investment</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+
+    <style>
+
+        .transfer-container {
+            margin-top: 30px;
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 16px;
+        }
+
+        .input-field {
+            margin-bottom: 18px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ccc;
+        }
+
+        .input-field input, 
+        .input-field select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #1b1b1b;
+            color: white;
+        }
+
+        .upload-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #000;
+            border-radius: 12px;
+            border: 1px solid #222;
+            text-align: center;
+        }
+
+        .upload-box input {
+            margin-top: 15px;
+        }
+
+        .submit-btn {
+            padding: 14px;
+            background: #10b981;
+            border: none;
+            width: 100%;
+            margin-top: 15px;
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .history-table {
+            margin-top: 40px;
+            background: #000;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        table th {
+            background: #111;
+            padding: 12px;
+        }
+
+        table td {
+            padding: 10px;
+        }
+
+        .status-new { color: #3b82f6; }
+        .status-review { color: #f59e0b; }
+        .status-done { color: #10b981; }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li class="active"><a href="bank-transfer.html">التحويل البنكي</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>التحويل البنكي</h1>
+        </div>
+
+        <!-- Form -->
+        <div class="transfer-container">
+
+            <h2>بيانات التحويل البنكي</h2>
+
+            <div class="input-field">
+                <label>اختر البنك</label>
+                <select>
+                    <option>البنك الأهلي السعودي</option>
+                    <option>مصرف الراجحي</option>
+                    <option>بنك الإنماء</option>
+                    <option>بنك الرياض</option>
+                    <option>ساب</option>
+                    <option>بنك البلاد</option>
+                </select>
+            </div>
+
+            <div class="input-field">
+                <label>رقم الحساب</label>
+                <input type="text" placeholder="1234567890">
+            </div>
+
+            <div class="input-field">
+                <label>رقم الآيبان (IBAN)</label>
+                <input type="text" placeholder="SA12345678901234567890">
+            </div>
+
+            <div class="input-field">
+                <label>المبلغ (ريال)</label>
+                <input type="number" placeholder="1000">
+            </div>
+
+            <div class="input-field">
+                <label>الرقم المرجعي للتحويل</label>
+                <input type="text" placeholder="REF2345632">
+            </div>
+
+            <div class="input-field">
+                <label>تاريخ ووقت التحويل</label>
+                <input type="datetime-local">
+            </div>
+
+            <!-- Upload Receipt -->
+            <div class="upload-box">
+                <h3>رفع إيصال التحويل</h3>
+                <input type="file">
+            </div>
+
+            <button class="submit-btn">إرسال طلب التحويل</button>
+
+        </div>
+
+        <!-- History Table -->
+        <div class="history-table">
+
+            <h2>سجل التحويلات</h2>
+
+            <table border="1">
+                <tr>
+                    <th>البنك</th>
+                    <th>المبلغ</th>
+                    <th>الحالة</th>
+                    <th>التاريخ</th>
+                    <th>الرقم المرجعي</th>
+                </tr>
+
+                <tr>
+                    <td>الراجحي</td>
+                    <td>1500 ريال</td>
+                    <td class="status-new">جديد</td>
+                    <td>2026-05-12</td>
+                    <td>REF23313</td>
+                </tr>
+
+                <tr>
+                    <td>الإنماء</td>
+                    <td>800 ريال</td>
+                    <td class="status-review">قيد المراجعة</td>
+                    <td>2026-05-11</td>
+                    <td>REF54412</td>
+                </tr>
+
+                <tr>
+                    <td>الأهلي</td>
+                    <td>500 ريال</td>
+                    <td class="status-done">مكتمل</td>
+                    <td>2026-05-04</td>
+                    <td>REF09980</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
