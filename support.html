@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدعم الفني - ForeSmart</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+
+    <style>
+        .support-container {
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 30px;
+        }
+
+        .ticket-box {
+            margin-top: 40px;
+            background: #000;
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .ticket-box h3 {
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            margin-bottom: 15px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ccc;
+        }
+
+        .input-field input,
+        .input-field textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #1b1b1b;
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #10b981;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #0d8d68;
+        }
+
+        table {
+            width: 100%;
+            color: white;
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        table th {
+            background: #111;
+            padding: 12px;
+        }
+
+        table td {
+            padding: 10px;
+        }
+
+        .status-open { color: #3b82f6; }
+        .status-closed { color: #10b981; }
+        .status-waiting { color: #f59e0b; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li class="active"><a href="support.html">الدعم الفني</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>الدعم الفني</h1>
+        </div>
+
+        <div class="support-container">
+
+            <h2>فتح تذكرة جديدة</h2>
+
+            <div class="ticket-box">
+
+                <div class="input-field">
+                    <label>عنوان التذكرة</label>
+                    <input type="text" placeholder="مثال: مشكلة في تسجيل الدخول">
+                </div>
+
+                <div class="input-field">
+                    <label>وصف المشكلة</label>
+                    <textarea rows="4" placeholder="يرجى كتابة تفاصيل المشكلة"></textarea>
+                </div>
+
+                <div class="input-field">
+                    <label>رفع ملف (اختياري)</label>
+                    <input type="file">
+                </div>
+
+                <button class="submit-btn">إرسال التذكرة</button>
+
+            </div>
+
+            <h2 style="margin-top:40px;">سجل التذاكر</h2>
+
+            <table border="1">
+                <tr>
+                    <th>رقم التذكرة</th>
+                    <th>العنوان</th>
+                    <th>الحالة</th>
+                    <th>التاريخ</th>
+                </tr>
+
+                <tr>
+                    <td>#1001</td>
+                    <td>مشكلة في الإيداع</td>
+                    <td class="status-open">مفتوحة</td>
+                    <td>2026-05-12</td>
+                </tr>
+
+                <tr>
+                    <td>#1000</td>
+                    <td>استفسار عن الباقة</td>
+                    <td class="status-waiting">قيد الانتظار</td>
+                    <td>2026-05-09</td>
+                </tr>
+
+                <tr>
+                    <td>#998</td>
+                    <td>مشكلة في تسجيل الدخول</td>
+                    <td class="status-closed">مغلقة</td>
+                    <td>2026-05-07</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
