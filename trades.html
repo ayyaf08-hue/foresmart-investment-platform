@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفقات - ForeSmart</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li class="active"><a href="trades.html">الصفقات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h1>سجل الصفقات</h1>
+        </div>
+
+        <div class="chart-box">
+            <h2>توزيع الصفقات</h2>
+            <canvas id="tradesChart"></canvas>
+        </div>
+
+        <div class="chart-box" style="margin-top:30px;">
+            <h2>قائمة الصفقات</h2>
+
+            <table style="width:100%; color:white; text-align:center; margin-top:20px;">
+                <tr style="background:#111;">
+                    <th style="padding:12px;">العملة</th>
+                    <th>الكمية</th>
+                    <th>السعر</th>
+                    <th>الربح/الخسارة</th>
+                    <th>الحالة</th>
+                </tr>
+
+                <tr>
+                    <td>Bitcoin</td>
+                    <td>0.12</td>
+                    <td>147,000 ريال</td>
+                    <td style="color:#10b981;">+4.2%</td>
+                    <td>مغلقة</td>
+                </tr>
+
+                <tr>
+                    <td>Ethereum</td>
+                    <td>1.8</td>
+                    <td>9,800 ريال</td>
+                    <td style="color:#f87171;">-2.1%</td>
+                    <td>مفتوحة</td>
+                </tr>
+
+                <tr>
+                    <td>Gold</td>
+                    <td>5.2 جم</td>
+                    <td>295 ريال</td>
+                    <td style="color:#10b981;">+1.8%</td>
+                    <td>مغلقة</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/chart.js)"></script>
+
+    <script>
+        const ctx = document.getElementById('tradesChart');
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bitcoin', 'Ethereum', 'Gold'],
+                datasets: [{
+                    label: 'Trades',
+                    data: [40, 35, 25],
+                    backgroundColor: ['#10b981',' #3b82f6',' #f59e0b']
+                }]
+            }
+        });
+    </script>
+
+</body>
+</html>
