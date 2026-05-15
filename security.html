@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز الحماية - ForeSmart Security Center</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+    <link rel="stylesheet" href="assets/css/light.css">
+
+    <style>
+        .security-box {
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 30px;
+        }
+
+        .section {
+            background: #000;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+            border: 1px solid #222;
+        }
+
+        .section h3 {
+            margin-top: 0;
+        }
+
+        .security-btn {
+            padding: 12px 18px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .security-btn.warning {
+            background: #f59e0b;
+        }
+
+        .security-btn.danger {
+            background: #ef4444;
+        }
+
+        table {
+            width: 100%;
+            color: white;
+            text-align: center;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #222;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="ai-trading.html">التداول بالذكاء الاصطناعي</a></li>
+            <li><a href="analytics.html">التحليلات</a></li>
+            <li><a href="transactions.html">العمليات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="bank-transfer.html">التحويل البنكي</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="security.html" class="active">مركز الحماية</a></li>
+            <li><a href="user-profile.html">الملف الشخصي</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Area -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>مركز الحماية</h1>
+            <button id="modeToggle">🌙 / ☀️</button>
+        </div>
+
+        <div class="security-box">
+
+            <!-- Account Security Level -->
+            <div class="section">
+                <h3>مستوى أمان الحساب</h3>
+                <p style="color:#10b981; font-size:20px;">⭐⭐⭐⭐☆ (4/5)</p>
+                <p>حسابك مؤمن بنسبة عالية، لكن يمكنك رفع مستوى الأمان بتفعيل جميع خيارات 2FA.</p>
+            </div>
+
+            <!-- 2FA Methods -->
+            <div class="section">
+                <h3>التحقق الثنائي 2FA</h3>
+
+                <p><strong>1) التحقق عبر SMS</strong></p>
+                <button class="security-btn">تفعيل كود SMS</button>
+
+                <hr style="border-color:#222;">
+
+                <p><strong>2) التحقق عبر البريد الإلكتروني</strong></p>
+                <button class="security-btn">إرسال كود التفعيل</button>
+
+                <hr style="border-color:#222;">
+
+                <p><strong>3) التحقق عبر Google Authenticator</strong></p>
+                <button class="security-btn secondary">عرض QR Code</button>
+            </div>
+
+            <!-- Sessions -->
+            <div class="section">
+                <h3>جلسات تسجيل الدخول</h3>
+                <p>هذه الأجهزة التي سجلت الدخول إلى حسابك:</p>
+
+                <table>
+                    <tr>
+                        <th>الجهاز</th>
+                        <th>الموقع</th>
+                        <th>التاريخ</th>
+                        <th>الإجراء</th>
+                    </tr>
+
+                    <tr>
+                        <td>iPhone 14</td>
+                        <td>السعودية - الرياض</td>
+                        <td>2026-05-13</td>
+                        <td><button class="security-btn danger">تسجيل خروج</button></td>
+                    </tr>
+
+                    <tr>
+                        <td>Windows Desktop</td>
+                        <td>السعودية - جدة</td>
+                        <td>2026-05-10</td>
+                        <td><button class="security-btn danger">تسجيل خروج</button></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- PIN Security -->
+            <div class="section">
+                <h3>رمز PIN إضافي</h3>
+                <p>يفيد عند تنفيذ صفقات أو عمليات مالية كبيرة.</p>
+                <button class="security-btn warning">إعداد رمز PIN</button>
+            </div>
+
+            <!-- Breach Check -->
+            <div class="section">
+                <h3>فحص الاختراقات</h3>
+                <p>لم يتم العثور على نشاط مشبوه.</p>
+                <button class="security-btn">إجراء فحص جديد</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>
