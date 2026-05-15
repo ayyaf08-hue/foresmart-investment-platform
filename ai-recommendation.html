@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل الذكاء الاصطناعي - ForeSmart AI</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+    <link rel="stylesheet" href="assets/css/light.css">
+
+    <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/chart.js)"></script>
+
+    <style>
+        .ai-container {
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 25px;
+        }
+
+        .selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .selector select, input {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #1b1b1b;
+            color: white;
+        }
+
+        .ai-panel {
+            background: #000;
+            padding: 25px;
+            margin-top: 20px;
+            border-radius: 14px;
+            border: 1px solid #222;
+        }
+
+        .ai-title {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .score-box {
+            background: #1b1b1b;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        .score-number {
+            font-size: 34px;
+            color: #10b981;
+        }
+
+        .recommend-box {
+            background: #000;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #222;
+            margin-top: 25px;
+        }
+
+        .recommend-text {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .reason-box {
+            margin-top: 20px;
+            background: #111;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .reason-box ul {
+            line-height: 2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="ai-trading.html">التداول بالذكاء الاصطناعي</a></li>
+            <li class="active"><a href="ai-recommendation.html">تحليل AI شامل</a></li>
+            <li><a href="analytics.html">التحليلات</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="security.html">مركز الحماية</a></li>
+            <li><a href="transactions.html">العمليات</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="user-profile.html">الملف الشخصي</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>تحليل شامل من الذكاء الاصطناعي</h1>
+            <button id="modeToggle">🌙 / ☀️</button>
+        </div>
+
+        <div class="ai-container">
+
+            <!-- SELECTORS -->
+            <div class="selector">
+                <select>
+                    <option>Bitcoin</option>
+                    <option>Ethereum</option>
+                    <option>Gold</option>
+                    <option>Oil</option>
+                    <option>NASDAQ</option>
+                    <option>S&P 500</option>
+                    <option>USD/JPY</option>
+                </select>
+
+                <select>
+                    <option>تحليل اليوم</option>
+                    <option>تحليل أسبوعي</option>
+                    <option>تحليل شهري</option>
+                </select>
+            </div>
+
+            <!-- AI SCORE & TREND -->
+            <div class="grid-2">
+                <div class="score-box">
+                    <h3>نسبة ثقة الذكاء الاصطناعي</h3>
+                    <div class="score-number">82%</div>
+                </div>
+
+                <div class="score-box">
+                    <h3>اتجاه السوق</h3>
+                    <div class="score-number" style="color:#3b82f6">⬆ صاعد</div>
+                </div>
+            </div>
+
+            <!-- AI RECOMMENDATION -->
+            <div class="recommend-box">
+                <div class="recommend-text" style="color:#10b981;">✔ توصية: شراء</div>
+                <p>قوة التوصية: 8.5 / 10</p>
+            </div>
+
+            <!-- CHART -->
+            <div class="ai-panel">
+                <h2 class="ai-title">الرسم البياني الذكي</h2>
+                <canvas id="aiChart"></canvas>
+            </div>
+
+            <!-- REASONING -->
+            <div class="reason-box">
+                <h3>الأسباب التي بُني عليها القرار (Explainable AI):</h3>
+                <ul>
+                    <li>ارتفاع المعنويات في الأخبار العامة بنسبة +12%</li>
+                    <li>انخفاض التوتر الجيوسياسي في أوروبا</li>
+                    <li>إشارات شراء قوية على مؤشرات RSI وMACD</li>
+                    <li>زيادة الطلب المؤسسي Institutional Demand</li>
+                    <li>استقرار أسعار النفط مما يقلل الضغط على الأسواق</li>
+                    <li>تحسن الطقس في مناطق الإنتاج العالمية</li>
+                    <li>تراجع مؤشر Fear & Greed من 70 إلى 55</li>
+                </ul>
+            </div>
+
+            <!-- Geo + Weather -->
+            <div class="grid-2">
+                <div class="ai-panel">
+                    <h2>تحليل الطقس Weather Impact</h2>
+                    <p>تأثير الطقس على الأسواق: منخفض</p>
+                    <p>تحسن ملحوظ في إنتاج الطاقة</p>
+                </div>
+
+                <div class="ai-panel">
+                    <h2>المخاطر الجيوسياسية</h2>
+                    <p>مستوى التوتر العالمي: متوسط</p>
+                    <p>توقع انخفاض التوتر خلال أسبوع</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+<script src="assets/js/app.js"></script>
+
+<script>
+new Chart(document.getElementById("aiChart"), {
+    type: "line",
+    data: {
+        labels: ["1","2","3","4","5","6","7","8","9","10"],
+        datasets: [{
+            label: "AI Forecast",
+            data: [10,12,15,14,18,20,22,25,23,27],
+            borderColor: "#10b981",
+            borderWidth: 3,
+            fill: true,
+            backgroundColor: "rgba(16,185,129,.2)",
+            tension: .4
+        }]
+    }
+});
+</script>
+
+</body>
+</html>
