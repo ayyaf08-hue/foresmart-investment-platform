@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإشعارات - ForeSmart</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+
+    <style>
+        .notifications-container {
+            margin-top: 30px;
+            background: #0f0f0f;
+            padding: 25px;
+            border-radius: 16px;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            background: #000;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #222;
+        }
+
+        .notification.unread {
+            border-color: #10b981;
+            background: #101e13;
+        }
+
+        .icon {
+            font-size: 26px;
+            margin-left: 15px;
+        }
+
+        .notif-text {
+            line-height: 1.7;
+        }
+
+        .notif-title {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .notif-time {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .badge-financial { color: #10b981; }
+        .badge-system { color: #3b82f6; }
+        .badge-support { color: #f59e0b; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li class="active"><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>الإشعارات</h1>
+        </div>
+
+        <div class="notifications-container">
+
+            <!-- Financial Notification -->
+            <div class="notification unread">
+                <div class="icon badge-financial">💰</div>
+                <div class="notif-text">
+                    <div class="notif-title">تم تنفيذ صفقة Bitcoin</div>
+                    <div class="notif-time">منذ 5 دقائق — ربح +2.4%</div>
+                </div>
+            </div>
+
+            <!-- System Notification -->
+            <div class="notification unread">
+                <div class="icon badge-system">⚙️</div>
+                <div class="notif-text">
+                    <div class="notif-title">تم تجديد اشتراكك Pro لمدة شهر</div>
+                    <div class="notif-time">قبل 20 دقيقة</div>
+                </div>
+            </div>
+
+            <!-- Support Notification -->
+            <div class="notification">
+                <div class="icon badge-support">🎧</div>
+                <div class="notif-text">
+                    <div class="notif-title">تم الرد على تذكرتك #1001</div>
+                    <div class="notif-time">قبل يومين</div>
+                </div>
+            </div>
+
+            <!-- More -->
+            <div class="notification">
+                <div class="icon badge-financial">📉</div>
+                <div class="notif-text">
+                    <div class="notif-title">انخفاض Ethereum بنسبة -1.3%</div>
+                    <div class="notif-time">قبل 3 ساعات</div>
+                </div>
+            </div>
+
+            <div class="notification">
+                <div class="icon badge-system">🔐</div>
+                <div class="notif-text">
+                    <div class="notif-title">تم تغيير كلمة المرور بنجاح</div>
+                    <div class="notif-time">قبل أسبوع</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
