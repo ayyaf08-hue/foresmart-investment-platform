@@ -1,1 +1,0 @@
-# foresmart-investment-platform
