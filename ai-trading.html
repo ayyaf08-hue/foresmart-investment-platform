@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التداول بالذكاء الاصطناعي - ForeSmart AI</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+    <link rel="stylesheet" href="assets/css/light.css">
+
+    <style>
+        .ai-box {
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 30px;
+        }
+
+        .input-field {
+            margin-bottom: 15px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ccc;
+        }
+
+        .input-field input, select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: #1b1b1b;
+            color: white;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .buy-btn { background: #10b981; }
+        .sell-btn { background: #ef4444; }
+
+        .ai-analysis {
+            background: #000;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #222;
+        }
+
+        .ai-analysis pre {
+            white-space: pre-wrap;
+            color: #10b981;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="ai-trading.html" class="active">التداول بالذكاء الاصطناعي</a></li>
+            <li><a href="analytics.html">تحليلات السوق</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="transactions.html">العمليات</a></li>
+            <li><a href="bank-transfer.html">التحويل البنكي</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="user-profile.html">الملف الشخصي</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>التداول بالذكاء الاصطناعي</h1>
+            <button id="modeToggle">🌙 / ☀️</button>
+        </div>
+
+        <div class="ai-box">
+
+            <h2>أوامر التداول</h2>
+
+            <div class="input-field">
+                <label>نوع الأصل:</label>
+                <select>
+                    <option>Bitcoin</option>
+                    <option>Ethereum</option>
+                    <option>Gold</option>
+                    <option>NASDAQ</option>
+                    <option>S&P 500</option>
+                    <option>Oil</option>
+                </select>
+            </div>
+
+            <div class="input-field">
+                <label>المبلغ (ريال):</label>
+                <input type="number" placeholder="مثال: 1000">
+            </div>
+
+            <div class="input-field">
+                <label>وقف الخسارة Stop Loss (%):</label>
+                <input type="number" placeholder="مثال: 5">
+            </div>
+
+            <div class="input-field">
+                <label>جني الأرباح Take Profit (%):</label>
+                <input type="number" placeholder="مثال: 10">
+            </div>
+
+            <button class="action-btn buy-btn">شراء</button>
+            <button class="action-btn sell-btn">بيع</button>
+
+        </div>
+
+        <div class="ai-box">
+
+            <h2>تحليل الذكاء الاصطناعي</h2>
+
+            <p>يعتمد على:</p>
+            <ul>
+                <li>الأخبار العالمية</li>
+                <li>الطقس والكوارث الطبيعية</li>
+                <li>التوترات الجيوسياسية</li>
+                <li>العلاقات الدولية</li>
+                <li>الاقتصاد العالمي</li>
+                <li>حركة الأسواق الآنية</li>
+            </ul>
+
+            <div class="ai-analysis">
+                <h3>نتيجة التحليل:</h3>
+                <pre>
+(سيظهر النص التحليلي هنا لاحقًا بعد ربط الـAPI)
+                </pre>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>
