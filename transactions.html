@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل العمليات - ForeSmart Investment</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/dark.css">
+
+    <style>
+        .transactions-container {
+            margin-top: 30px;
+            background: #0f0f0f;
+            padding: 25px;
+            border-radius: 16px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1d;
+            border: none;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .tab-btn.active {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        table {
+            width: 100%;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #111;
+            padding: 12px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #222;
+        }
+
+        .type-deposit { color: #10b981; }
+        .type-withdraw { color: #f87171; }
+        .type-subscription { color: #3b82f6; }
+        .type-trade { color: #f59e0b; }
+    </style>
+
+    <script>
+        function showTab(type) {
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.getElementById("btn-" + type).classList.add("active");
+
+            document.querySelectorAll(".table-box").forEach(box => box.style.display = "none");
+            document.getElementById("table-" + type).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">ForeSmart</h2>
+        <ul>
+            <li><a href="index.html">لوحة التحكم</a></li>
+            <li><a href="wallet.html">الإيداع والسحب</a></li>
+            <li><a href="bank-transfer.html">التحويل البنكي</a></li>
+            <li class="active"><a href="transactions.html">سجل العمليات</a></li>
+            <li><a href="subscriptions.html">الاشتراكات</a></li>
+            <li><a href="trades.html">الصفقات</a></li>
+            <li><a href="settings.html">الإعدادات</a></li>
+            <li><a href="support.html">الدعم الفني</a></li>
+            <li><a href="notifications.html">الإشعارات</a></li>
+            <li><a href="login.html">تسجيل الخروج</a></li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <div class="topbar">
+            <h1>سجل العمليات المالية</h1>
+        </div>
+
+        <div class="transactions-container">
+
+            <!-- Filters -->
+            <div class="filters">
+                <select>
+                    <option>كل الأنواع</option>
+                    <option>إيداع</option>
+                    <option>سحب</option>
+                    <option>اشتراك</option>
+                    <option>صفقة تداول</option>
+                </select>
+
+                <input type="date">
+
+                <input type="number" placeholder="المبلغ">
+
+                <button class="tab-btn" style="background:#10b981;">تطبيق الفلتر</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button id="btn-all" class="tab-btn active" onclick="showTab('all')">الكل</button>
+                <button id="btn-deposit" class="tab-btn" onclick="showTab('deposit')">إيداع</button>
+                <button id="btn-withdraw" class="tab-btn" onclick="showTab('withdraw')">سحب</button>
+                <button id="btn-subscription" class="tab-btn" onclick="showTab('subscription')">اشتراكات</button>
+                <button id="btn-trade" class="tab-btn" onclick="showTab('trade')">تداول</button>
+            </div>
+
+            <!-- ALL -->
+            <div class="table-box" id="table-all">
+
+                <table>
+                    <tr>
+                        <th>النوع</th>
+                        <th>المبلغ</th>
+                        <th>المرجع</th>
+                        <th>الحالة</th>
+                        <th>التاريخ</th>
+                    </tr>
+
+                    <tr>
+                        <td class="type-deposit">إيداع</td>
+                        <td>1500 ريال</td>
+                        <td>REF23313</td>
+                        <td>مكتمل</td>
+                        <td>2026-05-12</td>
+                    </tr>
+
+                    <tr>
+                        <td class="type-subscription">اشتراك PRO</td>
+                        <td>200 ريال</td>
+                        <td>SUB001</td>
+                        <td>مكتمل</td>
+                        <td>2026-05-10</td>
+                    </tr>
+
+                    <tr>
+                        <td class="type-trade">صفقة: Bitcoin</td>
+                        <td>ربح +2.5%</td>
+                        <td>TRD881</td>
+                        <td>مغلقة</td>
+                        <td>2026-05-09</td>
+                    </tr>
+
+                    <tr>
+                        <td class="type-withdraw">سحب</td>
+                        <td>500 ريال</td>
+                        <td>WD1121</td>
+                        <td>قيد المراجعة</td>
+                        <td>2026-05-08</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <!-- DEPOSIT -->
+            <div class="table-box" id="table-deposit" style="display:none;">
+                <table>
+                    <tr>
+                        <th>المبلغ</th>
+                        <th>المرجع</th>
+                        <th>الحالة</th>
+                        <th>التاريخ</th>
+                    </tr>
+                    <tr>
+                        <td>1500 ريال</td>
+                        <td>REF23313</td>
+                        <td>مكتمل</td>
+                        <td>2026-05-12</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- WITHDRAW -->
+            <div class="table-box" id="table-withdraw" style="display:none;">
+                <table>
+                    <tr>
+                        <th>المبلغ</th>
+                        <th>المرجع</th>
+                        <th>الحالة</th>
+                        <th>التاريخ</th>
+                    </tr>
+                    <tr>
+                        <td>500 ريال</td>
+                        <td>WD1121</td>
+                        <td>قيد المراجعة</td>
+                        <td>2026-05-08</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- SUBSCRIPTION -->
+            <div class="table-box" id="table-subscription" style="display:none;">
+                <table>
+                    <tr>
+                        <th>الباقة</th>
+                        <th>المبلغ</th>
+                        <th>الحالة</th>
+                        <th>التاريخ</th>
+                    </tr>
+                    <tr>
+                        <td>Pro</td>
+                        <td>200 ريال</td>
+                        <td>مكتمل</td>
+                        <td>2026-05-10</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- TRADES -->
+            <div class="table-box" id="table-trade" style="display:none;">
+                <table>
+                    <tr>
+                        <th>الصفقة</th>
+                        <th>النتيجة</th>
+                        <th>المرجع</th>
+                        <th>التاريخ</th>
+                    </tr>
+
+                    <tr>
+                        <td>Bitcoin</td>
+                        <td class="type-trade">+2.5%</td>
+                        <td>TRD881</td>
+                        <td>2026-05-09</td>
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
