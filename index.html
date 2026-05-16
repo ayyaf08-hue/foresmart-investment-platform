@@ -698,3 +698,58 @@
                 if (target) target.classList.add('active-section');
                 
                 // تحديث البيانات عند فتح القسم
+                if (sectionId === 'portfolio') renderPortfolio();
+                if (sectionId === 'ai-plan') renderAIPlan();
+                if (sectionId === 'ai-advisor') renderAIAdvisor();
+            });
+        });
+    }
+
+    // عرض الملخص في لوحة التحكم
+    function renderDashboard() {
+        const summaryDiv = document.getElementById('marketSummary');
+        if (!summaryDiv) return;
+        
+        summaryDiv.innerHTML = `
+            <div class="markets-grid">
+                <div class="market-card"><div class="market-name">📊 الأسهم</div><div>${marketsData.stocks.length} سوق</div><div class="positive">▲ متابعة</div></div>
+                <div class="market-card"><div class="market-name">📜 السندات</div><div>${marketsData.bonds.length} نوع</div><div class="positive">▲ مستقرة</div></div>
+                <div class="market-card"><div class="market-name">₿ العملات الرقمية</div><div>${marketsData.crypto.length} عملة</div><div class="positive">▲ تقلبات عالية</div></div>
+                <div class="market-card"><div class="market-name">💱 العملات الورقية</div><div>${marketsData.forex.length} زوج</div><div class="negative">▼ تأثير الأخبار</div></div>
+                <div class="market-card"><div class="market-name">🥇 المعادن</div><div>${marketsData.metals.length} معدن</div><div class="positive">▲ ارتفاع الطلب</div></div>
+            </div>
+        `;
+    }
+
+    // المستخدم الحالي
+    let currentUserData = currentUser;
+    if (!currentUserData) window.location.href = 'login.html';
+    
+    document.getElementById('userInfo').innerHTML = `
+        <div class="name">👋 ${currentUserData.firstName || currentUserData.name}</div>
+        <div class="subscription-badge">${getUserPlan(currentUserData).name}</div>
+    `;
+
+    // تشغيل كل شيء
+    renderAllMarkets();
+    renderDashboard();
+    renderPortfolio();
+    renderAIPlan();
+    renderAIAdvisor();
+    initNavigation();
+    
+    // تحديث الأسعار كل 30 ثانية
+    setInterval(() => {
+        Object.keys(marketsData).forEach(category => {
+            marketsData[category].forEach(item => {
+                item.change = (Math.random() * 4 - 2).toFixed(1);
+                item.price = item.price * (1 + parseFloat(item.change) / 100);
+            });
+        });
+        renderAllMarkets();
+        renderDashboard();
+        renderPortfolio();
+    }, 30000);
+</script>
+</body>
+</html>
