@@ -17,7 +17,8 @@
         .logo { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .logo h1 { color: #10b981; font-size: 1.8rem; }
         .user-info { background: rgba(16,185,129,0.1); border-radius: 20px; padding: 15px; margin-bottom: 25px; text-align: center; }
-        .user-info .name { font-weight: bold; }
+        .user-info .name { font-weight: bold; font-size: 1rem; }
+        .user-info .detail { font-size: 0.7rem; color: #8e9aaf; margin-top: 5px; }
         .subscription-badge { background: #10b981; font-size: 0.7rem; padding: 3px 8px; border-radius: 30px; display: inline-block; margin-top: 8px; }
         .trial-warning { background: rgba(255,90,103,0.2); color: #ff5a67; border-radius: 16px; padding: 10px; margin-bottom: 20px; text-align: center; font-size: 0.8rem; }
         .logout-btn { background: rgba(255,90,103,0.2); color: #ff5a67; border: none; width: 100%; padding: 10px; border-radius: 40px; cursor: pointer; margin-top: 20px; font-weight: bold; }
@@ -43,8 +44,6 @@
         .asset-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
         canvas { max-height: 250px; width: 100%; }
         .upgrade-btn { background: #10b981; padding: 12px 24px; border-radius: 40px; border: none; color: white; cursor: pointer; margin-top: 15px; }
-        .feature-locked { opacity: 0.5; pointer-events: none; position: relative; }
-        .feature-locked::after { content: "🔒"; position: absolute; left: 10px; top: 10px; }
         @media (max-width: 900px) { .sidebar { width: 100%; position: relative; } .main-content { margin-right: 0; } }
     </style>
 </head>
@@ -90,14 +89,17 @@
     
     if (!currentUserData) window.location.href = 'login.html';
     
-    // عرض معلومات المستخدم
     const userPlan = getUserPlan(currentUserData);
     const subscriptionStatus = checkSubscriptionStatus();
     
+    // عرض معلومات المستخدم الكاملة
     document.getElementById('userInfo').innerHTML = `
-        <div class="name">👋 مرحباً ${currentUserData.name}</div>
+        <div class="name">👋 مرحباً ${currentUserData.firstName || currentUserData.name} ${currentUserData.lastName || ''}</div>
+        <div class="detail">📧 ${currentUserData.email}</div>
+        <div class="detail">📱 ${currentUserData.phone || 'لم يتم إضافة رقم الجوال'}</div>
+        <div class="detail">🆔 ${currentUserData.nationalId ? 'تم التحقق من الهوية ✓' : 'الهوية غير مسجلة'}</div>
         <div class="subscription-badge">${userPlan.name}</div>
-        <div style="font-size:0.7rem; margin-top:5px;">${subscriptionStatus.expired ? 'انتهت الفترة التجريبية' : subscriptionStatus.daysLeft + ' يوم متبقي'}</div>
+        <div class="detail">${subscriptionStatus.expired ? 'انتهت الفترة التجريبية' : subscriptionStatus.daysLeft + ' يوم متبقي'}</div>
     `;
     
     if (subscriptionStatus.expired && currentUserData.plan === 'free_trial') {
@@ -109,7 +111,6 @@
     function applyFeatureRestrictions() {
         const hasAdvancedMarkets = hasFeature(currentUserData, 'advanced_markets');
         const hasBankIntegration = hasFeature(currentUserData, 'bank_integration');
-        const hasAPIAccess = hasFeature(currentUserData, 'api_access');
         const maxPortfolio = userPlan.features.max_portfolio_size;
         
         if (!hasAdvancedMarkets) {
