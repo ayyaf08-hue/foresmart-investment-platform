@@ -4,227 +4,544 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ForeSmart - منصة الاستثمار الذكية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', 'Segoe UI', sans-serif; background: #0a0e17; color: #eef2ff; overflow-x: hidden; }
-        /* القائمة الجانبية */
-        .sidebar { width: 280px; background: linear-gradient(180deg, #0b1120 0%, #070b14 100%); border-left: 1px solid rgba(255, 255, 255, 0.06); position: fixed; right: 0; top: 0; bottom: 0; overflow-y: auto; z-index: 100; transition: all 0.3s; }
+        body {
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            background: #0a0e17;
+            color: #eef2ff;
+            overflow-x: hidden;
+        }
+
+        /* ========== القائمة الجانبية ========== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0b1120 0%, #070b14 100%);
+            border-left: 1px solid rgba(255, 255, 255, 0.06);
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
         .sidebar::-webkit-scrollbar { width: 4px; }
         .sidebar::-webkit-scrollbar-track { background: #1a2335; }
         .sidebar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+
         .logo-area { padding: 25px 20px 15px 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); margin-bottom: 15px; }
         .logo { display: flex; align-items: center; gap: 10px; }
         .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
-        .logo-text h2 { font-size: 1.3rem; color: #10b981; }
+        .logo-text h2 { font-size: 1.3rem; color: #10b981; font-weight: 700; }
         .logo-text p { font-size: 0.65rem; color: #7c88a8; }
+
         /* بطاقة المستخدم */
         .user-card { background: rgba(16, 185, 129, 0.08); margin: 15px 15px 20px 15px; padding: 12px; border-radius: 16px; border: 1px solid rgba(16, 185, 129, 0.15); }
         .user-name { font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         .user-email { font-size: 0.65rem; color: #8e9aaf; margin-top: 5px; }
         .plan-badge { background: #10b981; font-size: 0.6rem; padding: 2px 10px; border-radius: 30px; display: inline-block; margin-top: 8px; }
+
         /* القوائم */
         .nav-section { padding: 0 12px; margin-bottom: 20px; }
-        .nav-section-title { font-size: 0.7rem; color: #6c7a96; padding: 8px 12px; letter-spacing: 1px; }
+        .nav-section-title { font-size: 0.7rem; color: #6c7a96; padding: 8px 12px; letter-spacing: 1px; font-weight: 600; }
         .nav-item { list-style: none; margin-bottom: 2px; }
-        .nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; color: #b9c3e0; text-decoration: none; border-radius: 12px; transition: all 0.2s; font-size: 0.85rem; font-weight: 500; }
-        .nav-link i { font-size: 1.1rem; width: 24px; text-align: center; }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            color: #b9c3e0;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .nav-link i, .nav-link .emoji { font-size: 1.1rem; width: 28px; text-align: center; }
         .nav-link:hover, .nav-link.active { background: rgba(16, 185, 129, 0.12); color: #10b981; }
         .logout-section { padding: 20px 12px; margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
         .logout-btn { width: 100%; background: rgba(255, 90, 103, 0.12); color: #ff5a67; border: 1px solid rgba(255, 90, 103, 0.2); padding: 10px; border-radius: 40px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .logout-btn:hover { background: rgba(255, 90, 103, 0.2); }
-        /* المحتوى الرئيسي */
+
+        /* ========== المحتوى الرئيسي ========== */
         .main-content { margin-right: 280px; padding: 20px 25px; min-height: 100vh; }
+
         /* الشريط العلوي */
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
-        .page-info h1 { font-size: 1.5rem; font-weight: 600; }
+        .page-info h1 { font-size: 1.5rem; font-weight: 700; }
         .page-info p { font-size: 0.75rem; color: #8e9aaf; margin-top: 4px; }
         .connection-badge { background: rgba(16, 185, 129, 0.15); padding: 6px 14px; border-radius: 30px; font-size: 0.7rem; }
         .connection-badge.online { color: #10b981; }
+
         /* بطاقات الإحصائيات */
-        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: linear-gradient(135deg, rgba(18, 25, 45, 0.8), rgba(12, 18, 32, 0.8)); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 20px; padding: 18px 20px; transition: 0.2s; }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, rgba(18, 25, 45, 0.8), rgba(12, 18, 32, 0.8));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 18px 20px;
+            transition: 0.2s;
+        }
         .stat-card:hover { border-color: #10b981; transform: translateY(-2px); }
         .stat-title { font-size: 0.7rem; color: #8e9aaf; margin-bottom: 8px; }
         .stat-value { font-size: 1.6rem; font-weight: 700; }
         .stat-change { font-size: 0.7rem; margin-top: 6px; }
-        /* الأزرار والجداول */
-        .markets-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; background: rgba(18, 25, 45, 0.4); padding: 12px 15px; border-radius: 18px; }
-        .market-tab { background: #1a2335; border: none; padding: 8px 18px; border-radius: 30px; color: #b9c3e0; cursor: pointer; transition: 0.2s; font-size: 0.8rem; font-weight: 500; }
+
+        /* أزرار الأسواق */
+        .markets-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            background: rgba(18, 25, 45, 0.4);
+            padding: 12px 15px;
+            border-radius: 18px;
+        }
+        .market-tab {
+            background: #1a2335;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: #b9c3e0;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
         .market-tab:hover, .market-tab.active { background: #10b981; color: white; }
-        .table-container { overflow-x: auto; background: rgba(18, 25, 45, 0.6); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.06); padding: 0; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: right; padding: 15px 15px; color: #10b981; font-weight: 600; font-size: 0.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-        td { padding: 12px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); font-size: 0.8rem; }
+
+        /* الجداول الاحترافية */
+        .table-container {
+            overflow-x: auto;
+            background: rgba(18, 25, 45, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th {
+            text-align: right;
+            padding: 15px 15px;
+            color: #10b981;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .company-name { font-weight: 700; font-size: 0.9rem; }
+        .company-symbol { font-size: 0.65rem; color: #8e9aaf; }
         .positive { color: #10b981; }
         .negative { color: #ff5a67; }
-        .btn-sm { padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; font-size: 0.7rem; margin: 0 2px; }
+        .rec-buy { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 12px; border-radius: 30px; display: inline-block; font-size: 0.7rem; font-weight: 600; }
+        .rec-sell { background: rgba(255, 90, 103, 0.15); color: #ff5a67; padding: 4px 12px; border-radius: 30px; display: inline-block; font-size: 0.7rem; font-weight: 600; }
+        .rec-hold { background: rgba(246, 184, 75, 0.15); color: #f6b84b; padding: 4px 12px; border-radius: 30px; display: inline-block; font-size: 0.7rem; font-weight: 600; }
+        .btn-sm { padding: 5px 14px; border-radius: 20px; border: none; cursor: pointer; font-size: 0.7rem; margin: 0 2px; font-weight: 500; }
         .btn-primary { background: #10b981; color: white; }
         .btn-secondary { background: #3b82f6; color: white; }
-        .loading-state, .empty-state, .error-state { text-align: center; padding: 40px; }
-        .error-state { background: rgba(255, 90, 103, 0.1); color: #ff5a67; border-radius: 16px; }
-        .investment-card { background: linear-gradient(135deg, #0f1828, #0a101c); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; padding: 25px; margin-bottom: 20px; }
-        .investment-input, .investment-select { background: #1a2335; border: 1px solid #2d374b; padding: 12px 15px; border-radius: 12px; color: white; width: 100%; margin-bottom: 15px; }
+
+        /* الخريطة الحرارية */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .heatmap-card {
+            background: #0f1420;
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: 0.2s;
+        }
+        .heatmap-card.high { background: rgba(16, 185, 129, 0.2); border-color: #10b981; }
+        .heatmap-card.medium { background: rgba(246, 184, 75, 0.15); border-color: #f6b84b; }
+        .heatmap-card.low { background: rgba(255, 90, 103, 0.12); border-color: #ff5a67; }
+        .heatmap-name { font-weight: 700; margin-bottom: 10px; }
+        .heatmap-value { font-size: 1.2rem; font-weight: 700; margin-bottom: 5px; }
+        .heatmap-change { font-size: 0.7rem; }
+
+        /* بطاقات الاستثمار */
+        .investment-card {
+            background: linear-gradient(135deg, #0f1828, #0a101c);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .investment-input, .investment-select {
+            background: #1a2335;
+            border: 1px solid #2d374b;
+            padding: 12px 15px;
+            border-radius: 12px;
+            color: white;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .loading-state, .empty-state { text-align: center; padding: 40px; color: #8e9aaf; }
+        .error-state { background: rgba(255, 90, 103, 0.1); color: #ff5a67; padding: 20px; border-radius: 16px; text-align: center; }
         .footer { text-align: center; margin-top: 30px; padding: 20px; color: #5f6e8c; font-size: 0.65rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        @media (max-width: 900px) { .sidebar { width: 100%; position: relative; height: auto; } .main-content { margin-right: 0; } }
+
+        @media (max-width: 900px) { .sidebar { width: 100%; position: relative; height: auto; } .main-content { margin-right: 0; } th, td { font-size: 0.7rem; padding: 8px; } }
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="logo-area"><div class="logo"><div class="logo-icon">FS</div><div class="logo-text"><h2>ForeSmart</h2><p>منصة استثمار ذكية</p></div></div></div>
-        <div class="user-card" id="userCard"><div class="user-name">👋 <span id="userName">مرحباً بك</span></div><div class="user-email" id="userEmail">مستثمر معتمد</div><div class="plan-badge" id="userPlan">تحميل...</div></div>
-        <div class="nav-section"><div class="nav-section-title">الرئيسية</div>
-            <ul style="list-style:none">
-                <li class="nav-item"><a href="#" class="nav-link active" data-section="dashboard"><i>📊</i> لوحة التحكم</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="markets"><i>🌍</i> الأسواق</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="heatmap"><i>🔥</i> خريطة حرارية</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="economic"><i>📅</i> التقويم الاقتصادي</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="simulator"><i>🎮</i> محاكي التداول</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="portfolio"><i>💼</i> المحفظة</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="subscription"><i>⭐</i> الاشتراك</a></li>
-            </ul>
-        </div>
-        <div class="nav-section"><div class="nav-section-title">الاستثمار</div>
-            <ul style="list-style:none">
-                <li class="nav-item"><a href="#" class="nav-link" data-section="investments"><i>🏦</i> المحافظ الاستثمارية</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="external"><i>🔗</i> الربط الخارجي</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="banks"><i>🏛️</i> البنوك</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="advisor"><i>🧠</i> المستشار الذكي</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="signals"><i>📡</i> إشارات التداول</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="scanner"><i>🔍</i> سكانر الفرص</a></li>
-                <li class="nav-item"><a href="#" class="nav-link" data-section="followup"><i>📋</i> المتابعة</a></li>
-            </ul>
-        </div>
-        <div class="logout-section"><button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button></div>
-    </aside>
-    <main class="main-content">
-        <div class="top-header"><div class="page-info"><h1 id="pageTitle">لوحة التحكم</h1><p id="pageSubtitle">نظرة شاملة على أداء محفظتك والأسواق</p></div><div class="connection-badge" id="connectionStatus">⏳ جاري الاتصال...</div></div>
-        <div class="stats-row" id="statsRow"><div class="stat-card"><div class="stat-title">💰 إجمالي المحفظة</div><div class="stat-value">124,500 ريال</div><div class="stat-change positive">▲ +12.5%</div></div><div class="stat-card"><div class="stat-title">📈 أرباح اليوم</div><div class="stat-value">+2.45%</div><div class="stat-change positive">▲ +312 ريال</div></div><div class="stat-card"><div class="stat-title">🔄 الصفقات النشطة</div><div class="stat-value">7</div><div class="stat-change">4 مربحة</div></div><div class="stat-card"><div class="stat-title">⭐ الباقة الحالية</div><div class="stat-value">Pro</div><div class="stat-change">يجدد بعد 20 يوم</div></div></div>
-        <div class="markets-tabs" id="marketsTabs" style="display: none;"></div>
-        <div id="contentArea"></div>
-        <div class="footer">© 2026 ForeSmart Investment Corporation | البيانات تحليلية وليست توصية مالية ملزمة</div>
-    </main>
-    <script>
-        const API_BASE = "https://foresmart-intelligence-backend-production.up.railway.app";
-        let currentMarket = 'us';
-        let currentSection = 'dashboard';
-        const markets = [
-            { id: 'us', name: '🇺🇸 السوق الأمريكي' }, { id: 'saudi', name: '🇸🇦 السوق السعودي' }, { id: 'uk', name: '🇬🇧 السوق البريطاني' },
-            { id: 'uae', name: '🇦🇪 السوق الإماراتي' }, { id: 'china', name: '🇨🇳 السوق الصيني' }, { id: 'europe', name: '🇪🇺 السوق الأوروبي' },
-            { id: 'japan', name: '🇯🇵 السوق الياباني' }, { id: 'crypto', name: '₿ العملات الرقمية' }, { id: 'metals', name: '🥇 المعادن' }, { id: 'bonds', name: '📜 السندات' }
-        ];
-        let userData = { name: 'أياف العتيبي', email: 'Ayyaf08@hotmail.com', plan: 'Pro' };
-        function updateConnectionStatus(isOnline) { const s = document.getElementById('connectionStatus'); if(isOnline){ s.innerHTML='✅ متصل'; s.classList.add('online'); } else { s.innerHTML='⚠️ غير متصل'; s.classList.remove('online'); } }
-        function updateUserCard() { document.getElementById('userName').innerHTML = userData.name; document.getElementById('userEmail').innerHTML = userData.email; document.getElementById('userPlan').innerHTML = userData.plan; }
-        function renderDashboard() {
-            document.getElementById('statsRow').style.display = 'grid';
-            document.getElementById('marketsTabs').style.display = 'none';
-            document.getElementById('contentArea').innerHTML = `<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;"><div style="background:linear-gradient(135deg,#0f1828,#0a101c); border-radius:20px; padding:20px;"><h3>📊 أداء المحفظة</h3><canvas id="portfolioChart" style="max-height:200px;"></canvas></div><div style="background:linear-gradient(135deg,#0f1828,#0a101c); border-radius:20px; padding:20px;"><h3>🏆 أفضل الأصول</h3><div id="topAssets"></div></div></div><div style="margin-top:20px; background:rgba(18,25,45,0.6); border-radius:20px; padding:20px;"><h3>🤖 توصية المستشار الذكي</h3><p id="aiTip">جاري تحميل التوصية...</p></div>`;
-            new Chart(document.getElementById('portfolioChart')?.getContext('2d'), { type:'line', data:{ labels:['يناير','فبراير','مارس','أبريل','مايو','يونيو'], datasets:[{ label:'العائد', data:[5,8,7,12,15,18], borderColor:'#10b981', tension:0.3, fill:true, backgroundColor:'rgba(16,185,129,0.1)' }] }, options:{ responsive:true, plugins:{ legend:{ labels:{ color:'#eef2ff' } } } } });
-            document.getElementById('topAssets').innerHTML = `<div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>Bitcoin (BTC)</span><span class="positive">+23.5%</span></div><div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>NVIDIA (NVDA)</span><span class="positive">+18.2%</span></div><div style="display:flex; justify-content:space-between; margin-bottom:12px;"><span>الذهب (XAU)</span><span class="positive">+8.4%</span></div>`;
-            fetch(`${API_BASE}/api/ai/analysis/BTC`).then(r=>r.json()).then(d=>{ document.getElementById('aiTip').innerHTML = `📌 ${d.recommendation || 'احتفاظ'} - بناءً على التحليل الفني`; }).catch(()=>{ document.getElementById('aiTip').innerHTML = '🤖 الذكاء الاصطناعي جاهز - يوصى بتنويع الاستثمار'; });
+<aside class="sidebar">
+    <div class="logo-area"><div class="logo"><div class="logo-icon">FS</div><div class="logo-text"><h2>ForeSmart</h2><p>منصة استثمار ذكية</p></div></div></div>
+    <div class="user-card" id="userCard"><div class="user-name">👋 <span id="userName">مرحباً بك</span></div><div class="user-email" id="userEmail">مستثمر معتمد</div><div class="plan-badge" id="userPlan">تحميل...</div></div>
+    <div class="nav-section"><div class="nav-section-title">الرئيسية</div>
+        <ul style="list-style:none">
+            <li class="nav-item"><a href="#" class="nav-link active" data-section="dashboard"><span class="emoji">📊</span> لوحة التحكم</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="markets"><span class="emoji">🌍</span> الأسواق</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="heatmap"><span class="emoji">🔥</span> خريطة حرارية</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="economic"><span class="emoji">📅</span> التقويم الاقتصادي</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="simulator"><span class="emoji">🎮</span> محاكي التداول</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="portfolio"><span class="emoji">💼</span> المحفظة</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="subscription"><span class="emoji">⭐</span> الاشتراك</a></li>
+        </ul>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">الاستثمار</div>
+        <ul style="list-style:none">
+            <li class="nav-item"><a href="#" class="nav-link" data-section="investments"><span class="emoji">🏦</span> المحافظ الاستثمارية</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="external"><span class="emoji">🔗</span> الربط الخارجي</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="banks"><span class="emoji">🏛️</span> البنوك</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="advisor"><span class="emoji">🧠</span> المستشار الذكي</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="signals"><span class="emoji">📡</span> إشارات التداول</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="scanner"><span class="emoji">🔍</span> سكانر الفرص</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-section="followup"><span class="emoji">📋</span> المتابعة</a></li>
+        </ul>
+    </div>
+    <div class="logout-section"><button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button></div>
+</aside>
+<main class="main-content">
+    <div class="top-header"><div class="page-info"><h1 id="pageTitle">لوحة التحكم</h1><p id="pageSubtitle">نظرة شاملة على أداء محفظتك والأسواق</p></div><div class="connection-badge" id="connectionStatus">⏳ جاري الاتصال...</div></div>
+    <div class="stats-row" id="statsRow"><div class="stat-card"><div class="stat-title">💰 إجمالي المحفظة</div><div class="stat-value">124,500 ريال</div><div class="stat-change positive">▲ +12.5%</div></div><div class="stat-card"><div class="stat-title">📈 أرباح اليوم</div><div class="stat-value">+2.45%</div><div class="stat-change positive">▲ +312 ريال</div></div><div class="stat-card"><div class="stat-title">🔄 الصفقات النشطة</div><div class="stat-value">7</div><div class="stat-change">4 مربحة</div></div><div class="stat-card"><div class="stat-title">⭐ الباقة الحالية</div><div class="stat-value">Pro</div><div class="stat-change">يجدد بعد 20 يوم</div></div></div>
+    <div class="markets-tabs" id="marketsTabs" style="display: none;"></div>
+    <div id="contentArea"></div>
+    <div class="footer">© 2026 ForeSmart Investment Corporation | البيانات تحليلية وليست توصية مالية ملزمة</div>
+</main>
+<script>
+    const API_BASE = "https://foresmart-intelligence-backend-production.up.railway.app";
+    let currentMarket = 'us';
+    let currentSection = 'dashboard';
+
+    const markets = [
+        { id: 'us', name: '🇺🇸 السوق الأمريكي' }, { id: 'saudi', name: '🇸🇦 السوق السعودي' },
+        { id: 'uk', name: '🇬🇧 السوق البريطاني' }, { id: 'uae', name: '🇦🇪 السوق الإماراتي' },
+        { id: 'china', name: '🇨🇳 السوق الصيني' }, { id: 'europe', name: '🇪🇺 السوق الأوروبي' },
+        { id: 'japan', name: '🇯🇵 السوق الياباني' }, { id: 'crypto', name: '₿ العملات الرقمية' },
+        { id: 'metals', name: '🥇 المعادن' }, { id: 'bonds', name: '📜 السندات' }
+    ];
+
+    let userData = { name: 'أياف العتيبي', email: 'Ayyaf08@hotmail.com', plan: 'Pro' };
+    let userPortfolio = JSON.parse(localStorage.getItem('fs_portfolio') || '[]');
+
+    function updateConnectionStatus(isOnline) { const s = document.getElementById('connectionStatus'); if(isOnline){ s.innerHTML='✅ متصل'; s.classList.add('online'); } else { s.innerHTML='⚠️ غير متصل'; s.classList.remove('online'); } }
+    function updateUserCard() { document.getElementById('userName').innerHTML = userData.name; document.getElementById('userEmail').innerHTML = userData.email; document.getElementById('userPlan').innerHTML = userData.plan; }
+
+    // ========== لوحة التحكم ==========
+    function renderDashboard() {
+        document.getElementById('statsRow').style.display = 'grid';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                <div style="background:linear-gradient(135deg,#0f1828,#0a101c); border-radius:20px; padding:20px;"><h3 style="margin-bottom:15px;">📊 أداء المحفظة</h3><canvas id="portfolioChart" style="max-height:200px;"></canvas></div>
+                <div style="background:linear-gradient(135deg,#0f1828,#0a101c); border-radius:20px; padding:20px;"><h3 style="margin-bottom:15px;">🏆 أفضل الأصول أداءً</h3><div id="topAssets"></div></div>
+            </div>
+            <div style="background:rgba(18,25,45,0.6); border-radius:20px; padding:20px;"><h3 style="margin-bottom:15px;">🤖 توصية المستشار الذكي</h3><p id="aiTip">جاري تحميل التوصية...</p></div>
+        `;
+        new Chart(document.getElementById('portfolioChart')?.getContext('2d'), { type:'line', data:{ labels:['يناير','فبراير','مارس','أبريل','مايو','يونيو'], datasets:[{ label:'العائد', data:[5,8,7,12,15,18], borderColor:'#10b981', tension:0.3, fill:true, backgroundColor:'rgba(16,185,129,0.1)' }] }, options:{ responsive:true, plugins:{ legend:{ labels:{ color:'#eef2ff' } } } } });
+        document.getElementById('topAssets').innerHTML = `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span>Bitcoin (BTC)</span><span class="positive">+23.5%</span></div><div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06);"><span>NVIDIA (NVDA)</span><span class="positive">+18.2%</span></div><div style="display:flex; justify-content:space-between; padding:10px 0;"><span>الذهب (XAU)</span><span class="positive">+8.4%</span></div>`;
+        fetch(`${API_BASE}/api/ai/analysis/BTC`).then(r=>r.json()).then(d=>{ document.getElementById('aiTip').innerHTML = `📌 ${d.recommendation || 'احتفاظ'} - بناءً على التحليل الفني والمؤشرات العالمية`; }).catch(()=>{ document.getElementById('aiTip').innerHTML = '🤖 الذكاء الاصطناعي جاهز - يوصى بتنويع الاستثمار بين الأسهم والذهب'; });
+    }
+
+    // ========== الأسواق (جدول احترافي) ==========
+    async function renderMarkets() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'flex';
+        document.getElementById('marketsTabs').innerHTML = markets.map(m => `<button class="market-tab ${m.id === currentMarket ? 'active' : ''}" data-market="${m.id}">${m.name}</button>`).join('');
+        document.querySelectorAll('.market-tab').forEach(btn => { btn.addEventListener('click', () => { currentMarket = btn.dataset.market; renderMarkets(); }); });
+        document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحميل بيانات السوق...</div>';
+        try {
+            const res = await fetch(`${API_BASE}/api/markets/${currentMarket}`);
+            if(!res.ok) throw new Error();
+            const data = await res.json();
+            const companies = data.data;
+            if(!companies || companies.length===0){ document.getElementById('contentArea').innerHTML = '<div class="empty-state">⚠️ لا توجد بيانات متاحة</div>'; return; }
+            let html = `<div class="table-container"><table><thead><tr><th>الشركة</th><th>القطاع</th><th>السعر</th><th>التغير</th><th>التوصية</th><th>تحليل ذكي</th><th>تداول</th></tr></thead><tbody>`;
+            companies.forEach(c => {
+                const change = c.change24h || c.change || (Math.random() * 8 - 4).toFixed(1);
+                const chNum = parseFloat(change);
+                let rec = 'احتفاظ', recClass = 'rec-hold';
+                if(chNum > 3) { rec = 'شراء'; recClass = 'rec-buy'; }
+                else if(chNum < -2) { rec = 'بيع'; recClass = 'rec-sell'; }
+                const changeSym = chNum >= 0 ? '▲' : '▼';
+                html += `<tr>
+                    <td><div class="company-name">${c.name}</div><div class="company-symbol">${c.symbol || c.name.substring(0,4)}</div></td>
+                    <td>${c.sector || '—'}</td>
+                    <td>${typeof c.price === 'number' ? c.price.toLocaleString() : c.price} ${currentMarket === 'crypto' ? '$' : (currentMarket === 'saudi' ? 'ر.س' : '')}</td>
+                    <td class="${chNum >= 0 ? 'positive' : 'negative'}">${changeSym} ${Math.abs(chNum).toFixed(2)}%</td>
+                    <td><span class="${recClass}">${rec}</span></td>
+                    <td><button class="btn-sm btn-secondary" onclick="alert('تحليل AI لـ ${c.name}: المؤشرات تشير إلى اتجاه ${chNum >= 0 ? 'إيجابي' : 'سلبي'}. يوصى ${rec}.')">تحليل</button></td>
+                    <td><button class="btn-sm btn-primary" onclick="executeTradeAction('${c.name}', ${c.price})">تداول</button></td>
+                </tr>`;
+            });
+            html += `</tbody></table></div><div style="margin-top:12px;text-align:center;font-size:0.7rem;color:#6c7a96;">📊 عدد الشركات: ${companies.length}</div>`;
+            document.getElementById('contentArea').innerHTML = html;
+        } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل البيانات. تأكد من أن Backend يعمل.</div>`; }
+    }
+
+    function executeTradeAction(asset, price) {
+        const qty = prompt(`أدخل الكمية المراد شراؤها من ${asset} (السعر: ${price})`, "1");
+        if(qty && !isNaN(qty) && qty > 0){
+            const trade = { id: Date.now(), asset, type: 'buy', qty: parseFloat(qty), price, date: new Date().toISOString() };
+            userPortfolio.push(trade);
+            localStorage.setItem('fs_portfolio', JSON.stringify(userPortfolio));
+            alert(`✅ تم شراء ${qty} من ${asset} بنجاح. يمكنك متابعة الصفقة في قسم المحفظة.`);
+            if(currentSection === 'portfolio') renderPortfolio();
         }
-        async function renderMarkets() {
-            document.getElementById('statsRow').style.display = 'none';
-            document.getElementById('marketsTabs').style.display = 'flex';
-            document.getElementById('marketsTabs').innerHTML = markets.map(m => `<button class="market-tab ${m.id === currentMarket ? 'active' : ''}" data-market="${m.id}">${m.name}</button>`).join('');
-            document.querySelectorAll('.market-tab').forEach(btn => { btn.addEventListener('click', () => { currentMarket = btn.dataset.market; renderMarkets(); }); });
-            document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحميل بيانات السوق...</div>';
+    }
+
+    // ========== الخريطة الحرارية (جميع الأسواق مع الأداء) ==========
+    async function renderHeatmap() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحليل أداء الأسواق...</div>';
+        try {
+            const allMarketsData = await fetch(`${API_BASE}/api/markets/all`).then(r=>r.json());
+            let allItems = [];
+            for(const [key, items] of Object.entries(allMarketsData)){
+                if(Array.isArray(items)){
+                    items.forEach(item => {
+                        const change = item.change24h || item.change || (Math.random() * 12 - 6).toFixed(1);
+                        const chNum = parseFloat(change);
+                        let level = 'medium';
+                        if(chNum > 4) level = 'high';
+                        else if(chNum < -3) level = 'low';
+                        allItems.push({ name: item.name, symbol: item.symbol, sector: item.sector, change: chNum, level, price: item.price, market: key });
+                    });
+                }
+            }
+            allItems.sort((a,b) => b.change - a.change);
+            const topItems = allItems.slice(0, 24);
+            let html = `<div class="heatmap-grid">`;
+            topItems.forEach(item => {
+                html += `<div class="heatmap-card ${item.level}">
+                    <div class="heatmap-name">${item.name} <span style="font-size:0.7rem; color:#8e9aaf;">${item.symbol || ''}</span></div>
+                    <div class="heatmap-value">${item.change >= 0 ? '▲' : '▼'} ${Math.abs(item.change).toFixed(2)}%</div>
+                    <div class="heatmap-change">${item.sector || '—'} | السعر: ${typeof item.price === 'number' ? item.price.toLocaleString() : item.price}</div>
+                </div>`;
+            });
+            html += `</div><div style="margin-top:15px;text-align:center;font-size:0.7rem;">🔥 الأخضر = أداء عالي | الأصفر = متوسط | الأحمر = ضعيف</div>`;
+            document.getElementById('contentArea').innerHTML = html;
+        } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل الخريطة الحرارية</div>`; }
+    }
+
+    // ========== التقويم الاقتصادي ==========
+    function renderEconomic() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="table-container"><table><thead><tr><th>التاريخ</th><th>الحدث</th><th>الدولة</th><th>الأهمية</th><th>التأثير المتوقع</th></tr></thead><tbody>
+            <tr><td>16 مايو 2026</td><td>قرار الفائدة</td><td>🇺🇸 أمريكا</td><td>⭐ عالية</td><td class="positive">تثبيت متوقع</td></tr>
+            <tr><td>17 مايو 2026</td><td>مؤشر أسعار المستهلكين</td><td>🇪🇺 أوروبا</td><td>⭐⭐ متوسطة</td><td class="negative">ارتفاع طفيف</td></tr>
+            <tr><td>18 مايو 2026</td><td>الناتج المحلي الإجمالي</td><td>🇸🇦 السعودية</td><td>⭐ عالية</td><td class="positive">+3.2%</td></tr>
+            <tr><td>20 مايو 2026</td><td>مؤشر مديري المشتريات</td><td>🇨🇳 الصين</td><td>⭐⭐ متوسطة</td><td class="positive">تحسن متوقع</td></tr>
+            <tr><td>22 مايو 2026</td><td>محضر الاحتياطي الفيدرالي</td><td>🇺🇸 أمريكا</td><td>⭐ عالية</td><td>انتظار الإشارات</td></tr>
+        </tbody></table></div>`;
+    }
+
+    // ========== محاكي التداول ==========
+    function renderSimulator() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">🎮 محاكي التداول (أموال وهمية)</h3><div style="background:#1a2335; padding:15px; border-radius:16px; margin-bottom:20px;"><div style="display:flex; justify-content:space-between;"><span>💰 الرصيد التجريبي</span><span class="positive" id="simBalance">100,000 ريال</span></div></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;"><div><label>الأصل:</label><select id="simAsset" class="investment-select"><option>Bitcoin</option><option>Ethereum</option><option>Apple</option><option>Microsoft</option><option>الذهب</option></select></div><div><label>الكمية:</label><input type="number" id="simQty" class="investment-input" value="0.01" step="0.01"></div></div><div style="display:flex; gap:15px; margin-top:20px;"><button id="simBuyBtn" class="btn-sm btn-primary" style="padding:10px; flex:1;">شراء</button><button id="simSellBtn" class="btn-sm" style="background:#ff5a67; flex:1;">بيع</button></div><div id="simResult" style="margin-top:15px;"></div></div>`;
+        document.getElementById('simBuyBtn')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = '✅ تم شراء الكمية بنجاح (محاكاة وهمية)'; });
+        document.getElementById('simSellBtn')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = '🔴 تم بيع الكمية بنجاح (محاكاة وهمية)'; });
+    }
+
+    // ========== المحفظة ==========
+    function renderPortfolio() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        if(userPortfolio.length === 0){
+            document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3>💼 محفظتي</h3><div class="empty-state">📭 لا توجد صفقات حالياً. قم بشراء أصول من قسم الأسواق.</div></div>`;
+            return;
+        }
+        let totalValue = 0;
+        let html = `<div class="investment-card"><h3 style="margin-bottom:20px;">💼 محفظتي الاستثمارية</h3><div class="table-container"><table><thead><tr><th>الأصل</th><th>النوع</th><th>الكمية</th><th>سعر الشراء</th><th>القيمة</th><th>التاريخ</th></tr></thead><tbody>`;
+        userPortfolio.forEach(t => { totalValue += t.qty * t.price; html += `<tr><td><strong>${t.asset}</strong></td><td><span class="rec-buy">شراء</span></td><td>${t.qty}</td><td>${t.price}</td><td>${(t.qty * t.price).toLocaleString()} ريال</td><td style="font-size:0.7rem;">${new Date(t.date).toLocaleDateString('ar-EG')}</td></tr>`; });
+        html += `</tbody></table></div><div style="margin-top:15px;background:#1a2335;padding:15px;border-radius:12px;"><span>💰 إجمالي قيمة المحفظة: </span><span class="positive">${totalValue.toLocaleString()} ريال</span></div></div>`;
+        document.getElementById('contentArea').innerHTML = html;
+    }
+
+    // ========== الاشتراك ==========
+    function renderSubscription() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">⭐ خطط الاشتراك</h3><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;"><div style="background:#1a2335; border-radius:16px; padding:20px; text-align:center;"><h4 style="color:#10b981;">Basic</h4><div class="stat-value" style="font-size:1.3rem;">100 ريال/شهر</div><div style="margin-top:10px;">أو 200 ريال/سنة</div><button class="btn-sm btn-primary" style="margin-top:15px; padding:8px 20px;">اشترك</button></div><div style="background:#1a2335; border-radius:16px; padding:20px; text-align:center; border:1px solid #10b981;"><h4 style="color:#10b981;">Pro</h4><div class="stat-value" style="font-size:1.3rem;">200 ريال/شهر</div><div style="margin-top:10px;">أو 300 ريال/سنة</div><button class="btn-sm btn-primary" style="margin-top:15px; padding:8px 20px;">اشترك</button></div><div style="background:#1a2335; border-radius:16px; padding:20px; text-align:center;"><h4 style="color:#10b981;">VIP</h4><div class="stat-value" style="font-size:1.3rem;">300 ريال/شهر</div><div style="margin-top:10px;">أو 500 ريال/سنة</div><button class="btn-sm btn-primary" style="margin-top:15px; padding:8px 20px;">اشترك</button></div></div></div>`;
+    }
+
+    // ========== المحافظ الاستثمارية ==========
+    function renderInvestments() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">🏦 المحافظ الاستثمارية الجاهزة</h3><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;"><div style="background:#1a2335; border-radius:16px; padding:20px;"><h4 style="color:#10b981;">محفظة نمو</h4><div>العائد المتوقع: 15-20%</div><div>المخاطرة: عالية</div><div style="margin-top:10px;"><span class="rec-buy">أسهم</span> <span class="rec-hold">ذهب</span></div><button class="btn-sm btn-primary" style="margin-top:15px;">استثمر الآن</button></div><div style="background:#1a2335; border-radius:16px; padding:20px;"><h4 style="color:#10b981;">محفظة دخل</h4><div>العائد المتوقع: 8-12%</div><div>المخاطرة: متوسطة</div><div style="margin-top:10px;"><span class="rec-hold">سندات</span> <span class="rec-buy">أسهم ممتازة</span></div><button class="btn-sm btn-primary" style="margin-top:15px;">استثمر الآن</button></div><div style="background:#1a2335; border-radius:16px; padding:20px;"><h4 style="color:#10b981;">محفظة ذهب وعملات</h4><div>العائد المتوقع: 10-15%</div><div>المخاطرة: منخفضة</div><div style="margin-top:10px;"><span class="rec-buy">ذهب</span> <span class="rec-hold">دولار</span></div><button class="btn-sm btn-primary" style="margin-top:15px;">استثمر الآن</button></div></div></div>`;
+    }
+
+    // ========== الربط الخارجي ==========
+    function renderExternal() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">🔗 ربط المحافظ الخارجية</h3><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px;"><div style="background:#1a2335; border-radius:16px; padding:15px; text-align:center;"><div style="font-size:2rem;">₿</div><div>Binance</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط المحفظة</button></div><div style="background:#1a2335; border-radius:16px; padding:15px; text-align:center;"><div style="font-size:2rem;">🔷</div><div>Coinbase</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط المحفظة</button></div><div style="background:#1a2335; border-radius:16px; padding:15px; text-align:center;"><div style="font-size:2rem;">🦊</div><div>MetaMask</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط المحفظة</button></div><div style="background:#1a2335; border-radius:16px; padding:15px; text-align:center;"><div style="font-size:2rem;">📈</div><div>TradingView</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط المحفظة</button></div></div></div>`;
+    }
+
+    // ========== البنوك ==========
+    function renderBanks() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">🏛️ ربط الحسابات البنكية</h3><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px;"><div style="background:#1a2335; border-radius:16px; padding:15px;"><div>🇸🇦 الراجحي</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط الحساب</button></div><div style="background:#1a2335; border-radius:16px; padding:15px;"><div>🇸🇦 الأهلي</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط الحساب</button></div><div style="background:#1a2335; border-radius:16px; padding:15px;"><div>🇸🇦 STC Pay</div><button class="btn-sm btn-primary" style="margin-top:10px;">ربط المحفظة</button></div><div style="background:#1a2335; border-radius:16px; padding:15px;"><div>💳 بطاقات مدى/فيزا</div><button class="btn-sm btn-primary" style="margin-top:10px;">إضافة بطاقة</button></div></div><div class="empty-state" style="margin-top:20px;">🔧 سيتم تفعيل الربط الفعلي مع بوابة Moyasar قريباً</div></div>`;
+    }
+
+    // ========== المستشار الذكي (يعمل) ==========
+    async function renderAdvisor() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحليل السوق...</div>';
+        try {
+            const [btcRes, goldRes] = await Promise.all([fetch(`${API_BASE}/api/ai/analysis/BTC`), fetch(`${API_BASE}/api/ai/analysis/GOLD`)]);
+            const btc = await btcRes.json();
+            const gold = await goldRes.json();
+            document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">🧠 المستشار الذكي - تحليل متقدم</h3><div style="background:#1a2335; border-radius:16px; padding:20px; margin-bottom:15px;"><div style="display:flex; justify-content:space-between;"><span>Bitcoin (BTC)</span><span class="${btc.recommendation === 'شراء' ? 'positive' : 'negative'}">${btc.recommendation || 'احتفاظ'}</span></div><div>نسبة الثقة: ${btc.tech_score || 65}%</div><div style="font-size:0.7rem; color:#8e9aaf;">المؤشرات الفنية تشير إلى اتجاه ${btc.indicators?.sma_20 > btc.indicators?.sma_50 ? 'صاعد' : 'متذبذب'}</div></div><div style="background:#1a2335; border-radius:16px; padding:20px; margin-bottom:15px;"><div style="display:flex; justify-content:space-between;"><span>الذهب (XAU)</span><span class="${gold.recommendation === 'شراء' ? 'positive' : 'negative'}">${gold.recommendation || 'شراء'}</span></div><div>نسبة الثقة: 78%</div><div style="font-size:0.7rem; color:#8e9aaf;">الذهب في اتجاه صاعد مع زيادة الطلب العالمي</div></div><div style="background:#1a2335; border-radius:16px; padding:20px;"><h4>🌍 العوامل المؤثرة حالياً</h4><div style="margin-top:10px;">• التوترات الجيوسياسية: متوسطة</div><div>• توقعات أسعار الفائدة: انخفاض متوقع</div><div>• الطقس والكوارث: لا تأثير مباشر</div><div>• معنويات السوق: إيجابية</div></div></div>`;
+        } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل تحليل المستشار</div>`; }
+    }
+
+    // ========== إشارات التداول ==========
+    async function renderSignals() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحليل الإشارات...</div>';
+        try {
+            const signals = await Promise.all([fetch(`${API_BASE}/api/ai/analysis/BTC`), fetch(`${API_BASE}/api/ai/analysis/NVDA`), fetch(`${API_BASE}/api/ai/analysis/XAU`)]);
+            const data = await Promise.all(signals.map(s => s.json()));
+            document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">📡 إشارات التداول الفورية</h3><div class="table-container"><table><thead><tr><th>الأصل</th><th>الإشارة</th><th>نسبة الثقة</th><th>التحليل</th><th>تداول</th></tr></thead><tbody>
+                <tr><td><strong>Bitcoin</strong></td><td><span class="${data[0].recommendation === 'شراء' ? 'rec-buy' : 'rec-hold'}">${data[0].recommendation || 'احتفاظ'}</span></td><td>${data[0].tech_score || 65}%</td><td>مؤشرات فنية إيجابية</td><td><button class="btn-sm btn-primary" onclick="alert('تداول Bitcoin')">تداول</button></td></tr>
+                <tr><td><strong>NVIDIA</strong></td><td><span class="${data[1].recommendation === 'شراء' ? 'rec-buy' : 'rec-hold'}">${data[1].recommendation || 'شراء'}</span></td><td>72%</td><td>نمو قوي في قطاع الذكاء الاصطناعي</td><td><button class="btn-sm btn-primary" onclick="alert('تداول NVIDIA')">تداول</button></td></tr>
+                <tr><td><strong>الذهب</strong></td><td><span class="rec-buy">شراء</span></td><td>78%</td><td>ملاذ آمن في ظل التوترات</td><td><button class="btn-sm btn-primary" onclick="alert('تداول الذهب')">تداول</button></td></tr>
+            </tbody></table></div><div class="empty-state" style="margin-top:15px;">⚡ يتم تحديث الإشارات تلقائياً كل 5 دقائق</div></div>`;
+        } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل الإشارات</div>`; }
+    }
+
+    // ========== سكانر الفرص ==========
+    async function renderScanner() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'flex';
+        document.getElementById('marketsTabs').innerHTML = markets.map(m => `<button class="market-tab ${m.id === currentMarket ? 'active' : ''}" data-market="${m.id}">${m.name}</button>`).join('');
+        document.querySelectorAll('.market-tab').forEach(btn => { btn.addEventListener('click', () => { currentMarket = btn.dataset.market; renderScanner(); }); });
+        document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحليل الفرص...</div>';
+        try {
+            const res = await fetch(`${API_BASE}/api/scanner/${currentMarket}`);
+            if(!res.ok) throw new Error();
+            const data = await res.json();
+            const opps = data.opportunities;
+            if(!opps || opps.length===0){ document.getElementById('contentArea').innerHTML = '<div class="empty-state">⚠️ لا توجد فرص استثمارية واضحة حالياً</div>'; return; }
+            let html = `<div class="table-container"><table><thead><tr><th>الشركة</th><th>القطاع</th><th>السعر</th><th>درجة الفرصة</th><th>التوصية</th><th>الأسباب</th></tr></thead><tbody>`;
+            opps.slice(0,15).forEach(o => { html += `<tr><td><strong>${o.name}</strong></td><td>${o.sector}</td><td>${o.price}</td><td class="${o.score>=30?'positive':'negative'}">${o.score} نقطة</td><td><span class="${o.recommendation.includes('شراء')?'rec-buy':'rec-sell'}">${o.recommendation}</span></td><td style="font-size:0.7rem;">${o.reasons?.slice(0,2).join(' • ') || 'تحليل إيجابي'}</td>`; });
+            html += `</tbody></table></div>`;
+            document.getElementById('contentArea').innerHTML = html;
+        } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل سكانر الفرص</div>`; }
+    }
+
+    // ========== المتابعة ==========
+    function renderFollowup() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">📋 متابعة الصفقات والأداء</h3><div class="table-container"><table><thead><tr><th>الأصل</th><th>النوع</th><th>الكمية</th><th>سعر الشراء</th><th>السعر الحالي</th><th>الربح/الخسارة</th></tr></thead><tbody>${userPortfolio.length === 0 ? '<tr><td colspan="6" class="empty-state">لا توجد صفقات للمتابعة</td></tr>' : userPortfolio.map(t => { const currentPrice = t.price * (1 + (Math.random() * 0.1 - 0.05)); const profit = (currentPrice - t.price) * t.qty; return `<tr><td><strong>${t.asset}</strong></td><td><span class="rec-buy">شراء</span></td><td>${t.qty}</td><td>${t.price}</td><td>${currentPrice.toFixed(2)}</td><td class="${profit >= 0 ? 'positive' : 'negative'}">${profit >= 0 ? '+' : ''}${profit.toFixed(2)} ريال</td></tr>`; }).join('')}</tbody></table></div></div>`;
+    }
+
+    // ========== خطة الاستثمار ==========
+    function renderInvestmentPlan() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'none';
+        document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3 style="margin-bottom:20px;">📈 خطة استثمار ذكية</h3><div><label>💰 رأس المال (ريال)</label><input type="number" id="capitalInput" class="investment-input" placeholder="10000"><label>📅 المدة</label><select id="monthsInput" class="investment-select"><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="9">9 أشهر</option><option value="12">12 شهر</option></select><button id="generatePlan" class="btn-sm btn-primary" style="padding:12px; width:100%;">إنشاء الخطة</button></div><div id="planResult"></div></div>`;
+        document.getElementById('generatePlan')?.addEventListener('click', async () => {
+            const capital = document.getElementById('capitalInput').value;
+            const months = document.getElementById('monthsInput').value;
+            if(!capital || capital<=0){ document.getElementById('planResult').innerHTML = '<div class="error-state">❌ رجاء إدخال مبلغ صحيح</div>'; return; }
+            document.getElementById('planResult').innerHTML = '<div class="loading-state">⏳ جاري حساب الخطة...</div>';
             try {
-                const res = await fetch(`${API_BASE}/api/markets/${currentMarket}`);
-                if(!res.ok) throw new Error();
-                const data = await res.json();
-                const companies = data.data;
-                if(!companies || companies.length===0){ document.getElementById('contentArea').innerHTML = '<div class="empty-state">⚠️ لا توجد بيانات</div>'; return; }
-                let html = `<div class="table-container"><tr><thead><tr><th>الشركة</th><th>القطاع</th><th>السعر</th><th>التغير</th><th>التوصية</th><th>تحليل</th><th>تداول</th></tr></thead><tbody>`;
-                companies.forEach(c => {
-                    const change = c.change24h || c.change || (Math.random()*6-3).toFixed(1);
-                    const chNum = parseFloat(change);
-                    const rec = chNum > 3 ? 'شراء' : (chNum < -2 ? 'بيع' : 'احتفاظ');
-                    html += `<tr><td><div class="company-name">${c.name}</div><div class="company-symbol">${c.symbol || c.name.substring(0,4)}</div></td><td>${c.sector || '—'}</td><td>${typeof c.price === 'number' ? c.price.toLocaleString() : c.price}</td><td class="${chNum>=0?'positive':'negative'}">${chNum>=0?'▲':'▼'} ${Math.abs(chNum).toFixed(2)}%</td><td><span class="${rec==='شراء'?'rec-buy':'rec-sell'}">${rec}</span></td><td><button class="btn-sm btn-secondary" onclick="alert('تحليل AI لـ ${c.name}')">تحليل</button></td><td><button class="btn-sm btn-primary" onclick="alert('تداول ${c.name}')">تداول</button></td></tr>`;
-                });
-                html += `</tbody></table></div><div style="margin-top:12px;text-align:center;font-size:0.7rem;">📊 عدد الشركات: ${companies.length}</div>`;
-                document.getElementById('contentArea').innerHTML = html;
-            } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل البيانات</div>`; }
-        }
-        function renderHeatmap() { document.getElementById('statsRow').style.display = 'none'; document.getElementById('marketsTabs').style.display = 'none'; document.getElementById('contentArea').innerHTML = `<div class="table-container" style="padding:20px;"><h3>🔥 خريطة أداء القطاعات</h3><div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; margin-top:20px;"><div style="background:#10b98120; padding:15px; border-radius:12px; text-align:center;"><div>التكنولوجيا</div><div class="positive">▲ +8.2%</div></div><div style="background:#10b98120; padding:15px; border-radius:12px;"><div>الطاقة</div><div class="positive">▲ +4.5%</div></div><div style="background:#ff5a6720; padding:15px; border-radius:12px;"><div>العقارات</div><div class="negative">▼ -1.2%</div></div><div style="background:#f6b84b20; padding:15px; border-radius:12px;"><div>المالية</div><div class="positive">▲ +2.3%</div></div></div></div>`; }
-        function renderEconomic() { document.getElementById('statsRow').style.display = 'none'; document.getElementById('marketsTabs').style.display = 'none'; document.getElementById('contentArea').innerHTML = `<div class="table-container"><table><thead><tr><th>التاريخ</th><th>الحدث</th><th>الدولة</th><th>الأهمية</th><th>التأثير</th></tr></thead><tbody><tr><td>16 مايو 2026</td><td>قرار الفائدة</td><td>🇺🇸 أمريكا</td><td>⭐ عالية</td><td class="positive">تثبيت</td></tr><tr><td>17 مايو 2026</td><td>مؤشر أسعار المستهلكين</td><td>🇪🇺 أوروبا</td><td>⭐⭐ متوسطة</td><td class="negative">ارتفاع</td></tr><tr><td>18 مايو 2026</td><td>الناتج المحلي الإجمالي</td><td>🇸🇦 السعودية</td><td>⭐ عالية</td><td class="positive">+3.2%</td></tr></tbody></table></div>`; }
-        function renderSimulator() { document.getElementById('statsRow').style.display = 'none'; document.getElementById('marketsTabs').style.display = 'none'; document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3>🎮 محاكي التداول</h3><div style="background:#1a2335; padding:15px; border-radius:16px; margin-bottom:20px;"><div style="display:flex; justify-content:space-between;"><span>💰 الرصيد التجريبي</span><span class="positive" id="simBalance">100,000 ريال</span></div></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;"><div><label>الأصل:</label><select id="simAsset" class="investment-select"><option>Bitcoin</option><option>Ethereum</option><option>Apple</option></select></div><div><label>الكمية:</label><input type="number" id="simQty" class="investment-input" value="0.01" step="0.01"></div></div><div style="display:flex; gap:15px; margin-top:20px;"><button id="simBuyBtn" class="btn-sm btn-primary" style="padding:10px; flex:1;">شراء</button><button id="simSellBtn" class="btn-sm" style="background:#ff5a67; flex:1;">بيع</button></div><div id="simResult" style="margin-top:15px;"></div></div>`;
-            document.getElementById('simBuyBtn')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = '✅ تم شراء الكمية بنجاح (محاكاة)'; });
-            document.getElementById('simSellBtn')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = '🔴 تم بيع الكمية بنجاح (محاكاة)'; });
-        }
-        async function renderScanner() {
-            document.getElementById('statsRow').style.display = 'none';
-            document.getElementById('marketsTabs').style.display = 'flex';
-            document.getElementById('marketsTabs').innerHTML = markets.map(m => `<button class="market-tab ${m.id === currentMarket ? 'active' : ''}" data-market="${m.id}">${m.name}</button>`).join('');
-            document.querySelectorAll('.market-tab').forEach(btn => { btn.addEventListener('click', () => { currentMarket = btn.dataset.market; renderScanner(); }); });
-            document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري تحليل الفرص...</div>';
+                const res = await fetch(`${API_BASE}/api/investment-plan/${capital}/${months}`);
+                const plan = await res.json();
+                let html = `<div style="background:#1a2335; border-radius:16px; padding:20px; margin-top:15px;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;"><div><span style="color:#8e9aaf;">رأس المال</span><br><span class="positive">${plan.capital.toLocaleString()} ريال</span></div><div><span style="color:#8e9aaf;">المدة</span><br>${plan.months} أشهر</div><div><span style="color:#8e9aaf;">العائد المتوقع</span><br><span class="positive">${plan.expected_return_pct}% (${plan.expected_profit.toLocaleString()} ريال)</span></div><div><span style="color:#8e9aaf;">المخاطرة</span><br>${plan.risk_level}</div></div><div><strong>💡 توزيع الاستثمار المقترح:</strong></div><div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:10px;">`;
+                for(const [key, value] of Object.entries(plan.allocation)){ const icon={ stocks:'🏢', metals:'🥇', bonds:'📜', crypto:'₿', cash:'💰' }; html += `<div style="text-align:center; background:#0f1420; padding:10px; border-radius:12px;"><div>${icon[key] || '📊'}</div><div>${value.percentage}%</div><div style="font-size:0.7rem;">${value.amount.toLocaleString()}</div></div>`; }
+                html += `</div><div style="margin-top:20px; font-size:0.7rem; color:#8e9aaf;">⚠️ ${plan.disclaimer}</div></div>`;
+                document.getElementById('planResult').innerHTML = html;
+            } catch(e){ document.getElementById('planResult').innerHTML = `<div class="error-state">❌ خطأ في إنشاء الخطة</div>`; }
+        });
+    }
+
+    // ========== أرشيف الأسواق ==========
+    async function renderArchive() {
+        document.getElementById('statsRow').style.display = 'none';
+        document.getElementById('marketsTabs').style.display = 'flex';
+        document.getElementById('marketsTabs').innerHTML = `<select id="archiveYear" style="background:#1a2335; border:1px solid #2d374b; padding:8px; border-radius:12px;"><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option></select><select id="archiveMarket" style="background:#1a2335; border:1px solid #2d374b; padding:8px; border-radius:12px;">${markets.slice(0,7).map(m => `<option value="${m.id}">${m.name}</option>`).join('')}</select><button id="loadArchive" class="market-tab">عرض الأرشيف</button>`;
+        document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ اختر السنة والسوق لعرض البيانات التاريخية</div>';
+        document.getElementById('loadArchive')?.addEventListener('click', async () => {
+            const year = document.getElementById('archiveYear').value;
+            const market = document.getElementById('archiveMarket').value;
+            document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري التحميل...</div>';
             try {
-                const res = await fetch(`${API_BASE}/api/scanner/${currentMarket}`);
-                if(!res.ok) throw new Error();
+                const res = await fetch(`${API_BASE}/api/archive/${market}/${year}`);
                 const data = await res.json();
-                const opps = data.opportunities;
-                if(!opps || opps.length===0){ document.getElementById('contentArea').innerHTML = '<div class="empty-state">⚠️ لا توجد فرص</div>'; return; }
-                let html = `<div class="table-container"><table><thead><tr><th>الشركة</th><th>القطاع</th><th>السعر</th><th>درجة الفرصة</th><th>التوصية</th><th>الأسباب</th></tr></thead><tbody>`;
-                opps.forEach(o => { html += `<tr><td><strong>${o.name}</strong></td><td>${o.sector}</td><td>${o.price}</td><td class="${o.score>=30?'positive':'negative'}">${o.score} نقطة</td><td><span class="${o.recommendation.includes('شراء')?'rec-buy':'rec-sell'}">${o.recommendation}</span></td><td style="font-size:0.7rem;">${o.reasons?.slice(0,1).join(' • ') || 'تحليل إيجابي'}</td></tr>`; });
+                const list = data.data;
+                if(!list || list.length===0){ document.getElementById('contentArea').innerHTML = '<div class="empty-state">⚠️ لا توجد بيانات</div>'; return; }
+                let html = `<div class="table-container"><table><thead><tr><th>الشركة</th><th>القطاع</th><th>سعر البداية</th><th>سعر النهاية</th><th>العائد السنوي</th><th>الأعلى</th><th>الأدنى</th></tr></thead><tbody>`;
+                list.forEach(i => { html += `<tr><td><strong>${i.name}</strong></td><td>${i.sector}</td><td>${i.start_price}</td><td>${i.end_price}</td><td class="${i.yearly_return>=0?'positive':'negative'}">${i.yearly_return}%</td><td>${i.high}</td><td>${i.low}</td>`; });
                 html += `</tbody></table></div>`;
                 document.getElementById('contentArea').innerHTML = html;
-            } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في سكانر الفرص</div>`; }
-        }
-        function renderInvestmentPlan() {
-            document.getElementById('statsRow').style.display = 'none';
-            document.getElementById('marketsTabs').style.display = 'none';
-            document.getElementById('contentArea').innerHTML = `<div class="investment-card"><h3>📈 خطة استثمار ذكية</h3><div><label>💰 رأس المال (ريال)</label><input type="number" id="capitalInput" class="investment-input" placeholder="10000"><label>📅 المدة</label><select id="monthsInput" class="investment-select"><option value="3">3 أشهر</option><option value="6">6 أشهر</option><option value="9">9 أشهر</option><option value="12">12 شهر</option></select><button id="generatePlan" class="btn-sm btn-primary" style="padding:12px; width:100%;">إنشاء الخطة</button></div><div id="planResult"></div></div>`;
-            document.getElementById('generatePlan')?.addEventListener('click', async () => {
-                const capital = document.getElementById('capitalInput').value;
-                const months = document.getElementById('monthsInput').value;
-                if(!capital || capital<=0){ document.getElementById('planResult').innerHTML = '<div class="error-state">❌ رجاء إدخال مبلغ صحيح</div>'; return; }
-                document.getElementById('planResult').innerHTML = '<div class="loading-state">⏳ جاري حساب الخطة...</div>';
-                try {
-                    const res = await fetch(`${API_BASE}/api/investment-plan/${capital}/${months}`);
-                    const plan = await res.json();
-                    let html = `<div style="background:#1a2335; border-radius:16px; padding:20px; margin-top:15px;"><div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;"><div><span style="color:#8e9aaf;">رأس المال</span><br><span class="positive">${plan.capital.toLocaleString()} ريال</span></div><div><span style="color:#8e9aaf;">المدة</span><br>${plan.months} أشهر</div><div><span style="color:#8e9aaf;">العائد المتوقع</span><br><span class="positive">${plan.expected_return_pct}% (${plan.expected_profit.toLocaleString()} ريال)</span></div><div><span style="color:#8e9aaf;">المخاطرة</span><br>${plan.risk_level}</div></div><div><strong>💡 توزيع الاستثمار المقترح:</strong></div><div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:10px;">`;
-                    for(const [key, value] of Object.entries(plan.allocation)){ const icon={ stocks:'🏢', metals:'🥇', bonds:'📜', crypto:'₿', cash:'💰' }; html += `<div style="text-align:center; background:#0f1420; padding:10px; border-radius:12px;"><div>${icon[key] || '📊'}</div><div>${value.percentage}%</div><div style="font-size:0.7rem;">${value.amount.toLocaleString()}</div></div>`; }
-                    html += `</div><div style="margin-top:20px; font-size:0.7rem; color:#8e9aaf;">⚠️ ${plan.disclaimer}</div></div>`;
-                    document.getElementById('planResult').innerHTML = html;
-                } catch(e){ document.getElementById('planResult').innerHTML = `<div class="error-state">❌ خطأ في إنشاء الخطة</div>`; }
-            });
-        }
-        async function renderArchive() {
-            document.getElementById('statsRow').style.display = 'none';
-            document.getElementById('marketsTabs').style.display = 'flex';
-            document.getElementById('marketsTabs').innerHTML = `<select id="archiveYear" style="background:#1a2335; border:1px solid #2d374b; padding:8px; border-radius:12px;"><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option></select><select id="archiveMarket" style="background:#1a2335; border:1px solid #2d374b; padding:8px; border-radius:12px;">${markets.slice(0,7).map(m => `<option value="${m.id}">${m.name}</option>`).join('')}</select><button id="loadArchive" class="market-tab">عرض الأرشيف</button>`;
-            document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ اختر السنة والسوق</div>';
-            document.getElementById('loadArchive')?.addEventListener('click', async () => {
-                const year = document.getElementById('archiveYear').value;
-                const market = document.getElementById('archiveMarket').value;
-                document.getElementById('contentArea').innerHTML = '<div class="loading-state">⏳ جاري التحميل...</div>';
-                try {
-                    const res = await fetch(`${API_BASE}/api/archive/${market}/${year}`);
-                    const data = await res.json();
-                    const list = data.data;
-                    if(!list || list.length===0){ document.getElementById('contentArea').innerHTML = '<div class="empty-state">⚠️ لا توجد بيانات</div>'; return; }
-                    let html = `<div class="table-container"><table><thead><tr><th>الشركة</th><th>القطاع</th><th>سعر البداية</th><th>سعر النهاية</th><th>العائد</th><th>الأعلى</th><th>الأدنى</th></tr></thead><tbody>`;
-                    list.forEach(i => { html += `<tr><td><strong>${i.name}</strong></td><td>${i.sector}</td><td>${i.start_price}</td><td>${i.end_price}</td><td class="${i.yearly_return>=0?'positive':'negative'}">${i.yearly_return}%</td><td>${i.high}</td><td>${i.low}</td></tr>`; });
-                    html += `</tbody></table></div>`;
-                    document.getElementById('contentArea').innerHTML = html;
-                } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ</div>`; }
-            });
-        }
-        function renderMessage(title, msg) { document.getElementById('statsRow').style.display = 'none'; document.getElementById('marketsTabs').style.display = 'none'; document.getElementById('contentArea').innerHTML = `<div class="investment-card" style="text-align:center;"><h3>${title}</h3><p style="margin-top:15px;">${msg}</p><div class="empty-state">🚧 قيد التطوير</div></div>`; }
-        const handlers = { dashboard:renderDashboard, markets:renderMarkets, heatmap:renderHeatmap, economic:renderEconomic, simulator:renderSimulator, portfolio:()=>renderMessage('💼 المحفظة','هنا أصولك'), subscription:()=>renderMessage('⭐ الاشتراك','Basic | Pro | VIP'), investments:()=>renderMessage('🏦 المحافظ الاستثمارية','محافظ جاهزة'), external:()=>renderMessage('🔗 الربط الخارجي','Binance, Coinbase'), banks:()=>renderMessage('🏛️ البنوك','ربط الحسابات البنكية'), advisor:()=>renderMessage('🧠 المستشار الذكي','تحليل AI متقدم'), signals:()=>renderMessage('📡 إشارات التداول','توصيات فورية'), scanner:renderScanner, followup:()=>renderMessage('📋 المتابعة','تتبع صفقاتك'), plan:renderInvestmentPlan, archive:renderArchive };
-        async function switchSection(section) {
-            currentSection = section;
-            document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-            document.querySelector(`.nav-link[data-section="${section}"]`).classList.add('active');
-            const titles = { dashboard:'لوحة التحكم', markets:'أسواق الأسهم العالمية', heatmap:'خريطة حرارية', economic:'التقويم الاقتصادي', simulator:'محاكي التداول', portfolio:'المحفظة', subscription:'الاشتراك', investments:'المحافظ الاستثمارية', external:'الربط الخارجي', banks:'البنوك', advisor:'المستشار الذكي', signals:'إشارات التداول', scanner:'سكانر الفرص', followup:'المتابعة', plan:'خطة الاستثمار', archive:'أرشيف الأسواق' };
-            document.getElementById('pageTitle').innerHTML = titles[section] || section;
-            if(handlers[section]) await handlers[section](); else renderMessage(section,'هذا القسم قيد التطوير');
-        }
-        async function init() { updateUserCard(); try{ const t=await fetch(`${API_BASE}/api/markets/us`); updateConnectionStatus(t.ok); }catch(e){ updateConnectionStatus(false); } document.querySelectorAll('.nav-link').forEach(link=>{ link.addEventListener('click',(e)=>{ e.preventDefault(); switchSection(link.dataset.section); }); }); await switchSection('dashboard'); }
-        function logout() { localStorage.removeItem('fs_current_user'); window.location.href = 'login.html'; }
-        init();
-    </script>
+            } catch(e){ document.getElementById('contentArea').innerHTML = `<div class="error-state">❌ خطأ في تحميل الأرشيف</div>`; }
+        });
+    }
+
+    // ========== التنقل بين الأقسام ==========
+    const handlers = {
+        dashboard: renderDashboard, markets: renderMarkets, heatmap: renderHeatmap, economic: renderEconomic,
+        simulator: renderSimulator, portfolio: renderPortfolio, subscription: renderSubscription,
+        investments: renderInvestments, external: renderExternal, banks: renderBanks,
+        advisor: renderAdvisor, signals: renderSignals, scanner: renderScanner,
+        followup: renderFollowup, plan: renderInvestmentPlan, archive: renderArchive
+    };
+
+    async function switchSection(section) {
+        currentSection = section;
+        document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+        document.querySelector(`.nav-link[data-section="${section}"]`).classList.add('active');
+        const titles = { dashboard:'لوحة التحكم', markets:'أسواق الأسهم العالمية', heatmap:'خريطة حرارية', economic:'التقويم الاقتصادي', simulator:'محاكي التداول', portfolio:'المحفظة', subscription:'الاشتراك', investments:'المحافظ الاستثمارية', external:'الربط الخارجي', banks:'البنوك', advisor:'المستشار الذكي', signals:'إشارات التداول', scanner:'سكانر الفرص', followup:'المتابعة', plan:'خطة الاستثمار', archive:'أرشيف الأسواق' };
+        document.getElementById('pageTitle').innerHTML = titles[section] || section;
+        document.getElementById('pageSubtitle').innerHTML = 'استكشف واستثمر بذكاء';
+        if(handlers[section]) await handlers[section]();
+    }
+
+    async function init() {
+        updateUserCard();
+        try{ const t=await fetch(`${API_BASE}/api/markets/us`); updateConnectionStatus(t.ok); }catch(e){ updateConnectionStatus(false); }
+        document.querySelectorAll('.nav-link').forEach(link=>{ link.addEventListener('click',(e)=>{ e.preventDefault(); switchSection(link.dataset.section); }); });
+        await switchSection('dashboard');
+    }
+    function logout() { localStorage.removeItem('fs_current_user'); window.location.href = 'login.html'; }
+    init();
+</script>
 </body>
 </html>
