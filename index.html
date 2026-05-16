@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ForeSmart - منصة التداول الذكية</title>
+    <title>ForeSmart - منصة الاستثمار الذكية</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -57,10 +57,6 @@
             text-align: center;
         }
 
-        .user-info .name {
-            font-weight: bold;
-        }
-
         .subscription-badge {
             background: #10b981;
             font-size: 0.7rem;
@@ -90,7 +86,7 @@
             font-size: 0.9rem;
         }
 
-        .nav-menu a:hover {
+        .nav-menu a:hover, .nav-menu .active a {
             background: rgba(16, 185, 129, 0.15);
             color: #10b981;
         }
@@ -121,39 +117,69 @@
             display: block;
         }
 
-        /* البطاقات والأسواق */
-        .markets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 18px;
-            margin-bottom: 30px;
-        }
-
-        .market-card {
+        /* شريط اختيار السوق */
+        .market-selector {
             background: rgba(18, 25, 45, 0.7);
             border-radius: 20px;
-            padding: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: 0.2s;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .market-selector select {
+            background: #1a2335;
+            border: 1px solid #2d374b;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            font-size: 1rem;
             cursor: pointer;
         }
 
-        .market-card:hover {
-            border-color: #10b981;
-            transform: translateY(-3px);
-        }
-
-        .market-name {
-            font-weight: bold;
+        .market-buttons {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .market-price {
-            font-size: 1.3rem;
+        .market-btn {
+            background: #1a2335;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: #b9c3e0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .market-btn.active {
+            background: #10b981;
+            color: white;
+        }
+
+        /* الجداول */
+        .markets-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(18, 25, 45, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .markets-table th, .markets-table td {
+            padding: 14px 12px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .markets-table th {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
             font-weight: bold;
-            margin-bottom: 8px;
         }
 
         .positive {
@@ -164,24 +190,31 @@
             color: #ff5a67;
         }
 
-        .section-title {
-            font-size: 1.4rem;
-            margin: 25px 0 15px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .recommend-buy {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
         }
 
-        /* أزرار التداول */
-        .trade-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
+        .recommend-sell {
+            background: rgba(255, 90, 103, 0.2);
+            color: #ff5a67;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
         }
 
-        .btn-buy {
+        .recommend-hold {
+            background: rgba(246, 184, 75, 0.2);
+            color: #f6b84b;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .trade-btn {
             background: #10b981;
             border: none;
             padding: 6px 12px;
@@ -191,40 +224,19 @@
             font-size: 0.8rem;
         }
 
-        .btn-sell {
-            background: #ff5a67;
+        .analysis-btn {
+            background: #3b82f6;
             border: none;
             padding: 6px 12px;
             border-radius: 20px;
             color: white;
             cursor: pointer;
             font-size: 0.8rem;
+            margin-left: 5px;
         }
 
-        /* التنبيهات */
-        .alert-bar {
-            background: rgba(16, 185, 129, 0.15);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .sound-toggle {
-            background: #1a2335;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 30px;
-            color: white;
-            cursor: pointer;
-        }
-
-        /* نافذة التداول السريع */
-        .quick-trade-modal {
+        /* نافذة التداول */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -241,7 +253,7 @@
             background: #0f1825;
             border-radius: 28px;
             padding: 30px;
-            width: 400px;
+            width: 450px;
             max-width: 90%;
             border: 1px solid #10b981;
         }
@@ -271,13 +283,19 @@
             .main-content {
                 margin-right: 0;
             }
+            .markets-table {
+                font-size: 0.7rem;
+            }
+            .markets-table th, .markets-table td {
+                padding: 8px 6px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- نافذة التداول السريع -->
-<div id="tradeModal" class="quick-trade-modal">
+<!-- نافذة التداول -->
+<div id="tradeModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeTradeModal()">&times;</span>
         <h3 id="modalAssetName">تداول</h3>
@@ -288,9 +306,7 @@
         <input type="number" id="tradeAmount" placeholder="الكمية">
         <input type="number" id="stopLoss" placeholder="وقف الخسارة (اختياري)">
         <input type="number" id="takeProfit" placeholder="جني الأرباح (اختياري)">
-        <div class="trade-buttons" style="margin-top:15px;">
-            <button onclick="executeTrade()" style="background:#10b981; padding:10px; border:none; border-radius:30px; color:white; width:100%;">تنفيذ الصفقة</button>
-        </div>
+        <button onclick="executeTrade()" style="background:#10b981; padding:12px; border:none; border-radius:30px; color:white; width:100%; margin-top:10px;">تنفيذ الصفقة</button>
         <div id="tradeResult" style="margin-top:10px; font-size:0.8rem;"></div>
     </div>
 </div>
@@ -298,7 +314,7 @@
 <div class="sidebar">
     <div class="logo">
         <h1>ForeSmart</h1>
-        <p>منصة التداول الذكية</p>
+        <p>منصة الاستثمار الذكية</p>
     </div>
     <div class="user-info" id="userInfo">
         <div class="name">مرحباً بك</div>
@@ -311,146 +327,471 @@
         <li data-section="crypto"><a href="#">₿ العملات الرقمية</a></li>
         <li data-section="forex"><a href="#">💱 العملات الورقية</a></li>
         <li data-section="metals"><a href="#">🥇 المعادن</a></li>
-        <li data-section="trading"><a href="#">⚡ التداول الذكي</a></li>
+        <li data-section="scanner"><a href="#">🔍 سكانر الفرص</a></li>
+        <li data-section="archive"><a href="#">📚 أرشيف الأسواق</a></li>
+        <li data-section="ai-investment"><a href="#">📈 خطة الاستثمار</a></li>
         <li data-section="portfolio"><a href="#">💼 محفظتي</a></li>
-        <li data-section="ai-plan"><a href="#">📈 خطة الاستثمار (AI)</a></li>
-        <li data-section="ai-advisor"><a href="#">🧠 المستشار الاقتصادي</a></li>
     </ul>
     <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
 </div>
 
 <div class="main-content">
-    <!-- شريط التنبيهات الصوتية -->
-    <div class="alert-bar">
-        <span>🔔 التنبيهات الصوتية: </span>
-        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">✅ مفعل</button>
-        <span id="lastAlert" style="font-size:0.8rem;"></span>
-    </div>
-
-    <!-- ==================== الأسواق ==================== -->
+    <!-- لوحة التحكم -->
     <div id="dashboard" class="section active-section">
-        <h2>🌍 نظرة عامة على الأسواق</h2>
-        <div id="marketSummary"></div>
+        <h2>📊 لوحة التحكم</h2>
+        <div class="market-selector">
+            <span>🌍 نظرة عامة على الأسواق</span>
+        </div>
+        <div id="dashboardSummary"></div>
     </div>
 
-    <div id="stocks" class="section"><h2>🏢 أسواق الأسهم العالمية</h2><div id="stocksMarket" class="markets-grid"></div></div>
-    <div id="bonds" class="section"><h2>📜 أسواق السندات</h2><div id="bondsMarket" class="markets-grid"></div></div>
-    <div id="crypto" class="section"><h2>₿ العملات الرقمية</h2><div id="cryptoMarket" class="markets-grid"></div></div>
-    <div id="forex" class="section"><h2>💱 أسواق العملات (فوركس)</h2><div id="forexMarket" class="markets-grid"></div></div>
-    <div id="metals" class="section"><h2>🥇 المعادن الثمينة</h2><div id="metalsMarket" class="markets-grid"></div></div>
+    <!-- أسواق الأسهم -->
+    <div id="stocks" class="section">
+        <h2>🏢 أسواق الأسهم العالمية</h2>
+        <div class="market-selector">
+            <div class="market-buttons" id="marketButtons">
+                <button class="market-btn active" data-market="us">🇺🇸 السوق الأمريكي</button>
+                <button class="market-btn" data-market="saudi">🇸🇦 السوق السعودي</button>
+                <button class="market-btn" data-market="uk">🇬🇧 السوق البريطاني</button>
+                <button class="market-btn" data-market="uae">🇦🇪 السوق الإماراتي</button>
+                <button class="market-btn" data-market="china">🇨🇳 السوق الصيني</button>
+                <button class="market-btn" data-market="europe">🇪🇺 السوق الأوروبي</button>
+                <button class="market-btn" data-market="japan">🇯🇵 السوق الياباني</button>
+            </div>
+        </div>
+        <div id="stocksTableContainer"></div>
+    </div>
 
-    <div id="trading" class="section"><h2>⚡ التداول الذكي (بيع/شراء/وقف خسارة)</h2><div id="tradingPanel"></div></div>
-    <div id="portfolio" class="section"><h2>💼 محفظتي الاستثمارية</h2><div id="portfolioPanel"></div></div>
-    <div id="ai-plan" class="section"><h2>📈 خطة الاستثمار - توصيات الذكاء الاصطناعي</h2><div id="aiPlanPanel"></div></div>
-    <div id="ai-advisor" class="section"><h2>🧠 المستشار الاقتصادي - تحليل السوق</h2><div id="aiAdvisorPanel"></div></div>
+    <!-- أسواق السندات -->
+    <div id="bonds" class="section">
+        <h2>📜 أسواق السندات</h2>
+        <div id="bondsTableContainer"></div>
+    </div>
+
+    <!-- العملات الرقمية -->
+    <div id="crypto" class="section">
+        <h2>₿ أسواق العملات الرقمية</h2>
+        <div id="cryptoTableContainer"></div>
+    </div>
+
+    <!-- العملات الورقية -->
+    <div id="forex" class="section">
+        <h2>💱 أسواق العملات (فوركس)</h2>
+        <div id="forexTableContainer"></div>
+    </div>
+
+    <!-- المعادن -->
+    <div id="metals" class="section">
+        <h2>🥇 أسواق المعادن الثمينة</h2>
+        <div id="metalsTableContainer"></div>
+    </div>
+
+    <!-- سكانر الفرص -->
+    <div id="scanner" class="section">
+        <h2>🔍 سكانر الفرص الاستثمارية</h2>
+        <div class="market-selector">
+            <span>📊 تحليل RSI والتغيرات - اكتشف الفرص الواعدة</span>
+        </div>
+        <div id="scannerContainer"></div>
+    </div>
+
+    <!-- أرشيف الأسواق -->
+    <div id="archive" class="section">
+        <h2>📚 أرشيف الأسواق (آخر 3 سنوات)</h2>
+        <div class="market-selector">
+            <select id="archiveYear" onchange="loadArchiveData()">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+            <select id="archiveMarket" onchange="loadArchiveData()">
+                <option value="us">السوق الأمريكي</option>
+                <option value="saudi">السوق السعودي</option>
+                <option value="crypto">العملات الرقمية</option>
+            </select>
+        </div>
+        <div id="archiveContainer"></div>
+    </div>
+
+    <!-- خطة الاستثمار -->
+    <div id="ai-investment" class="section">
+        <h2>📈 خطة الاستثمار - توصيات الذكاء الاصطناعي</h2>
+        <div class="market-selector">
+            <span>💰 أدخل رأس المال واختر المدة</span>
+        </div>
+        <div id="investmentContainer"></div>
+    </div>
+
+    <!-- المحفظة -->
+    <div id="portfolio" class="section">
+        <h2>💼 محفظتي الاستثمارية</h2>
+        <div id="portfolioContainer"></div>
+    </div>
 </div>
 
 <script src="assets/plans.js"></script>
 <script src="assets/auth.js"></script>
 <script>
     // ========================================
-    // بيانات الأسواق الكاملة
+    // بيانات الأسواق الكاملة (مثل الصورة)
     // ========================================
     const marketsData = {
-        stocks: [
-            { name: "الراجحي", price: 88.40, change: 1.2, market: "saudi" },
-            { name: "سابك", price: 76.30, change: -0.5, market: "saudi" },
-            { name: "أرامكو", price: 30.95, change: 0.8, market: "saudi" },
-            { name: "S&P 500", price: 5234.50, change: 0.65, market: "us" },
-            { name: "NASDAQ", price: 18450.30, change: 1.15, market: "us" },
-            { name: "FTSE 100", price: 8234.50, change: 0.32, market: "uk" },
-            { name: "DAX", price: 18650.30, change: 0.48, market: "europe" },
-            { name: "نيكاي 225", price: 38750.30, change: 0.95, market: "japan" }
-        ],
+        us: {
+            name: "السوق الأمريكي",
+            companies: [
+                { name: "Apple", symbol: "AAPL", sector: "Technology", price: 30233, change: 12.69, recommendation: "sell", aiAnalysis: "توصية بالبيع بسبب تشبع الشراء" },
+                { name: "Microsoft", symbol: "MSFT", sector: "Technology", price: 21912, change: 2.60, recommendation: "hold", aiAnalysis: "استقرار الأداء" },
+                { name: "NVIDIA", symbol: "NVDA", sector: "Semiconductors", price: 270271, change: 13.30, recommendation: "hold", aiAnalysis: "نمو قوي" },
+                { name: "Alphabet", symbol: "GOOGL", sector: "Technology", price: 391784, change: 17.70, recommendation: "sell", aiAnalysis: "توصية بيع لجني الأرباح" },
+                { name: "Amazon", symbol: "AMZN", sector: "E-commerce", price: 18950, change: 8.45, recommendation: "buy", aiAnalysis: "توسع في الذكاء الاصطناعي" },
+                { name: "Meta", symbol: "META", sector: "Social Media", price: 52340, change: 15.20, recommendation: "buy", aiAnalysis: "أرباح قوية" },
+                { name: "Tesla", symbol: "TSLA", sector: "Automotive", price: 17890, change: -5.30, recommendation: "sell", aiAnalysis: "ضغوط تنافسية" },
+                { name: "Netflix", symbol: "NFLX", sector: "Entertainment", price: 64520, change: 12.10, recommendation: "hold", aiAnalysis: "نمو في الاشتراكات" }
+            ]
+        },
+        saudi: {
+            name: "السوق السعودي",
+            companies: [
+                { name: "الراجحي", symbol: "1120", sector: "مصارف", price: 88.40, change: 1.20, recommendation: "buy", aiAnalysis: "أرباح قوية" },
+                { name: "سابك", symbol: "2010", sector: "بتروكيماويات", price: 76.30, change: -0.50, recommendation: "hold", aiAnalysis: "استقرار" },
+                { name: "أرامكو", symbol: "2222", sector: "طاقة", price: 30.95, change: 0.80, recommendation: "buy", aiAnalysis: "طلب عالمي مرتفع" },
+                { name: "STC", symbol: "7010", sector: "اتصالات", price: 38.20, change: 0.30, recommendation: "hold", aiAnalysis: "توسع في التقنية" },
+                { name: "البنك الأهلي", symbol: "1180", sector: "مصارف", price: 42.15, change: 0.85, recommendation: "buy", aiAnalysis: "ربحية متزايدة" }
+            ]
+        },
+        uk: {
+            name: "السوق البريطاني",
+            companies: [
+                { name: "HSBC", symbol: "HSBA", sector: "Banking", price: 6.85, change: -0.15, recommendation: "hold", aiAnalysis: "استقرار" },
+                { name: "BP", symbol: "BP", sector: "Energy", price: 5.12, change: 0.42, recommendation: "buy", aiAnalysis: "ارتفاع أسعار النفط" },
+                { name: "Shell", symbol: "SHEL", sector: "Energy", price: 27.85, change: 0.28, recommendation: "buy", aiAnalysis: "أرباح قياسية" },
+                { name: "Unilever", symbol: "ULVR", sector: "Consumer", price: 48.50, change: -0.22, recommendation: "hold", aiAnalysis: "طلب مستقر" }
+            ]
+        },
+        uae: {
+            name: "السوق الإماراتي",
+            companies: [
+                { name: "إعمار", symbol: "EMAAR", sector: "عقارات", price: 8.15, change: 1.05, recommendation: "buy", aiAnalysis: "نمو المشاريع" },
+                { name: "اتصالات", symbol: "EAND", sector: "اتصالات", price: 16.40, change: -0.25, recommendation: "hold", aiAnalysis: "استقرار" },
+                { name: "بنك دبي الإسلامي", symbol: "DIB", sector: "مصارف", price: 5.85, change: 0.55, recommendation: "buy", aiAnalysis: "أرباح متزايدة" }
+            ]
+        },
+        china: {
+            name: "السوق الصيني",
+            companies: [
+                { name: "Tencent", symbol: "0700", sector: "Technology", price: 42.15, change: 1.25, recommendation: "buy", aiAnalysis: "نمو الألعاب" },
+                { name: "Alibaba", symbol: "BABA", sector: "E-commerce", price: 9.45, change: 0.55, recommendation: "hold", aiAnalysis: "انتعاش متوقع" },
+                { name: "BYD", symbol: "1211", sector: "Automotive", price: 28.30, change: 2.15, recommendation: "buy", aiAnalysis: "قيادة السيارات الكهربائية" }
+            ]
+        },
+        europe: {
+            name: "السوق الأوروبي",
+            companies: [
+                { name: "SAP", symbol: "SAP", sector: "Software", price: 168.50, change: 0.65, recommendation: "buy", aiAnalysis: "نمو في السحابة" },
+                { name: "Volkswagen", symbol: "VOW3", sector: "Automotive", price: 112.30, change: -1.20, recommendation: "sell", aiAnalysis: "تراجع المبيعات" }
+            ]
+        },
+        japan: {
+            name: "السوق الياباني",
+            companies: [
+                { name: "Toyota", symbol: "7203", sector: "Automotive", price: 3520.00, change: 0.42, recommendation: "hold", aiAnalysis: "استقرار" },
+                { name: "Sony", symbol: "6758", sector: "Technology", price: 13850.00, change: 1.15, recommendation: "buy", aiAnalysis: "نمو الألعاب والإلكترونيات" }
+            ]
+        },
         bonds: [
-            { name: "الخزانة الأمريكية 10Y", price: 98.45, change: -0.15, yield: 4.35 },
-            { name: "الخزانة الأمريكية 30Y", price: 96.20, change: -0.22, yield: 4.55 },
-            { name: "السندات السعودية", price: 101.30, change: 0.12, yield: 5.10 },
-            { name: "السندات الأوروبية", price: 99.85, change: 0.08, yield: 3.85 },
-            { name: "سندات الشركات", price: 102.50, change: 0.25, yield: 4.65 }
+            { name: "الخزانة الأمريكية 10 سنوات", price: 98.45, change: -0.15, yield: 4.35, recommendation: "buy" },
+            { name: "الخزانة الأمريكية 30 سنة", price: 96.20, change: -0.22, yield: 4.55, recommendation: "hold" },
+            { name: "السندات السعودية", price: 101.30, change: 0.12, yield: 5.10, recommendation: "buy" }
         ],
         crypto: [
-            { name: "Bitcoin", price: 64213, change: 2.3, symbol: "BTC" },
-            { name: "Ethereum", price: 3482, change: 1.1, symbol: "ETH" },
-            { name: "Solana", price: 142, change: -0.5, symbol: "SOL" },
-            { name: "BNB", price: 612, change: 0.8, symbol: "BNB" },
-            { name: "XRP", price: 0.62, change: 0.3, symbol: "XRP" }
+            { name: "Bitcoin", symbol: "BTC", price: 64213, change: 2.30, recommendation: "buy" },
+            { name: "Ethereum", symbol: "ETH", price: 3482, change: 1.10, recommendation: "hold" },
+            { name: "Solana", symbol: "SOL", price: 142, change: -0.50, recommendation: "sell" }
         ],
         forex: [
-            { name: "EUR/USD", price: 1.0845, change: 0.25 },
-            { name: "GBP/USD", price: 1.2645, change: -0.12 },
-            { name: "USD/JPY", price: 154.80, change: 0.45 },
-            { name: "USD/CHF", price: 0.9145, change: -0.08 },
-            { name: "AUD/USD", price: 0.6615, change: 0.18 }
+            { name: "EUR/USD", price: 1.0845, change: 0.25, recommendation: "hold" },
+            { name: "GBP/USD", price: 1.2645, change: -0.12, recommendation: "sell" },
+            { name: "USD/JPY", price: 154.80, change: 0.45, recommendation: "buy" }
         ],
         metals: [
-            { name: "الذهب (XAU)", price: 2345.50, change: 0.42 },
-            { name: "الفضة (XAG)", price: 28.15, change: 0.35 },
-            { name: "النحاس", price: 4.65, change: -0.22 },
-            { name: "البلاتين", price: 985.30, change: 0.18 },
-            { name: "البلاديوم", price: 1012.50, change: 0.55 }
+            { name: "الذهب", price: 2345.50, change: 0.42, recommendation: "buy" },
+            { name: "الفضة", price: 28.15, change: 0.35, recommendation: "buy" },
+            { name: "النحاس", price: 4.65, change: -0.22, recommendation: "sell" }
         ]
     };
 
-    // محفظة المستخدم (لحفظ الصفقات)
+    // البيانات التاريخية (آخر 3 سنوات)
+    const archiveData = {
+        us: {
+            2024: { profit: 18.5, loss: 3.2, high: 52345, low: 47890 },
+            2023: { profit: 22.3, loss: 4.1, high: 49876, low: 41234 },
+            2022: { profit: -12.5, loss: 15.8, high: 46789, low: 35678 }
+        },
+        saudi: {
+            2024: { profit: 12.3, loss: 2.5, high: 12450, low: 11230 },
+            2023: { profit: 15.6, loss: 3.2, high: 11890, low: 10234 },
+            2022: { profit: 8.9, loss: 5.4, high: 10987, low: 9876 }
+        },
+        crypto: {
+            2024: { profit: 85.3, loss: 12.5, high: 73450, low: 42340 },
+            2023: { profit: 156.2, loss: 45.3, high: 65432, low: 23456 },
+            2022: { profit: -64.2, loss: 75.5, high: 67890, low: 16543 }
+        }
+    };
+
     let userPortfolio = JSON.parse(localStorage.getItem('fs_portfolio') || '[]');
+    let currentUserData = currentUser;
+    if (!currentUserData) window.location.href = 'login.html';
 
-    // إعدادات التنبيهات الصوتية
-    let soundEnabled = true;
-    let priceTargets = {};
+    // عرض معلومات المستخدم
+    document.getElementById('userInfo').innerHTML = `
+        <div class="name">👋 ${currentUserData.firstName || currentUserData.name}</div>
+        <div class="subscription-badge">${getUserPlan(currentUserData).name}</div>
+    `;
 
-    function toggleSound() {
-        soundEnabled = !soundEnabled;
-        document.getElementById('soundToggle').innerHTML = soundEnabled ? '✅ مفعل' : '🔇 معطل';
-        playSound('notification');
-    }
+    // ========================================
+    // عرض جدول الأسهم (مثل الصورة)
+    // ========================================
+    function renderStocksTable(marketKey) {
+        const market = marketsData[marketKey];
+        if (!market || !market.companies) return;
 
-    function playSound(type) {
-        if (!soundEnabled) return;
-        try {
-            const audio = new Audio();
-            if (type === 'notification') {
-                audio.src = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3';
-            } else if (type === 'alert') {
-                audio.src = 'https://www.soundjay.com/misc/sounds/alert-beep.mp3';
-            }
-            audio.play().catch(e => console.log('صوت:', e));
-        } catch(e) { console.log('خطأ في الصوت'); }
-    }
-
-    // عرض الأسواق
-    function renderMarket(containerId, data, priceKey = 'price') {
-        const container = document.getElementById(containerId);
+        const container = document.getElementById('stocksTableContainer');
         if (!container) return;
-        container.innerHTML = data.map(item => `
-            <div class="market-card" onclick="openTradeModal('${item.name}', ${item.price})">
-                <div class="market-name">
-                    <span>${item.name}</span>
-                    <span class="${item.change >= 0 ? 'positive' : 'negative'}">${item.change >= 0 ? '▲' : '▼'} ${Math.abs(item.change)}%</span>
+
+        let html = `<table class="markets-table">
+            <thead>
+                <tr>
+                    <th>الشركة</th><th>القطاع</th><th>السعر</th><th>التغير</th><th>التوصية</th><th>تحليل ذكي</th><th>تداول</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+        market.companies.forEach(comp => {
+            const changeClass = comp.change >= 0 ? 'positive' : 'negative';
+            const recClass = comp.recommendation === 'buy' ? 'recommend-buy' : (comp.recommendation === 'sell' ? 'recommend-sell' : 'recommend-hold');
+            const recText = comp.recommendation === 'buy' ? 'شراء' : (comp.recommendation === 'sell' ? 'بيع' : 'احتفاظ');
+
+            html += `
+                <tr>
+                    <td>${comp.name} ${comp.symbol}</td>
+                    <td>${comp.sector}</td>
+                    <td>${comp.price.toLocaleString()} ${marketKey === 'us' ? 'USD' : 'ريال'}</td>
+                    <td class="${changeClass}">${comp.change >= 0 ? '+' : ''}${comp.change}%</td>
+                    <td><span class="${recClass}">${recText}</span></td>
+                    <td><button class="analysis-btn" onclick="showAIAnalysis('${comp.name}', '${comp.aiAnalysis}')">تحليل</button></td>
+                    <td><button class="trade-btn" onclick="openTradeModal('${comp.name}', ${comp.price})">تداول</button></td>
                 </div>
-                <div class="market-price">${item[priceKey].toLocaleString()} ${item.name.includes('USD') ? '' : (item.name.includes('ذهب') ? '$' : 'ريال')}</div>
-                <div class="trade-buttons">
-                    <button class="btn-buy" onclick="event.stopPropagation(); openTradeModal('${item.name}', ${item.price}, 'buy')">شراء</button>
-                    <button class="btn-sell" onclick="event.stopPropagation(); openTradeModal('${item.name}', ${item.price}, 'sell')">بيع</button>
-                </div>
-            </div>
-        `).join('');
+            `;
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
     }
 
+    // عرض الجداول الأخرى
+    function renderBondsTable() {
+        const container = document.getElementById('bondsTableContainer');
+        if (!container) return;
+        let html = `<table class="markets-table"><tr><th>السند</th><th>السعر</th><th>التغير</th><th>العائد</th><th>تداول</th></tr>`;
+        marketsData.bonds.forEach(b => {
+            html += `<tr><td>${b.name}</td><td>${b.price}</td><td class="${b.change >=0 ? 'positive' : 'negative'}">${b.change}%</td><td>${b.yield}%</td><td><button class="trade-btn" onclick="openTradeModal('${b.name}', ${b.price})">تداول</button></td></tr>`;
+        });
+        html += `</table>`;
+        container.innerHTML = html;
+    }
+
+    function renderCryptoTabe() {
+        const container = document.getElementById('cryptoTableContainer');
+        if (!container) return;
+        let html = `<table class="markets-table"><tr><th>العملة</th><th>السعر</th><th>التغير</th><th>تداول</th></tr>`;
+        marketsData.crypto.forEach(c => {
+            html += `<tr><td>${c.name}</td><td>$${c.price.toLocaleString()}</td><td class="${c.change >=0 ? 'positive' : 'negative'}">${c.change}%</td><td><button class="trade-btn" onclick="openTradeModal('${c.name}', ${c.price})">تداول</button></td></tr>`;
+        });
+        html += `</table>`;
+        container.innerHTML = html;
+    }
+
+    function renderForexTable() {
+        const container = document.getElementById('forexTableContainer');
+        if (!container) return;
+        let html = `<table class="markets-table"><tr><th>زوج العملات</th><th>السعر</th><th>التغير</th><th>تداول</th></tr>`;
+        marketsData.forex.forEach(f => {
+            html += `<tr><td>${f.name}</td><td>${f.price}</td><td class="${f.change >=0 ? 'positive' : 'negative'}">${f.change}%</td><td><button class="trade-btn" onclick="openTradeModal('${f.name}', ${f.price})">تداول</button></td></tr>`;
+        });
+        html += `</table>`;
+        container.innerHTML = html;
+    }
+
+    function renderMetalsTable() {
+        const container = document.getElementById('metalsTableContainer');
+        if (!container) return;
+        let html = `<table class="markets-table"><tr><th>المعدن</th><th>السعر</th><th>التغير</th><th>تداول</th></tr>`;
+        marketsData.metals.forEach(m => {
+            html += `<tr><td>${m.name}</td><td>$${m.price}</td><td class="${m.change >=0 ? 'positive' : 'negative'}">${m.change}%</td><td><button class="trade-btn" onclick="openTradeModal('${m.name}', ${m.price})">تداول</button></td></tr>`;
+        });
+        html += `</table>`;
+        container.innerHTML = html;
+    }
+
+    // ========================================
+    // سكانر الفرص (RSI والتغيرات)
+    // ========================================
+    function renderScanner() {
+        const container = document.getElementById('scannerContainer');
+        if (!container) return;
+
+        // تجميع كل الفرص من جميع الأسواق
+        const allOpportunities = [];
+        
+        Object.keys(marketsData).forEach(key => {
+            if (marketsData[key].companies) {
+                marketsData[key].companies.forEach(comp => {
+                    const rsi = Math.random() * 100;
+                    const opportunity = {
+                        name: comp.name,
+                        market: marketsData[key].name,
+                        price: comp.price,
+                        change: comp.change,
+                        rsi: rsi.toFixed(1),
+                        recommendation: comp.recommendation
+                    };
+                    if ((rsi < 30 && comp.recommendation === 'buy') || (rsi > 70 && comp.recommendation === 'sell')) {
+                        allOpportunities.push(opportunity);
+                    }
+                });
+            }
+        });
+
+        let html = `<table class="markets-table">
+            <thead><tr><th>الأصل</th><th>السوق</th><th>السعر</th><th>التغير</th><th>RSI</th><th>التوصية</th><th>تحليل ذكي</th></tr></thead>
+            <tbody>`;
+        
+        allOpportunities.slice(0, 20).forEach(opp => {
+            const rsiClass = opp.rsi < 30 ? 'positive' : (opp.rsi > 70 ? 'negative' : '');
+            html += `<tr>
+                <td>${opp.name}</td>
+                <td>${opp.market}</td>
+                <td>${opp.price}</td>
+                <td class="${opp.change >=0 ? 'positive' : 'negative'}">${opp.change}%</td>
+                <td class="${rsiClass}">${opp.rsi}</td>
+                <td><span class="${opp.recommendation === 'buy' ? 'recommend-buy' : (opp.recommendation === 'sell' ? 'recommend-sell' : 'recommend-hold')}">${opp.recommendation === 'buy' ? 'فرصة شراء' : (opp.recommendation === 'sell' ? 'فرصة بيع' : 'مراقبة')}</span></td>
+                <td><button class="analysis-btn" onclick="alert('تحليل: بناءً على RSI والتغيرات، يُنصح بمراقبة السهم.')">تحليل</button></td>
+            </tr>`;
+        });
+        html += `</tbody></table>`;
+        if (allOpportunities.length === 0) html = '<div class="alert-bar">لا توجد فرص استثمارية واضحة حالياً</div>';
+        container.innerHTML = html;
+    }
+
+    // ========================================
+    // أرشيف الأسواق
+    // ========================================
+    function loadArchiveData() {
+        const year = document.getElementById('archiveYear').value;
+        const market = document.getElementById('archiveMarket').value;
+        const data = archiveData[market]?.[year];
+        const container = document.getElementById('archiveContainer');
+        if (!data) return;
+        
+        container.innerHTML = `
+            <table class="markets-table">
+                <thead><tr><th>السنة</th><th>الربح/الخسارة</th><th>أعلى سعر</th><th>أقل سعر</th><th>التقلب</th></tr></thead>
+                <tbody>
+                    <tr><td>${year}</td><td class="${data.profit >=0 ? 'positive' : 'negative'}">${data.profit}%</td><td>${data.high.toLocaleString()}</td><td>${data.low.toLocaleString()}</td><td>${((data.high - data.low)/data.low*100).toFixed(1)}%</td></tr>
+                </tbody>
+            </table>
+            <div class="alert-bar" style="margin-top:15px;">
+                <span>📊 ملخص ${year}: ${data.profit >=0 ? 'ربح إجمالي' : 'خسارة إجمالية'} ${Math.abs(data.profit)}%</span>
+            </div>
+        `;
+    }
+
+    // ========================================
+    // خطة الاستثمار (مع اختيار المدة)
+    // ========================================
+    function renderInvestmentPlan() {
+        const container = document.getElementById('investmentContainer');
+        container.innerHTML = `
+            <div class="market-card" style="padding:20px;">
+                <p style="margin-bottom:15px;">📥 أدخل رأس المال واختر المدة:</p>
+                <input type="number" id="capitalAmount" placeholder="رأس المال (ريال)" style="width:100%; padding:12px; margin:10px 0; background:#1a2335; border:1px solid #2d374b; border-radius:30px; color:white;">
+                <select id="investmentPeriod" style="width:100%; padding:12px; margin:10px 0; background:#1a2335; border:1px solid #2d374b; border-radius:30px; color:white;">
+                    <option value="3">3 أشهر</option>
+                    <option value="6">6 أشهر</option>
+                    <option value="9">9 أشهر</option>
+                    <option value="12">12 شهر</option>
+                </select>
+                <button onclick="generateInvestmentPlan()" style="background:#10b981; padding:12px; border:none; border-radius:30px; color:white; width:100%; margin-top:10px;">إنشاء خطة استثمارية</button>
+                <div id="investmentPlanResult" style="margin-top:20px;"></div>
+            </div>
+            <div class="alert-bar" style="margin-top:15px;">
+                <span>⚠️ إخلاء مسؤولية: هذه التوصيات تحليلية وليست ضماناً للربح. استثمر على مسؤوليتك الشخصية.</span>
+            </div>
+        `;
+    }
+
+    function generateInvestmentPlan() {
+        const capital = parseFloat(document.getElementById('capitalAmount').value);
+        const months = parseInt(document.getElementById('investmentPeriod').value);
+        if (!capital || capital <= 0) {
+            document.getElementById('investmentPlanResult').innerHTML = '❌ الرجاء إدخال مبلغ صحيح';
+            return;
+        }
+
+        const expectedReturn = months === 3 ? 5 : months === 6 ? 10 : months === 9 ? 15 : 22;
+        const profit = capital * expectedReturn / 100;
+        
+        document.getElementById('investmentPlanResult').innerHTML = `
+            <div class="markets-grid">
+                <div class="market-card"><div class="market-name">💰 رأس المال</div><div>${capital.toLocaleString()} ريال</div></div>
+                <div class="market-card"><div class="market-name">📅 المدة</div><div>${months} أشهر</div></div>
+                <div class="market-card"><div class="market-name">📈 العائد المتوقع</div><div class="positive">${expectedReturn}% (${profit.toLocaleString()} ريال)</div></div>
+                <div class="market-card"><div class="market-name">🎯 التوصية</div><div>توزيع 40% أسهم، 30% ذهب، 20% سندات، 10% عملات رقمية</div></div>
+            </div>
+        `;
+    }
+
+    // عرض المحفظة
+    function renderPortfolio() {
+        const container = document.getElementById('portfolioContainer');
+        if (userPortfolio.length === 0) {
+            container.innerHTML = '<div class="alert-bar">📭 لا توجد صفقات حالياً. قم بشراء أصول من الأسواق أعلاه.</div>';
+            return;
+        }
+        let html = '<div class="markets-grid">';
+        userPortfolio.forEach(trade => {
+            html += `
+                <div class="market-card">
+                    <div class="market-name">${trade.asset} - ${trade.type === 'buy' ? 'شراء' : 'بيع'}</div>
+                    <div>الكمية: ${trade.amount}</div>
+                    <div>سعر التنفيذ: ${trade.price}</div>
+                    <div>القيمة: ${(trade.amount * trade.price).toFixed(2)} ريال</div>
+                    ${trade.stopLoss ? `<div>⛔ وقف خسارة: ${trade.stopLoss}</div>` : ''}
+                    <div style="font-size:0.7rem;">${new Date(trade.date).toLocaleDateString('ar-EG')}</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    // ========================================
     // نافذة التداول
+    // ========================================
     let currentTradeAsset = null;
     let currentTradePrice = null;
 
-    function openTradeModal(asset, price, type = null) {
+    function openTradeModal(asset, price) {
         currentTradeAsset = asset;
         currentTradePrice = price;
         document.getElementById('modalAssetName').innerHTML = `تداول - ${asset} (السعر: ${price})`;
-        if (type) document.getElementById('tradeType').value = type;
         document.getElementById('tradeModal').style.display = 'flex';
     }
 
     function closeTradeModal() {
         document.getElementById('tradeModal').style.display = 'none';
+        document.getElementById('tradeResult').innerHTML = '';
     }
 
     function executeTrade() {
@@ -464,231 +805,33 @@
             return;
         }
 
-        const totalValue = amount * currentTradePrice;
         const newTrade = {
             id: Date.now(),
             asset: currentTradeAsset,
             type: type,
             amount: amount,
             price: currentTradePrice,
-            totalValue: totalValue,
+            totalValue: amount * currentTradePrice,
             stopLoss: stopLoss || null,
             takeProfit: takeProfit || null,
-            date: new Date().toISOString(),
-            status: 'open'
+            date: new Date().toISOString()
         };
-
         userPortfolio.push(newTrade);
         localStorage.setItem('fs_portfolio', JSON.stringify(userPortfolio));
-
-        document.getElementById('tradeResult').innerHTML = `✅ تم ${type === 'buy' ? 'شراء' : 'بيع'} ${amount} من ${currentTradeAsset} بقيمة ${totalValue.toFixed(2)} ريال`;
-        
-        // إغلاق النافذة بعد ثانيتين
-        setTimeout(() => {
-            closeTradeModal();
-            renderPortfolio();
-            document.getElementById('tradeResult').innerHTML = '';
-        }, 2000);
-        
-        playSound('notification');
+        document.getElementById('tradeResult').innerHTML = `✅ تم ${type === 'buy' ? 'شراء' : 'بيع'} ${amount} من ${currentTradeAsset}`;
+        setTimeout(() => { closeTradeModal(); renderPortfolio(); }, 1500);
     }
 
-    // عرض المحفظة
-    function renderPortfolio() {
-        const portfolioDiv = document.getElementById('portfolioPanel');
-        if (!portfolioDiv) return;
-        
-        if (userPortfolio.length === 0) {
-            portfolioDiv.innerHTML = '<div class="market-card">📭 لا توجد صفقات حالياً. قم بشراء أصول من الأسواق أعلاه.</div>';
-            return;
-        }
-        
-        let totalValue = 0;
-        let totalProfit = 0;
-        
-        const html = userPortfolio.map(trade => {
-            totalValue += trade.totalValue;
-            // محاكاة الربح/الخسارة
-            const currentPrice = currentTradeAsset === trade.asset ? currentTradePrice : trade.price;
-            const profit = trade.type === 'buy' ? (currentPrice - trade.price) * trade.amount : (trade.price - currentPrice) * trade.amount;
-            totalProfit += profit;
-            return `
-                <div class="market-card">
-                    <div class="market-name">${trade.asset} - ${trade.type === 'buy' ? 'شراء' : 'بيع'}</div>
-                    <div>الكمية: ${trade.amount}</div>
-                    <div>سعر الشراء: ${trade.price}</div>
-                    <div>القيمة: ${trade.totalValue.toFixed(2)} ريال</div>
-                    <div class="${profit >= 0 ? 'positive' : 'negative'}">الربح/الخسارة: ${profit >= 0 ? '+' : ''}${profit.toFixed(2)} ريال</div>
-                    ${trade.stopLoss ? `<div>⛔ وقف خسارة: ${trade.stopLoss}</div>` : ''}
-                    ${trade.takeProfit ? `<div>🎯 جني أرباح: ${trade.takeProfit}</div>` : ''}
-                    <div style="font-size:0.7rem; margin-top:8px;">${new Date(trade.date).toLocaleDateString('ar-EG')}</div>
-                </div>
-            `;
-        }).join('');
-        
-        portfolioDiv.innerHTML = `
-            <div class="alert-bar" style="margin-bottom:20px;">
-                <span>💰 إجمالي المحفظة: ${totalValue.toFixed(2)} ريال</span>
-                <span class="${totalProfit >= 0 ? 'positive' : 'negative'}">الربح الإجمالي: ${totalProfit >= 0 ? '+' : ''}${totalProfit.toFixed(2)} ريال</span>
-            </div>
-            <div class="markets-grid">${html}</div>
-        `;
+    function showAIAnalysis(asset, analysis) {
+        alert(`🤖 تحليل الذكاء الاصطناعي لـ ${asset}:\n${analysis}`);
     }
 
-    // خطة الاستثمار (AI)
-    function renderAIPlan() {
-        const planDiv = document.getElementById('aiPlanPanel');
-        if (!planDiv) return;
-        
-        planDiv.innerHTML = `
-            <div class="market-card">
-                <h3>🤖 توصيات الذكاء الاصطناعي لتوزيع رأس المال</h3>
-                <p style="margin:15px 0;">📥 أدخل رأس المال الذي ترغب في استثماره:</p>
-                <input type="number" id="capitalAmount" placeholder="رأس المال (ريال)" style="background:#1a2335; border:1px solid #2d374b; border-radius:30px; padding:12px; width:100%; color:white;">
-                <button onclick="generateInvestmentPlan()" style="background:#10b981; padding:12px 20px; border-radius:30px; border:none; margin-top:10px; cursor:pointer;">إنشاء خطة استثمارية</button>
-                <div id="investmentPlanResult" style="margin-top:20px;"></div>
-            </div>
-            <div class="alert-bar" style="margin-top:15px;">
-                <span>⚠️ إخلاء مسؤولية: هذه التوصيات تحليلية وليست ضماناً للربح. استثمر على مسؤوليتك الشخصية.</span>
-            </div>
-        `;
-    }
-
-    function generateInvestmentPlan() {
-        const capital = parseFloat(document.getElementById('capitalAmount').value);
-        if (!capital || capital <= 0) {
-            document.getElementById('investmentPlanResult').innerHTML = '❌ الرجاء إدخال مبلغ صحيح';
-            return;
-        }
-        
-        // توزيع استثماري ذكي
-        const allocations = [
-            { asset: "الأسهم الأمريكية (S&P 500)", percent: 30, expectedReturn: 12 },
-            { asset: "الذهب", percent: 15, expectedReturn: 8 },
-            { asset: "Bitcoin (عملات رقمية)", percent: 10, expectedReturn: 25 },
-            { asset: "السندات الحكومية", percent: 20, expectedReturn: 5 },
-            { asset: "العملات (فوركس)", percent: 10, expectedReturn: 10 },
-            { asset: "الأسهم السعودية", percent: 15, expectedReturn: 10 }
-        ];
-        
-        let expectedTotalReturn = 0;
-        let html = '<div class="markets-grid">';
-        allocations.forEach(a => {
-            const amount = (capital * a.percent / 100).toFixed(2);
-            const expected = (amount * a.expectedReturn / 100).toFixed(2);
-            expectedTotalReturn += parseFloat(expected);
-            html += `
-                <div class="market-card">
-                    <div class="market-name">${a.asset}</div>
-                    <div>💰 المبلغ: ${amount} ريال (${a.percent}%)</div>
-                    <div class="positive">📈 العائد المتوقع سنوياً: ${expected} ريال (${a.expectedReturn}%)</div>
-                </div>
-            `;
-        });
-        html += '</div>';
-        html += `<div class="alert-bar" style="margin-top:20px;"><span>📊 العائد السنوي المتوقع للمحفظة: ${expectedTotalReturn.toFixed(2)} ريال (${((expectedTotalReturn/capital)*100).toFixed(1)}%)</span></div>`;
-        
-        document.getElementById('investmentPlanResult').innerHTML = html;
-        playSound('notification');
-    }
-
-    // المستشار الاقتصادي (AI)
-    let currentNewsIndex = 0;
-    const newsItems = [
-        { title: "تقرير التضخم الأمريكي", impact: "قد يؤثر على قرارات الفيدرالي", effect: "negative", asset: "الدولار", change: "-0.5%" },
-        { title: "التوترات الجيوسياسية في الشرق الأوسط", impact: "ارتفاع أسعار النفط", effect: "positive", asset: "النفط", change: "+2.3%" },
-        { title: "تغيرات الطقس في أمريكا الشمالية", impact: "تأثير على إنتاج الطاقة", effect: "neutral", asset: "الغاز الطبيعي", change: "+0.8%" },
-        { title: "قرار البنك المركزي الأوروبي", impact: "تثبيت أسعار الفائدة", effect: "positive", asset: "اليورو", change: "+0.3%" },
-        { title: "الحرب التجارية بين الصين وأمريكا", impact: "تأثير على سلاسل التوريد", effect: "negative", asset: "الأسهم الصينية", change: "-1.2%" },
-        { title: "الكوارث الطبيعية في جنوب شرق آسيا", impact: "ارتفاع أسعار السلع الزراعية", effect: "positive", asset: "السلع الزراعية", change: "+1.5%" }
-    ];
-
-    function renderAIAdvisor() {
-        const advisorDiv = document.getElementById('aiAdvisorPanel');
-        if (!advisorDiv) return;
-        
-        advisorDiv.innerHTML = `
-            <div class="market-card">
-                <h3>🌍 التحليل الاقتصادي لحظياً</h3>
-                <div id="newsCarousel" style="margin:15px 0; padding:15px; background:rgba(255,255,255,0.05); border-radius:20px;">
-                    <div id="currentNews"></div>
-                    <div class="trade-buttons" style="margin-top:10px; justify-content:center;">
-                        <button onclick="prevNews()" style="background:#1a2335; border:none; padding:8px 15px; border-radius:30px;">◀ السابق</button>
-                        <button onclick="nextNews()" style="background:#1a2335; border:none; padding:8px 15px; border-radius:30px;">التالي ▶</button>
-                    </div>
-                </div>
-                <div id="marketAnalysis"></div>
-            </div>
-            <div class="alert-bar" style="margin-top:15px;">
-                <span>⚠️ إخلاء مسؤولية: التحليل الاقتصادي يعتمد على بيانات عامة ولا يضمن نتائج استثمارية.</span>
-            </div>
-        `;
-        updateNewsCarousel();
-        updateMarketAnalysis();
-    }
-
-    function updateNewsCarousel() {
-        const news = newsItems[currentNewsIndex];
-        document.getElementById('currentNews').innerHTML = `
-            <div style="font-weight:bold;">📰 ${news.title}</div>
-            <div style="margin:8px 0;">📌 التأثير المتوقع: ${news.impact}</div>
-            <div class="${news.effect === 'positive' ? 'positive' : (news.effect === 'negative' ? 'negative' : '')}">🎯 التأثير على ${news.asset}: ${news.change}</div>
-            <div style="font-size:0.7rem; margin-top:8px;">🕒 تحديث: ${new Date().toLocaleTimeString()}</div>
-        `;
-    }
-
-    function prevNews() {
-        currentNewsIndex = (currentNewsIndex - 1 + newsItems.length) % newsItems.length;
-        updateNewsCarousel();
-    }
-
-    function nextNews() {
-        currentNewsIndex = (currentNewsIndex + 1) % newsItems.length;
-        updateNewsCarousel();
-    }
-
-    function updateMarketAnalysis() {
-        const analysisDiv = document.getElementById('marketAnalysis');
-        if (!analysisDiv) return;
-        
-        const globalFactors = [
-            { name: "التوترات الجيوسياسية", level: "متوسطة", advice: "زيادة التحوط في المحفظة" },
-            { name: "تغيرات الطقس", level: "منخفضة", advice: "مراقبة أسعار الطاقة" },
-            { name: "الأخبار الاقتصادية", level: "مرتفعة", advice: "توقع تقلبات في الأسواق" },
-            { name: "الحروب التجارية", level: "متوسطة", advice: "تنويع الاستثمارات جغرافياً" }
-        ];
-        
-        analysisDiv.innerHTML = `
-            <h3 style="margin:15px 0;">🌪️ العوامل المؤثرة على الأسواق حالياً</h3>
-            <div class="markets-grid">
-                ${globalFactors.map(f => `
-                    <div class="market-card">
-                        <div class="market-name">${f.name}</div>
-                        <div>📊 مستوى التأثير: ${f.level}</div>
-                        <div class="positive">💡 النصيحة: ${f.advice}</div>
-                    </div>
-                `).join('')}
-            </div>
-            <div class="alert-bar" style="margin-top:15px;">
-                <span>🤖 توصية الذكاء الاصطناعي: خصص 30% من محفظتك للأصول الآمنة (ذهب، سندات) في ظل التوترات الحالية.</span>
-            </div>
-        `;
-    }
-
-    // عرض جميع الأسواق
-    function renderAllMarkets() {
-        renderMarket('stocksMarket', marketsData.stocks);
-        renderMarket('bondsMarket', marketsData.bonds);
-        renderMarket('cryptoMarket', marketsData.crypto);
-        renderMarket('forexMarket', marketsData.forex);
-        renderMarket('metalsMarket', marketsData.metals);
-    }
-
+    // ========================================
     // التنقل بين الأقسام
+    // ========================================
     function initNavigation() {
         const sections = document.querySelectorAll('.section');
         const navLinks = document.querySelectorAll('.nav-menu li');
-        
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -697,59 +840,50 @@
                 const target = document.getElementById(sectionId);
                 if (target) target.classList.add('active-section');
                 
-                // تحديث البيانات عند فتح القسم
+                // تحديث المحتوى عند فتح القسم
+                if (sectionId === 'stocks') renderStocksTable('us');
+                if (sectionId === 'bonds') renderBondsTable();
+                if (sectionId === 'crypto') renderCryptoTabe();
+                if (sectionId === 'forex') renderForexTable();
+                if (sectionId === 'metals') renderMetalsTable();
+                if (sectionId === 'scanner') renderScanner();
+                if (sectionId === 'archive') loadArchiveData();
+                if (sectionId === 'ai-investment') renderInvestmentPlan();
                 if (sectionId === 'portfolio') renderPortfolio();
-                if (sectionId === 'ai-plan') renderAIPlan();
-                if (sectionId === 'ai-advisor') renderAIAdvisor();
+            });
+        });
+
+        // أزرار اختيار السوق
+        document.querySelectorAll('.market-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.market-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const market = btn.getAttribute('data-market');
+                renderStocksTable(market);
             });
         });
     }
 
-    // عرض الملخص في لوحة التحكم
+    // عرض لوحة التحكم
     function renderDashboard() {
-        const summaryDiv = document.getElementById('marketSummary');
-        if (!summaryDiv) return;
-        
-        summaryDiv.innerHTML = `
+        const container = document.getElementById('dashboardSummary');
+        container.innerHTML = `
             <div class="markets-grid">
-                <div class="market-card"><div class="market-name">📊 الأسهم</div><div>${marketsData.stocks.length} سوق</div><div class="positive">▲ متابعة</div></div>
-                <div class="market-card"><div class="market-name">📜 السندات</div><div>${marketsData.bonds.length} نوع</div><div class="positive">▲ مستقرة</div></div>
-                <div class="market-card"><div class="market-name">₿ العملات الرقمية</div><div>${marketsData.crypto.length} عملة</div><div class="positive">▲ تقلبات عالية</div></div>
-                <div class="market-card"><div class="market-name">💱 العملات الورقية</div><div>${marketsData.forex.length} زوج</div><div class="negative">▼ تأثير الأخبار</div></div>
-                <div class="market-card"><div class="market-name">🥇 المعادن</div><div>${marketsData.metals.length} معدن</div><div class="positive">▲ ارتفاع الطلب</div></div>
+                <div class="market-card"><div class="market-name">🇺🇸 السوق الأمريكي</div><div>8 شركات</div><div class="positive">▲ +8.2%</div></div>
+                <div class="market-card"><div class="market-name">🇸🇦 السوق السعودي</div><div>5 شركات</div><div class="positive">▲ +0.8%</div></div>
+                <div class="market-card"><div class="market-name">₿ العملات الرقمية</div><div>3 عملات</div><div class="positive">▲ +1.1%</div></div>
+                <div class="market-card"><div class="market-name">🥇 المعادن</div><div>3 معادن</div><div class="positive">▲ +0.3%</div></div>
             </div>
         `;
     }
 
-    // المستخدم الحالي
-    let currentUserData = currentUser;
-    if (!currentUserData) window.location.href = 'login.html';
-    
-    document.getElementById('userInfo').innerHTML = `
-        <div class="name">👋 ${currentUserData.firstName || currentUserData.name}</div>
-        <div class="subscription-badge">${getUserPlan(currentUserData).name}</div>
-    `;
-
-    // تشغيل كل شيء
-    renderAllMarkets();
     renderDashboard();
-    renderPortfolio();
-    renderAIPlan();
-    renderAIAdvisor();
+    renderStocksTable('us');
+    renderBondsTable();
+    renderCryptoTabe();
+    renderForexTable();
+    renderMetalsTable();
     initNavigation();
-    
-    // تحديث الأسعار كل 30 ثانية
-    setInterval(() => {
-        Object.keys(marketsData).forEach(category => {
-            marketsData[category].forEach(item => {
-                item.change = (Math.random() * 4 - 2).toFixed(1);
-                item.price = item.price * (1 + parseFloat(item.change) / 100);
-            });
-        });
-        renderAllMarkets();
-        renderDashboard();
-        renderPortfolio();
-    }, 30000);
 </script>
 </body>
 </html>
