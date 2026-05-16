@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الأدمن - ForeSmart</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui; }
+        body { background: #0a0e17; color: #eef2ff; padding: 30px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .card { background: rgba(18, 25, 45, 0.8); border-radius: 28px; padding: 25px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        h1 { color: #10b981; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: right; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        input, button { background: #1a2335; border: 1px solid #2d374b; padding: 10px 16px; border-radius: 40px; color: white; margin: 5px; }
+        button { background: #10b981; cursor: pointer; }
+        .logout-btn { background: #ff5a67; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card"><h1>🔐 لوحة تحكم الأدمن</h1><p>إدارة العملاء المختارين ورموز الدعوة</p></div>
+    <div class="card"><h2>👥 العملاء الحاليون</h2><div id="clientsTable"></div></div>
+    <div class="card"><h2>➕ إنشاء رمز دعوة جديد</h2><input type="text" id="newCode" placeholder="رمز جديد (مثل VIP2026)"><input type="text" id="clientName" placeholder="اسم العميل"><button onclick="addClient()">إنشاء الدعوة</button></div>
+    <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
+</div>
+<script>
+    let clients = JSON.parse(localStorage.getItem('fs_clients') || '{"VIP2025":{"name":"مستثمر أول","type":"vip"},"ANGEL01":{"name":"مستثمر ملاك","type":"angel"}}');
+    function renderClients() {
+        let html = '<table><tr><th>رمز الدعوة</th><th>اسم العميل</th><th>النوع</th><th>إجراء</th></tr>';
+        for(let [code, data] of Object.entries(clients)) {
+            html += `<tr><td>${code}</td><td>${data.name}</td><td>${data.type}</td><td><button onclick="deleteClient('${code}')">حذف</button></td></tr>`;
+        }
+        html += '</table>';
+        document.getElementById('clientsTable').innerHTML = html;
+        localStorage.setItem('fs_clients', JSON.stringify(clients));
+        // تحديث قائمة العملاء في login.html
+        localStorage.setItem('fs_allowed_codes', JSON.stringify(clients));
+    }
+    function addClient() {
+        let code = document.getElementById('newCode').value.trim();
+        let name = document.getElementById('clientName').value.trim();
+        if(code && name) {
+            clients[code] = { name, type: "client" };
+            renderClients();
+            document.getElementById('newCode').value = '';
+            document.getElementById('clientName').value = '';
+        }
+    }
+    function deleteClient(code) { delete clients[code]; renderClients(); }
+    function logout() { localStorage.removeItem('fs_user'); window.location.href = 'login.html'; }
+    renderClients();
+</script>
+</body>
+</html>
