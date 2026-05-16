@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - ForeSmart Investment</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, 'Cairo', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, 'Cairo', sans-serif;
+        }
+
         body {
             background: linear-gradient(145deg, #0a0e17 0%, #060a12 100%);
             min-height: 100vh;
@@ -14,26 +20,72 @@
             justify-content: center;
             padding: 20px;
         }
+
         .login-container {
             background: rgba(18, 25, 45, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 32px;
             padding: 40px;
-            width: 520px;
+            width: 500px;
             max-width: 100%;
         }
-        .logo { text-align: center; margin-bottom: 30px; }
-        .logo h1 { color: #10b981; font-size: 2rem; }
-        .logo p { color: #8e9aaf; font-size: 0.8rem; margin-top: 5px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; border-radius: 40px; transition: 0.2s; }
-        .tab.active { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .form-group { margin-bottom: 15px; }
-        input, select {
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #10b981;
+            font-size: 2rem;
+        }
+
+        .logo p {
+            color: #8e9aaf;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        /* علامات التبويب */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: 0.2s;
+            color: #8e9aaf;
+        }
+
+        .tab.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        /* الحقول */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 18px;
             background: #1a2335;
             border: 1px solid #2d374b;
             border-radius: 48px;
@@ -41,6 +93,7 @@
             font-size: 0.9rem;
             outline: none;
         }
+
         button {
             width: 100%;
             padding: 14px;
@@ -53,76 +106,139 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        .error { color: #ff5a67; margin-top: 15px; font-size: 0.85rem; text-align: center; }
-        .info { color: #7e8aa2; font-size: 0.7rem; margin-top: 20px; text-align: center; }
-        .trial-note { background: rgba(16,185,129,0.1); border-radius: 20px; padding: 15px; margin-top: 20px; text-align: center; font-size: 0.8rem; }
-        .trial-note strong { color: #10b981; }
-        .forgot-password { text-align: center; margin-top: 15px; }
-        .forgot-password a { color: #10b981; text-decoration: none; font-size: 0.8rem; cursor: pointer; }
+
+        .error {
+            color: #ff5a67;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .success {
+            color: #10b981;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .info {
+            color: #7e8aa2;
+            font-size: 0.7rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .trial-note {
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        .trial-note strong {
+            color: #10b981;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .forgot-password a {
+            color: #10b981;
+            text-decoration: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
 <div class="login-container">
     <div class="logo">
         <h1>ForeSmart</h1>
         <p>منصة الاستثمار الذكية</p>
     </div>
-    
+
+    <!-- علامات التبويب -->
     <div class="tabs">
         <div class="tab active" onclick="showTab('login')">تسجيل الدخول</div>
         <div class="tab" onclick="showTab('register')">إنشاء حساب جديد</div>
     </div>
-    
+
     <!-- نموذج تسجيل الدخول -->
     <div id="loginForm">
-        <div class="form-group"><input type="email" id="loginEmail" placeholder="البريد الإلكتروني" dir="ltr"></div>
-        <div class="form-group"><input type="password" id="loginPassword" placeholder="كلمة المرور" dir="ltr"></div>
+        <div class="form-group">
+            <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" dir="ltr">
+        </div>
+        <div class="form-group">
+            <input type="password" id="loginPassword" placeholder="كلمة المرور" dir="ltr">
+        </div>
         <button onclick="handleLogin()">دخول إلى المنصة</button>
         <div id="loginError" class="error"></div>
-        <div class="forgot-password"><a onclick="showForgotPassword()">نسيت كلمة المرور؟</a></div>
+        <div class="forgot-password">
+            <a onclick="showForgotPassword()">نسيت كلمة المرور؟</a>
+        </div>
     </div>
-    
-    <!-- نموذج إنشاء حساب جديد (مكتمل) -->
+
+    <!-- نموذج إنشاء حساب جديد -->
     <div id="registerForm" style="display: none;">
         <div class="form-row">
-            <div class="form-group"><input type="text" id="regFirstName" placeholder="الاسم الأول"></div>
-            <div class="form-group"><input type="text" id="regLastName" placeholder="الاسم الأخير"></div>
+            <input type="text" id="regFirstName" placeholder="الاسم الأول">
+            <input type="text" id="regLastName" placeholder="الاسم الأخير">
         </div>
-        <div class="form-group"><input type="email" id="regEmail" placeholder="البريد الإلكتروني" dir="ltr"></div>
-        <div class="form-group"><input type="tel" id="regPhone" placeholder="رقم الجوال (مثال: 05xxxxxxxx)" dir="ltr"></div>
-        <div class="form-group"><input type="text" id="regNationalId" placeholder="رقم الهوية الوطنية (10 أرقام)" dir="ltr"></div>
+        <div class="form-group">
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني" dir="ltr">
+        </div>
+        <div class="form-group">
+            <input type="tel" id="regPhone" placeholder="رقم الجوال (مثال: 05xxxxxxxx)" dir="ltr">
+        </div>
+        <div class="form-group">
+            <input type="text" id="regNationalId" placeholder="رقم الهوية الوطنية (10 أرقام)" dir="ltr">
+        </div>
         <div class="form-row">
-            <div class="form-group"><input type="password" id="regPassword" placeholder="كلمة المرور" dir="ltr"></div>
-            <div class="form-group"><input type="password" id="regConfirm" placeholder="تأكيد كلمة المرور" dir="ltr"></div>
+            <input type="password" id="regPassword" placeholder="كلمة المرور">
+            <input type="password" id="regConfirm" placeholder="تأكيد كلمة المرور">
         </div>
         <button onclick="handleRegister()">إنشاء حساب - 14 يوم تجريبي مجاني</button>
         <div id="registerError" class="error"></div>
+        <div id="registerSuccess" class="success"></div>
     </div>
-    
-    <!-- نموذج إعادة تعيين كلمة المرور -->
+
+    <!-- نموذج نسيت كلمة المرور -->
     <div id="forgotForm" style="display: none;">
-        <div class="form-group"><input type="email" id="resetEmail" placeholder="البريد الإلكتروني" dir="ltr"></div>
+        <div class="form-group">
+            <input type="email" id="resetEmail" placeholder="البريد الإلكتروني" dir="ltr">
+        </div>
         <button onclick="handleResetPassword()">إرسال كلمة مرور جديدة</button>
         <div id="resetError" class="error"></div>
-        <div class="info" style="margin-top:15px;"><a onclick="showTab('login')">العودة إلى تسجيل الدخول</a></div>
+        <div class="info" style="margin-top: 15px;">
+            <a onclick="showTab('login')">العودة إلى تسجيل الدخول</a>
+        </div>
     </div>
-    
+
     <div class="trial-note">
         🎉 <strong>فترة تجريبية مجانية لمدة 14 يوم</strong><br>
         يمكنك تجربة المنصة بكامل ميزاتها، ثم الاشتراك في الباقة التي تناسبك.
     </div>
-    <div class="info">🔐 هذه المنصة للعملاء المعتمدين فقط | جميع البيانات محفوظة</div>
+    <div class="info">
+        🔐 هذه المنصة للعملاء المعتمدين فقط | جميع البيانات محفوظة
+    </div>
 </div>
 
 <script src="assets/plans.js"></script>
 <script src="assets/auth.js"></script>
+
 <script>
+    // عرض علامات التبويب
     function showTab(tab) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('registerForm').style.display = 'none';
         document.getElementById('forgotForm').style.display = 'none';
-        
+
         if (tab === 'login') {
             document.querySelector('.tab:first-child').classList.add('active');
             document.getElementById('loginForm').style.display = 'block';
@@ -131,25 +247,33 @@
             document.getElementById('registerForm').style.display = 'block';
         }
     }
-    
+
     function showForgotPassword() {
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('registerForm').style.display = 'none';
         document.getElementById('forgotForm').style.display = 'block';
     }
-    
-    function handleLogin() {
+
+    // تسجيل الدخول
+    async function handleLogin() {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
+        
         const result = login(email, password);
+        
         if (result.success) {
-            window.location.href = result.user.role === 'admin' ? 'admin.html' : 'index.html';
+            if (result.user.role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'index.html';
+            }
         } else {
             document.getElementById('loginError').innerText = result.error;
         }
     }
-    
-    function handleRegister() {
+
+    // إنشاء حساب جديد
+    async function handleRegister() {
         const firstName = document.getElementById('regFirstName').value;
         const lastName = document.getElementById('regLastName').value;
         const email = document.getElementById('regEmail').value;
@@ -157,7 +281,10 @@
         const nationalId = document.getElementById('regNationalId').value;
         const password = document.getElementById('regPassword').value;
         const confirm = document.getElementById('regConfirm').value;
-        
+
+        document.getElementById('registerError').innerText = '';
+        document.getElementById('registerSuccess').innerText = '';
+
         if (!firstName || !lastName || !email || !phone || !nationalId || !password) {
             document.getElementById('registerError').innerText = 'جميع الحقول مطلوبة';
             return;
@@ -171,19 +298,23 @@
             return;
         }
         if (nationalId.length < 10) {
-            document.getElementById('registerError').innerText = 'رقم الهوية الوطنية يجب أن يكون 10 أرقام';
+            document.getElementById('registerError').innerText = 'رقم الهوية يجب أن يكون 10 أرقام';
             return;
         }
-        
+
         const result = register(email, password, firstName, lastName, phone, nationalId);
+        
         if (result.success) {
-            alert('تم إنشاء حسابك بنجاح! مرحباً بك في منصة ForeSmart.');
-            window.location.href = 'index.html';
+            document.getElementById('registerSuccess').innerText = '✓ تم إنشاء حسابك بنجاح! جاري تحويلك...';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
         } else {
             document.getElementById('registerError').innerText = result.error;
         }
     }
-    
+
+    // إعادة تعيين كلمة المرور
     function handleResetPassword() {
         const email = document.getElementById('resetEmail').value;
         if (!email) {
@@ -192,12 +323,13 @@
         }
         const result = resetPassword(email);
         if (result.success) {
-            alert('تم إرسال كلمة المرور الجديدة إلى بريدك الإلكتروني');
+            alert('تم إرسال كلمة مرور مؤقتة إلى بريدك الإلكتروني: ' + result.tempPassword);
             showTab('login');
         } else {
             document.getElementById('resetError').innerText = result.error;
         }
     }
 </script>
+
 </body>
 </html>
