@@ -3,97 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ForeSmart - لوحة التحكم الرئيسية</title>
+    <title>ForeSmart - منصة التداول الذكية</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, 'Cairo', sans-serif;
+            font-family: 'Segoe UI', 'Cairo', system-ui, sans-serif;
         }
 
         body {
-            background: #0a0e17;
+            background: linear-gradient(135deg, #0a0e17 0%, #0c1220 100%);
             color: #eef2ff;
-            overflow-x: hidden;
-        }
-
-        /* تخطيط الصفحة */
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
         }
 
         /* القائمة الجانبية */
         .sidebar {
             width: 280px;
             background: linear-gradient(180deg, #0c1220, #060a12);
-            border-left: 1px solid rgba(255,255,255,0.05);
-            padding: 25px 12px;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px 12px;
             position: fixed;
             right: 0;
             top: 0;
             bottom: 0;
             overflow-y: auto;
-            z-index: 20;
+            z-index: 100;
         }
 
         .logo {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .logo h1 {
             color: #10b981;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
         }
 
         .logo p {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #7c88a8;
-            margin-top: 5px;
         }
 
-        /* معلومات المستخدم */
         .user-info {
             background: rgba(16, 185, 129, 0.1);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 25px;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .user-info .name {
             font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .user-info .detail {
-            font-size: 0.7rem;
-            color: #8e9aaf;
-            margin-top: 5px;
         }
 
         .subscription-badge {
             background: #10b981;
             font-size: 0.7rem;
             padding: 3px 8px;
-            border-radius: 30px;
+            border-radius: 20px;
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
-        .trial-warning {
-            background: rgba(255, 90, 103, 0.2);
-            color: #ff5a67;
-            border-radius: 16px;
-            padding: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 0.8rem;
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 5px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: #b9c3e0;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
         }
 
         .logout-btn {
@@ -108,43 +107,10 @@
             font-weight: bold;
         }
 
-        /* قائمة التنقل */
-        .nav-menu {
-            list-style: none;
-            margin-top: 20px;
-        }
-
-        .nav-menu li {
-            margin-bottom: 6px;
-        }
-
-        .nav-menu a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 15px;
-            color: #b9c3e0;
-            text-decoration: none;
-            border-radius: 12px;
-            transition: 0.2s;
-        }
-
-        .nav-menu a:hover,
-        .nav-menu .active a {
-            background: rgba(16, 185, 129, 0.12);
-            color: #10b981;
-        }
-
-        .nav-menu a.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
         /* المحتوى الرئيسي */
         .main-content {
-            flex: 1;
             margin-right: 280px;
-            padding: 20px 30px;
+            padding: 20px 25px;
         }
 
         .section {
@@ -155,26 +121,39 @@
             display: block;
         }
 
-        /* البطاقات */
-        .stats-row {
+        /* البطاقات والأسواق */
+        .markets-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
             margin-bottom: 30px;
         }
 
-        .stat-box {
+        .market-card {
             background: rgba(18, 25, 45, 0.7);
-            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 18px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 18px 20px;
+            transition: 0.2s;
+            cursor: pointer;
         }
 
-        .stat-number {
-            font-size: 1.8rem;
+        .market-card:hover {
+            border-color: #10b981;
+            transform: translateY(-3px);
+        }
+
+        .market-name {
             font-weight: bold;
-            color: white;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .market-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
 
         .positive {
@@ -185,52 +164,102 @@
             color: #ff5a67;
         }
 
-        .assets-panel,
-        .chart-panel,
-        .ai-advisor,
-        .card-panel {
-            background: rgba(18, 25, 45, 0.7);
-            border-radius: 24px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 25px;
-        }
-
-        .asset-row {
+        .section-title {
+            font-size: 1.4rem;
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
             display: flex;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            align-items: center;
+            gap: 10px;
         }
 
-        canvas {
-            max-height: 250px;
-            width: 100%;
+        /* أزرار التداول */
+        .trade-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
         }
 
-        .upgrade-btn {
+        .btn-buy {
             background: #10b981;
-            padding: 12px 24px;
-            border-radius: 40px;
             border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
             color: white;
             cursor: pointer;
-            margin-top: 15px;
+            font-size: 0.8rem;
         }
 
-        /* نموذج تغيير كلمة المرور */
-        .form-group {
-            margin-bottom: 15px;
+        .btn-sell {
+            background: #ff5a67;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
         }
 
-        .form-group input {
+        /* التنبيهات */
+        .alert-bar {
+            background: rgba(16, 185, 129, 0.15);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sound-toggle {
+            background: #1a2335;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* نافذة التداول السريع */
+        .quick-trade-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #0f1825;
+            border-radius: 28px;
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+            border: 1px solid #10b981;
+        }
+
+        .modal-content input, .modal-content select {
             width: 100%;
             padding: 12px;
+            margin: 10px 0;
             background: #1a2335;
-            border-radius: 40px;
             border: 1px solid #2d374b;
+            border-radius: 40px;
             color: white;
-            outline: none;
+        }
+
+        .close-modal {
+            float: left;
+            cursor: pointer;
+            font-size: 1.5rem;
         }
 
         @media (max-width: 900px) {
@@ -239,417 +268,433 @@
                 position: relative;
                 height: auto;
             }
-
             .main-content {
                 margin-right: 0;
-                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <!-- القائمة الجانبية -->
-    <aside class="sidebar">
-        <div class="logo">
-            <h1>ForeSmart</h1>
-            <p>منصة استثمار ذكية</p>
+<!-- نافذة التداول السريع -->
+<div id="tradeModal" class="quick-trade-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeTradeModal()">&times;</span>
+        <h3 id="modalAssetName">تداول</h3>
+        <select id="tradeType">
+            <option value="buy">شراء</option>
+            <option value="sell">بيع</option>
+        </select>
+        <input type="number" id="tradeAmount" placeholder="الكمية">
+        <input type="number" id="stopLoss" placeholder="وقف الخسارة (اختياري)">
+        <input type="number" id="takeProfit" placeholder="جني الأرباح (اختياري)">
+        <div class="trade-buttons" style="margin-top:15px;">
+            <button onclick="executeTrade()" style="background:#10b981; padding:10px; border:none; border-radius:30px; color:white; width:100%;">تنفيذ الصفقة</button>
         </div>
+        <div id="tradeResult" style="margin-top:10px; font-size:0.8rem;"></div>
+    </div>
+</div>
 
-        <div class="user-info" id="userInfo"></div>
-        <div id="trialWarning" class="trial-warning" style="display: none;"></div>
+<div class="sidebar">
+    <div class="logo">
+        <h1>ForeSmart</h1>
+        <p>منصة التداول الذكية</p>
+    </div>
+    <div class="user-info" id="userInfo">
+        <div class="name">مرحباً بك</div>
+        <div class="subscription-badge">تحميل...</div>
+    </div>
+    <ul class="nav-menu">
+        <li data-section="dashboard"><a href="#">📊 لوحة التحكم</a></li>
+        <li data-section="stocks"><a href="#">🏢 أسواق الأسهم</a></li>
+        <li data-section="bonds"><a href="#">📜 أسواق السندات</a></li>
+        <li data-section="crypto"><a href="#">₿ العملات الرقمية</a></li>
+        <li data-section="forex"><a href="#">💱 العملات الورقية</a></li>
+        <li data-section="metals"><a href="#">🥇 المعادن</a></li>
+        <li data-section="trading"><a href="#">⚡ التداول الذكي</a></li>
+        <li data-section="portfolio"><a href="#">💼 محفظتي</a></li>
+        <li data-section="ai-plan"><a href="#">📈 خطة الاستثمار (AI)</a></li>
+        <li data-section="ai-advisor"><a href="#">🧠 المستشار الاقتصادي</a></li>
+    </ul>
+    <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
+</div>
 
-        <ul class="nav-menu" id="navMenu">
-            <li data-section="dashboard"><a href="#">📊 لوحة التحكم</a></li>
-            <li data-section="markets"><a href="#">🌍 الأسواق</a></li>
-            <li data-section="ai"><a href="#">🧠 المستشار الذكي</a></li>
-            <li data-section="simulator"><a href="#">🎮 محاكي التداول</a></li>
-            <li data-section="portfolio"><a href="#">💼 المحفظة</a></li>
-            <li data-section="subscription"><a href="#">⭐ الاشتراك والخطط</a></li>
-            <li data-section="banks"><a href="#">🏛️ البنوك</a></li>
-            <li data-section="upgrade"><a href="#" id="upgradeLink">🚀 ترقية الاشتراك</a></li>
-            <li data-section="settings"><a href="#">⚙️ الإعدادات</a></li>
-        </ul>
+<div class="main-content">
+    <!-- شريط التنبيهات الصوتية -->
+    <div class="alert-bar">
+        <span>🔔 التنبيهات الصوتية: </span>
+        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">✅ مفعل</button>
+        <span id="lastAlert" style="font-size:0.8rem;"></span>
+    </div>
 
-        <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
-    </aside>
+    <!-- ==================== الأسواق ==================== -->
+    <div id="dashboard" class="section active-section">
+        <h2>🌍 نظرة عامة على الأسواق</h2>
+        <div id="marketSummary"></div>
+    </div>
 
-    <!-- المحتوى الرئيسي -->
-    <main class="main-content">
-        <div id="dashboard" class="section active-section">
-            <div class="stats-row" id="statsRow"></div>
-            <div class="assets-panel">
-                <h3>⚡ أبرز الأصول</h3>
-                <div id="topAssets"></div>
-            </div>
-            <div class="chart-panel">
-                <canvas id="btcChart"></canvas>
-            </div>
-        </div>
+    <div id="stocks" class="section"><h2>🏢 أسواق الأسهم العالمية</h2><div id="stocksMarket" class="markets-grid"></div></div>
+    <div id="bonds" class="section"><h2>📜 أسواق السندات</h2><div id="bondsMarket" class="markets-grid"></div></div>
+    <div id="crypto" class="section"><h2>₿ العملات الرقمية</h2><div id="cryptoMarket" class="markets-grid"></div></div>
+    <div id="forex" class="section"><h2>💱 أسواق العملات (فوركس)</h2><div id="forexMarket" class="markets-grid"></div></div>
+    <div id="metals" class="section"><h2>🥇 المعادن الثمينة</h2><div id="metalsMarket" class="markets-grid"></div></div>
 
-        <div id="markets" class="section">
-            <h2>🌍 الأسواق العالمية</h2>
-            <div id="fullMarketTable" class="assets-panel"></div>
-        </div>
-
-        <div id="ai" class="section">
-            <h2>🧠 المستشار الذكي</h2>
-            <div class="ai-advisor" id="aiPanel"></div>
-        </div>
-
-        <div id="simulator" class="section">
-            <h2>🎮 محاكي التداول</h2>
-            <div class="card-panel" id="simulatorPanel"></div>
-        </div>
-
-        <div id="portfolio" class="section">
-            <h2>💼 محفظتي</h2>
-            <div class="card-panel" id="portfolioPanel"></div>
-        </div>
-
-        <div id="subscription" class="section">
-            <h2>⭐ خطط الاشتراك</h2>
-            <div class="card-panel" id="plansPanel"></div>
-        </div>
-
-        <div id="banks" class="section">
-            <h2>🏛️ البنوك والتحويلات</h2>
-            <div class="card-panel" id="banksPanel"></div>
-        </div>
-
-        <div id="upgrade" class="section">
-            <h2>🚀 ترقية الاشتراك</h2>
-            <div class="card-panel" id="upgradePanel"></div>
-        </div>
-
-        <div id="settings" class="section">
-            <h2>⚙️ إعدادات الحساب</h2>
-            <div class="card-panel" id="settingsPanel"></div>
-        </div>
-    </main>
+    <div id="trading" class="section"><h2>⚡ التداول الذكي (بيع/شراء/وقف خسارة)</h2><div id="tradingPanel"></div></div>
+    <div id="portfolio" class="section"><h2>💼 محفظتي الاستثمارية</h2><div id="portfolioPanel"></div></div>
+    <div id="ai-plan" class="section"><h2>📈 خطة الاستثمار - توصيات الذكاء الاصطناعي</h2><div id="aiPlanPanel"></div></div>
+    <div id="ai-advisor" class="section"><h2>🧠 المستشار الاقتصادي - تحليل السوق</h2><div id="aiAdvisorPanel"></div></div>
 </div>
 
 <script src="assets/plans.js"></script>
 <script src="assets/auth.js"></script>
-
 <script>
     // ========================================
-    // المتغيرات والإعدادات الأساسية
+    // بيانات الأسواق الكاملة
     // ========================================
-    const API_AI = "https://foresmart-intelligence-backend-production.up.railway.app";
-    let currentUserData = currentUser;
+    const marketsData = {
+        stocks: [
+            { name: "الراجحي", price: 88.40, change: 1.2, market: "saudi" },
+            { name: "سابك", price: 76.30, change: -0.5, market: "saudi" },
+            { name: "أرامكو", price: 30.95, change: 0.8, market: "saudi" },
+            { name: "S&P 500", price: 5234.50, change: 0.65, market: "us" },
+            { name: "NASDAQ", price: 18450.30, change: 1.15, market: "us" },
+            { name: "FTSE 100", price: 8234.50, change: 0.32, market: "uk" },
+            { name: "DAX", price: 18650.30, change: 0.48, market: "europe" },
+            { name: "نيكاي 225", price: 38750.30, change: 0.95, market: "japan" }
+        ],
+        bonds: [
+            { name: "الخزانة الأمريكية 10Y", price: 98.45, change: -0.15, yield: 4.35 },
+            { name: "الخزانة الأمريكية 30Y", price: 96.20, change: -0.22, yield: 4.55 },
+            { name: "السندات السعودية", price: 101.30, change: 0.12, yield: 5.10 },
+            { name: "السندات الأوروبية", price: 99.85, change: 0.08, yield: 3.85 },
+            { name: "سندات الشركات", price: 102.50, change: 0.25, yield: 4.65 }
+        ],
+        crypto: [
+            { name: "Bitcoin", price: 64213, change: 2.3, symbol: "BTC" },
+            { name: "Ethereum", price: 3482, change: 1.1, symbol: "ETH" },
+            { name: "Solana", price: 142, change: -0.5, symbol: "SOL" },
+            { name: "BNB", price: 612, change: 0.8, symbol: "BNB" },
+            { name: "XRP", price: 0.62, change: 0.3, symbol: "XRP" }
+        ],
+        forex: [
+            { name: "EUR/USD", price: 1.0845, change: 0.25 },
+            { name: "GBP/USD", price: 1.2645, change: -0.12 },
+            { name: "USD/JPY", price: 154.80, change: 0.45 },
+            { name: "USD/CHF", price: 0.9145, change: -0.08 },
+            { name: "AUD/USD", price: 0.6615, change: 0.18 }
+        ],
+        metals: [
+            { name: "الذهب (XAU)", price: 2345.50, change: 0.42 },
+            { name: "الفضة (XAG)", price: 28.15, change: 0.35 },
+            { name: "النحاس", price: 4.65, change: -0.22 },
+            { name: "البلاتين", price: 985.30, change: 0.18 },
+            { name: "البلاديوم", price: 1012.50, change: 0.55 }
+        ]
+    };
 
-    if (!currentUserData) {
-        window.location.href = 'login.html';
+    // محفظة المستخدم (لحفظ الصفقات)
+    let userPortfolio = JSON.parse(localStorage.getItem('fs_portfolio') || '[]');
+
+    // إعدادات التنبيهات الصوتية
+    let soundEnabled = true;
+    let priceTargets = {};
+
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        document.getElementById('soundToggle').innerHTML = soundEnabled ? '✅ مفعل' : '🔇 معطل';
+        playSound('notification');
     }
 
-    const userPlan = getUserPlan(currentUserData);
-    const subscriptionStatus = checkSubscriptionStatus();
-
-    // ========================================
-    // عرض معلومات المستخدم في القائمة الجانبية
-    // ========================================
-    function renderUserInfo() {
-        const userInfoDiv = document.getElementById('userInfo');
-        if (!userInfoDiv) return;
-
-        userInfoDiv.innerHTML = `
-            <div class="name">👋 مرحباً ${currentUserData.firstName || currentUserData.name} ${currentUserData.lastName || ''}</div>
-            <div class="detail">📧 ${currentUserData.email}</div>
-            <div class="detail">📱 ${currentUserData.phone || 'لم يتم إضافة رقم الجوال'}</div>
-            <div class="detail">🆔 ${currentUserData.nationalId ? '✓ تم التحقق من الهوية' : 'الهوية غير مسجلة'}</div>
-            <div class="subscription-badge">${userPlan.name}</div>
-            <div class="detail">${subscriptionStatus.expired ? 'انتهت الفترة التجريبية' : subscriptionStatus.daysLeft + ' يوم متبقي'}</div>
-        `;
-
-        if (subscriptionStatus.expired && currentUserData.plan === 'free_trial') {
-            const warningDiv = document.getElementById('trialWarning');
-            warningDiv.style.display = 'block';
-            warningDiv.innerHTML = '⚠️ انتهت الفترة التجريبية. يرجى الاشتراك في إحدى الباقات للاستمرار في استخدام المنصة.';
-        }
-    }
-
-    // ========================================
-    // تقييد المميزات بناءً على خطة المستخدم
-    // ========================================
-    function applyFeatureRestrictions() {
-        const hasAdvancedMarkets = hasFeature(currentUserData, 'advanced_markets');
-        const hasBankIntegration = hasFeature(currentUserData, 'bank_integration');
-        const maxPortfolio = userPlan.features.max_portfolio_size;
-
-        if (!hasAdvancedMarkets) {
-            const marketsLink = document.querySelector('[data-section="markets"] a');
-            if (marketsLink) marketsLink.classList.add('disabled');
-        }
-
-        if (!hasBankIntegration) {
-            const banksLink = document.querySelector('[data-section="banks"] a');
-            if (banksLink) banksLink.classList.add('disabled');
-            const banksPanel = document.getElementById('banksPanel');
-            if (banksPanel) {
-                banksPanel.innerHTML = '<div class="asset-row">🔒 هذه الميزة متاحة فقط لمشتركي Pro و VIP.<br><a href="#" onclick="showUpgrade()">قم بترقية اشتراكك</a></div>';
+    function playSound(type) {
+        if (!soundEnabled) return;
+        try {
+            const audio = new Audio();
+            if (type === 'notification') {
+                audio.src = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3';
+            } else if (type === 'alert') {
+                audio.src = 'https://www.soundjay.com/misc/sounds/alert-beep.mp3';
             }
-        }
-
-        const portfolioPanel = document.getElementById('portfolioPanel');
-        if (portfolioPanel) {
-            portfolioPanel.innerHTML = `<div class="asset-row">💰 رصيد المحفظة: 10,000 ريال (وهمي)<br>📊 الحد الأقصى للأصول: ${maxPortfolio === 999 ? 'غير محدود' : maxPortfolio}</div>`;
-        }
+            audio.play().catch(e => console.log('صوت:', e));
+        } catch(e) { console.log('خطأ في الصوت'); }
     }
 
-    // ========================================
-    // عرض خطط الاشتراك
-    // ========================================
-    function renderPlans() {
-        let html = '<div class="stats-row">';
-        for (const [key, plan] of Object.entries(PLANS)) {
-            if (key === 'free_trial') continue;
-            html += `
-                <div class="stat-box">
-                    <h3>${plan.name}</h3>
-                    <div class="stat-number">${plan.price_monthly} ريال</div>
-                    <div>شهرياً</div>
-                    <div style="margin-top:10px;">أو ${plan.price_yearly} ريال سنوياً</div>
-                    <button class="upgrade-btn" onclick="upgradeTo('${key}')">اشتراك</button>
+    // عرض الأسواق
+    function renderMarket(containerId, data, priceKey = 'price') {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = data.map(item => `
+            <div class="market-card" onclick="openTradeModal('${item.name}', ${item.price})">
+                <div class="market-name">
+                    <span>${item.name}</span>
+                    <span class="${item.change >= 0 ? 'positive' : 'negative'}">${item.change >= 0 ? '▲' : '▼'} ${Math.abs(item.change)}%</span>
+                </div>
+                <div class="market-price">${item[priceKey].toLocaleString()} ${item.name.includes('USD') ? '' : (item.name.includes('ذهب') ? '$' : 'ريال')}</div>
+                <div class="trade-buttons">
+                    <button class="btn-buy" onclick="event.stopPropagation(); openTradeModal('${item.name}', ${item.price}, 'buy')">شراء</button>
+                    <button class="btn-sell" onclick="event.stopPropagation(); openTradeModal('${item.name}', ${item.price}, 'sell')">بيع</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // نافذة التداول
+    let currentTradeAsset = null;
+    let currentTradePrice = null;
+
+    function openTradeModal(asset, price, type = null) {
+        currentTradeAsset = asset;
+        currentTradePrice = price;
+        document.getElementById('modalAssetName').innerHTML = `تداول - ${asset} (السعر: ${price})`;
+        if (type) document.getElementById('tradeType').value = type;
+        document.getElementById('tradeModal').style.display = 'flex';
+    }
+
+    function closeTradeModal() {
+        document.getElementById('tradeModal').style.display = 'none';
+    }
+
+    function executeTrade() {
+        const type = document.getElementById('tradeType').value;
+        const amount = parseFloat(document.getElementById('tradeAmount').value);
+        const stopLoss = parseFloat(document.getElementById('stopLoss').value);
+        const takeProfit = parseFloat(document.getElementById('takeProfit').value);
+
+        if (!amount || amount <= 0) {
+            document.getElementById('tradeResult').innerHTML = '❌ الرجاء إدخال كمية صحيحة';
+            return;
+        }
+
+        const totalValue = amount * currentTradePrice;
+        const newTrade = {
+            id: Date.now(),
+            asset: currentTradeAsset,
+            type: type,
+            amount: amount,
+            price: currentTradePrice,
+            totalValue: totalValue,
+            stopLoss: stopLoss || null,
+            takeProfit: takeProfit || null,
+            date: new Date().toISOString(),
+            status: 'open'
+        };
+
+        userPortfolio.push(newTrade);
+        localStorage.setItem('fs_portfolio', JSON.stringify(userPortfolio));
+
+        document.getElementById('tradeResult').innerHTML = `✅ تم ${type === 'buy' ? 'شراء' : 'بيع'} ${amount} من ${currentTradeAsset} بقيمة ${totalValue.toFixed(2)} ريال`;
+        
+        // إغلاق النافذة بعد ثانيتين
+        setTimeout(() => {
+            closeTradeModal();
+            renderPortfolio();
+            document.getElementById('tradeResult').innerHTML = '';
+        }, 2000);
+        
+        playSound('notification');
+    }
+
+    // عرض المحفظة
+    function renderPortfolio() {
+        const portfolioDiv = document.getElementById('portfolioPanel');
+        if (!portfolioDiv) return;
+        
+        if (userPortfolio.length === 0) {
+            portfolioDiv.innerHTML = '<div class="market-card">📭 لا توجد صفقات حالياً. قم بشراء أصول من الأسواق أعلاه.</div>';
+            return;
+        }
+        
+        let totalValue = 0;
+        let totalProfit = 0;
+        
+        const html = userPortfolio.map(trade => {
+            totalValue += trade.totalValue;
+            // محاكاة الربح/الخسارة
+            const currentPrice = currentTradeAsset === trade.asset ? currentTradePrice : trade.price;
+            const profit = trade.type === 'buy' ? (currentPrice - trade.price) * trade.amount : (trade.price - currentPrice) * trade.amount;
+            totalProfit += profit;
+            return `
+                <div class="market-card">
+                    <div class="market-name">${trade.asset} - ${trade.type === 'buy' ? 'شراء' : 'بيع'}</div>
+                    <div>الكمية: ${trade.amount}</div>
+                    <div>سعر الشراء: ${trade.price}</div>
+                    <div>القيمة: ${trade.totalValue.toFixed(2)} ريال</div>
+                    <div class="${profit >= 0 ? 'positive' : 'negative'}">الربح/الخسارة: ${profit >= 0 ? '+' : ''}${profit.toFixed(2)} ريال</div>
+                    ${trade.stopLoss ? `<div>⛔ وقف خسارة: ${trade.stopLoss}</div>` : ''}
+                    ${trade.takeProfit ? `<div>🎯 جني أرباح: ${trade.takeProfit}</div>` : ''}
+                    <div style="font-size:0.7rem; margin-top:8px;">${new Date(trade.date).toLocaleDateString('ar-EG')}</div>
                 </div>
             `;
+        }).join('');
+        
+        portfolioDiv.innerHTML = `
+            <div class="alert-bar" style="margin-bottom:20px;">
+                <span>💰 إجمالي المحفظة: ${totalValue.toFixed(2)} ريال</span>
+                <span class="${totalProfit >= 0 ? 'positive' : 'negative'}">الربح الإجمالي: ${totalProfit >= 0 ? '+' : ''}${totalProfit.toFixed(2)} ريال</span>
+            </div>
+            <div class="markets-grid">${html}</div>
+        `;
+    }
+
+    // خطة الاستثمار (AI)
+    function renderAIPlan() {
+        const planDiv = document.getElementById('aiPlanPanel');
+        if (!planDiv) return;
+        
+        planDiv.innerHTML = `
+            <div class="market-card">
+                <h3>🤖 توصيات الذكاء الاصطناعي لتوزيع رأس المال</h3>
+                <p style="margin:15px 0;">📥 أدخل رأس المال الذي ترغب في استثماره:</p>
+                <input type="number" id="capitalAmount" placeholder="رأس المال (ريال)" style="background:#1a2335; border:1px solid #2d374b; border-radius:30px; padding:12px; width:100%; color:white;">
+                <button onclick="generateInvestmentPlan()" style="background:#10b981; padding:12px 20px; border-radius:30px; border:none; margin-top:10px; cursor:pointer;">إنشاء خطة استثمارية</button>
+                <div id="investmentPlanResult" style="margin-top:20px;"></div>
+            </div>
+            <div class="alert-bar" style="margin-top:15px;">
+                <span>⚠️ إخلاء مسؤولية: هذه التوصيات تحليلية وليست ضماناً للربح. استثمر على مسؤوليتك الشخصية.</span>
+            </div>
+        `;
+    }
+
+    function generateInvestmentPlan() {
+        const capital = parseFloat(document.getElementById('capitalAmount').value);
+        if (!capital || capital <= 0) {
+            document.getElementById('investmentPlanResult').innerHTML = '❌ الرجاء إدخال مبلغ صحيح';
+            return;
         }
+        
+        // توزيع استثماري ذكي
+        const allocations = [
+            { asset: "الأسهم الأمريكية (S&P 500)", percent: 30, expectedReturn: 12 },
+            { asset: "الذهب", percent: 15, expectedReturn: 8 },
+            { asset: "Bitcoin (عملات رقمية)", percent: 10, expectedReturn: 25 },
+            { asset: "السندات الحكومية", percent: 20, expectedReturn: 5 },
+            { asset: "العملات (فوركس)", percent: 10, expectedReturn: 10 },
+            { asset: "الأسهم السعودية", percent: 15, expectedReturn: 10 }
+        ];
+        
+        let expectedTotalReturn = 0;
+        let html = '<div class="markets-grid">';
+        allocations.forEach(a => {
+            const amount = (capital * a.percent / 100).toFixed(2);
+            const expected = (amount * a.expectedReturn / 100).toFixed(2);
+            expectedTotalReturn += parseFloat(expected);
+            html += `
+                <div class="market-card">
+                    <div class="market-name">${a.asset}</div>
+                    <div>💰 المبلغ: ${amount} ريال (${a.percent}%)</div>
+                    <div class="positive">📈 العائد المتوقع سنوياً: ${expected} ريال (${a.expectedReturn}%)</div>
+                </div>
+            `;
+        });
         html += '</div>';
-
-        const plansPanel = document.getElementById('plansPanel');
-        const upgradePanel = document.getElementById('upgradePanel');
-        if (plansPanel) plansPanel.innerHTML = html;
-        if (upgradePanel) upgradePanel.innerHTML = html;
+        html += `<div class="alert-bar" style="margin-top:20px;"><span>📊 العائد السنوي المتوقع للمحفظة: ${expectedTotalReturn.toFixed(2)} ريال (${((expectedTotalReturn/capital)*100).toFixed(1)}%)</span></div>`;
+        
+        document.getElementById('investmentPlanResult').innerHTML = html;
+        playSound('notification');
     }
 
-    function upgradeTo(plan) {
-        if (confirm(`هل تريد الترقية إلى خطة ${PLANS[plan].name}؟`)) {
-            const result = upgradeSubscription(currentUserData.email, plan, 'monthly');
-            if (result.success) {
-                alert(`تم الترقية بنجاح. المبلغ: ${result.price} ريال. سيتم ربط بوابة الدفع قريباً.`);
-                window.location.reload();
-            }
-        }
-    }
+    // المستشار الاقتصادي (AI)
+    let currentNewsIndex = 0;
+    const newsItems = [
+        { title: "تقرير التضخم الأمريكي", impact: "قد يؤثر على قرارات الفيدرالي", effect: "negative", asset: "الدولار", change: "-0.5%" },
+        { title: "التوترات الجيوسياسية في الشرق الأوسط", impact: "ارتفاع أسعار النفط", effect: "positive", asset: "النفط", change: "+2.3%" },
+        { title: "تغيرات الطقس في أمريكا الشمالية", impact: "تأثير على إنتاج الطاقة", effect: "neutral", asset: "الغاز الطبيعي", change: "+0.8%" },
+        { title: "قرار البنك المركزي الأوروبي", impact: "تثبيت أسعار الفائدة", effect: "positive", asset: "اليورو", change: "+0.3%" },
+        { title: "الحرب التجارية بين الصين وأمريكا", impact: "تأثير على سلاسل التوريد", effect: "negative", asset: "الأسهم الصينية", change: "-1.2%" },
+        { title: "الكوارث الطبيعية في جنوب شرق آسيا", impact: "ارتفاع أسعار السلع الزراعية", effect: "positive", asset: "السلع الزراعية", change: "+1.5%" }
+    ];
 
-    function showUpgrade() {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-        const upgradeSection = document.getElementById('upgrade');
-        if (upgradeSection) upgradeSection.classList.add('active-section');
-    }
-
-    // ========================================
-    // الأسواق الحية (API)
-    // ========================================
-    async function fetchPrices() {
-        try {
-            const crypto = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin&vs_currencies=usd&include_24hr_change=true').then(r => r.json());
-            const btc = { price: crypto.bitcoin?.usd || 96000, change: crypto.bitcoin?.usd_24h_change || 1.2 };
-
-            const statsRow = document.getElementById('statsRow');
-            if (statsRow) {
-                statsRow.innerHTML = `
-                    <div class="stat-box"><div class="stat-title">حجم التداول 24h</div><div class="stat-number">$98.2B</div></div>
-                    <div class="stat-box"><div class="stat-title">التغير اليومي (BTC)</div><div class="stat-number ${btc.change > 0 ? 'positive' : 'negative'}">${btc.change > 0 ? '+' + btc.change.toFixed(2) : btc.change.toFixed(2)}%</div></div>
-                `;
-            }
-
-            const topAssets = document.getElementById('topAssets');
-            if (topAssets) {
-                topAssets.innerHTML = `<div class="asset-row"><span>Bitcoin (BTC)</span><span>$${btc.price} <span class="${btc.change > 0 ? 'positive' : 'negative'}">${btc.change > 0 ? '+' + btc.change.toFixed(2) : btc.change.toFixed(2)}%</span></span></div>`;
-            }
-
-            const chartCanvas = document.getElementById('btcChart');
-            if (chartCanvas) {
-                new Chart(chartCanvas, {
-                    type: 'line',
-                    data: {
-                        labels: ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
-                        datasets: [{
-                            label: 'BTC/USD',
-                            data: [btc.price - 300, btc.price - 100, btc.price + 50, btc.price + 80, btc.price + 120, btc.price],
-                            borderColor: '#10b981',
-                            fill: true,
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { labels: { color: '#b0bedb' } } }
-                    }
-                });
-            }
-        } catch (e) {
-            console.warn('خطأ في جلب الأسعار:', e);
-        }
-    }
-
-    async function loadAI() {
-        try {
-            const res = await fetch(`${API_AI}/ai/recommend?asset=Bitcoin`);
-            const data = await res.json();
-            const aiPanel = document.getElementById('aiPanel');
-            if (aiPanel) {
-                aiPanel.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap;">
-                        <span>🤖 التوصية: ${data.recommendation === "BUY" ? "شراء ✅" : data.recommendation === "SELL" ? "بيع 🔴" : "احتفاظ ⏸️"}</span>
-                        <span>🎯 الثقة: ${(data.score * 100).toFixed(1)}%</span>
+    function renderAIAdvisor() {
+        const advisorDiv = document.getElementById('aiAdvisorPanel');
+        if (!advisorDiv) return;
+        
+        advisorDiv.innerHTML = `
+            <div class="market-card">
+                <h3>🌍 التحليل الاقتصادي لحظياً</h3>
+                <div id="newsCarousel" style="margin:15px 0; padding:15px; background:rgba(255,255,255,0.05); border-radius:20px;">
+                    <div id="currentNews"></div>
+                    <div class="trade-buttons" style="margin-top:10px; justify-content:center;">
+                        <button onclick="prevNews()" style="background:#1a2335; border:none; padding:8px 15px; border-radius:30px;">◀ السابق</button>
+                        <button onclick="nextNews()" style="background:#1a2335; border:none; padding:8px 15px; border-radius:30px;">التالي ▶</button>
                     </div>
-                    <div class="asset-row">تحليل متعدد النماذج (OpenAI, Gemini, طقس, جيوسياسي)</div>
-                `;
-            }
-        } catch (e) {
-            const aiPanel = document.getElementById('aiPanel');
-            if (aiPanel) aiPanel.innerHTML = "✅ الذكاء الاصطناعي جاهز (تأكد من اتصال Railway)";
-        }
-    }
-
-    async function fetchMarkets() {
-        try {
-            const data = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=8&page=1').then(r => r.json());
-            const marketTable = document.getElementById('fullMarketTable');
-            if (marketTable) {
-                marketTable.innerHTML = `<div class="asset-row"><span>العملة</span><span>السعر</span><span>التغير 24h</span></div>` +
-                    data.map(c => `<div class="asset-row"><span>${c.name}</span><span>$${c.current_price}</span><span class="${c.price_change_percentage_24h > 0 ? 'positive' : 'negative'}">${c.price_change_percentage_24h?.toFixed(2)}%</span></div>`).join('');
-            }
-        } catch (e) {
-            console.warn(e);
-        }
-    }
-
-    // ========================================
-    // محاكي التداول
-    // ========================================
-    function initSimulator() {
-        const simulatorPanel = document.getElementById('simulatorPanel');
-        if (!simulatorPanel) return;
-
-        simulatorPanel.innerHTML = `
-            <div class="form-group">
-                <label>الأصل: </label>
-                <select id="simAsset" style="background:#1a2335; border-radius:40px; padding:10px; color:white; margin-right:10px;">
-                    <option>Bitcoin</option>
-                    <option>Ethereum</option>
-                    <option>Gold</option>
-                </select>
+                </div>
+                <div id="marketAnalysis"></div>
             </div>
-            <div class="form-group">
-                <label>الكمية: </label>
-                <input type="number" id="simQty" value="0.01" style="width:150px;">
+            <div class="alert-bar" style="margin-top:15px;">
+                <span>⚠️ إخلاء مسؤولية: التحليل الاقتصادي يعتمد على بيانات عامة ولا يضمن نتائج استثمارية.</span>
             </div>
-            <button id="simBuy" style="background:#10b981; padding:10px 20px; border-radius:40px; border:none; color:white; cursor:pointer; margin-left:10px;">شراء وهمي</button>
-            <button id="simSell" style="background:#ff5a67; padding:10px 20px; border-radius:40px; border:none; color:white; cursor:pointer;">بيع وهمي</button>
-            <p id="simResult" style="margin-top:15px;"></p>
         `;
-
-        const buyBtn = document.getElementById('simBuy');
-        const sellBtn = document.getElementById('simSell');
-        if (buyBtn) {
-            buyBtn.addEventListener('click', () => {
-                const qty = document.getElementById('simQty').value;
-                const asset = document.getElementById('simAsset').value;
-                document.getElementById('simResult').innerHTML = `✅ تم شراء ${qty} من ${asset} (محاكاة وهمية)`;
-            });
-        }
-        if (sellBtn) {
-            sellBtn.addEventListener('click', () => {
-                const qty = document.getElementById('simQty').value;
-                const asset = document.getElementById('simAsset').value;
-                document.getElementById('simResult').innerHTML = `🔴 تم بيع ${qty} من ${asset} (محاكاة وهمية)`;
-            });
-        }
+        updateNewsCarousel();
+        updateMarketAnalysis();
     }
 
-    // ========================================
-    // صفحة الإعدادات (تغيير كلمة المرور)
-    // ========================================
-    function renderSettings() {
-        const settingsPanel = document.getElementById('settingsPanel');
-        if (!settingsPanel) return;
-
-        settingsPanel.innerHTML = `
-            <h3>🔐 تغيير كلمة المرور</h3>
-            <div class="form-group">
-                <input type="password" id="oldPassword" placeholder="كلمة المرور الحالية">
-            </div>
-            <div class="form-group">
-                <input type="password" id="newPassword" placeholder="كلمة المرور الجديدة">
-            </div>
-            <div class="form-group">
-                <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور الجديدة">
-            </div>
-            <button onclick="handleChangePassword()" style="background:#10b981; padding:12px 24px; border-radius:40px; border:none; color:white; cursor:pointer;">تغيير كلمة المرور</button>
-            <div id="passwordChangeResult" style="margin-top:15px; font-size:0.8rem;"></div>
+    function updateNewsCarousel() {
+        const news = newsItems[currentNewsIndex];
+        document.getElementById('currentNews').innerHTML = `
+            <div style="font-weight:bold;">📰 ${news.title}</div>
+            <div style="margin:8px 0;">📌 التأثير المتوقع: ${news.impact}</div>
+            <div class="${news.effect === 'positive' ? 'positive' : (news.effect === 'negative' ? 'negative' : '')}">🎯 التأثير على ${news.asset}: ${news.change}</div>
+            <div style="font-size:0.7rem; margin-top:8px;">🕒 تحديث: ${new Date().toLocaleTimeString()}</div>
         `;
     }
 
-    function handleChangePassword() {
-        const oldPassword = document.getElementById('oldPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        const result = changePassword(currentUserData.email, oldPassword, newPassword, confirmPassword);
-
-        const resultDiv = document.getElementById('passwordChangeResult');
-        if (result.success) {
-            resultDiv.style.color = '#10b981';
-            resultDiv.innerHTML = '✅ ' + result.message + ' سيتم إعادة توجيهك إلى صفحة تسجيل الدخول.';
-            setTimeout(() => {
-                logout();
-            }, 2000);
-        } else {
-            resultDiv.style.color = '#ff5a67';
-            resultDiv.innerHTML = '❌ ' + result.error;
-        }
+    function prevNews() {
+        currentNewsIndex = (currentNewsIndex - 1 + newsItems.length) % newsItems.length;
+        updateNewsCarousel();
     }
 
-    // ========================================
+    function nextNews() {
+        currentNewsIndex = (currentNewsIndex + 1) % newsItems.length;
+        updateNewsCarousel();
+    }
+
+    function updateMarketAnalysis() {
+        const analysisDiv = document.getElementById('marketAnalysis');
+        if (!analysisDiv) return;
+        
+        const globalFactors = [
+            { name: "التوترات الجيوسياسية", level: "متوسطة", advice: "زيادة التحوط في المحفظة" },
+            { name: "تغيرات الطقس", level: "منخفضة", advice: "مراقبة أسعار الطاقة" },
+            { name: "الأخبار الاقتصادية", level: "مرتفعة", advice: "توقع تقلبات في الأسواق" },
+            { name: "الحروب التجارية", level: "متوسطة", advice: "تنويع الاستثمارات جغرافياً" }
+        ];
+        
+        analysisDiv.innerHTML = `
+            <h3 style="margin:15px 0;">🌪️ العوامل المؤثرة على الأسواق حالياً</h3>
+            <div class="markets-grid">
+                ${globalFactors.map(f => `
+                    <div class="market-card">
+                        <div class="market-name">${f.name}</div>
+                        <div>📊 مستوى التأثير: ${f.level}</div>
+                        <div class="positive">💡 النصيحة: ${f.advice}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="alert-bar" style="margin-top:15px;">
+                <span>🤖 توصية الذكاء الاصطناعي: خصص 30% من محفظتك للأصول الآمنة (ذهب، سندات) في ظل التوترات الحالية.</span>
+            </div>
+        `;
+    }
+
+    // عرض جميع الأسواق
+    function renderAllMarkets() {
+        renderMarket('stocksMarket', marketsData.stocks);
+        renderMarket('bondsMarket', marketsData.bonds);
+        renderMarket('cryptoMarket', marketsData.crypto);
+        renderMarket('forexMarket', marketsData.forex);
+        renderMarket('metalsMarket', marketsData.metals);
+    }
+
     // التنقل بين الأقسام
-    // ========================================
     function initNavigation() {
         const sections = document.querySelectorAll('.section');
-        const navLinks = document.querySelectorAll('#navMenu li');
-
+        const navLinks = document.querySelectorAll('.nav-menu li');
+        
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const sectionId = link.getAttribute('data-section');
-                const linkAnchor = link.querySelector('a');
-                if (linkAnchor && linkAnchor.classList.contains('disabled')) return;
-
                 sections.forEach(sec => sec.classList.remove('active-section'));
-                const targetSection = document.getElementById(sectionId);
-                if (targetSection) targetSection.classList.add('active-section');
-
-                // تحديث البيانات عند فتح بعض الأقسام
-                if (sectionId === 'markets') fetchMarkets();
-                if (sectionId === 'ai') loadAI();
-                if (sectionId === 'settings') renderSettings();
-            });
-        });
-    }
-
-    // ========================================
-    // تشغيل جميع الوظائف عند تحميل الصفحة
-    // ========================================
-    renderUserInfo();
-    applyFeatureRestrictions();
-    renderPlans();
-    fetchPrices();
-    loadAI();
-    initSimulator();
-    initNavigation();
-
-    // رابط الترقية
-    const upgradeLink = document.getElementById('upgradeLink');
-    if (upgradeLink) {
-        upgradeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            showUpgrade();
-        });
-    }
-</script>
-</body>
-</html>
+                const target = document.getElementById(sectionId);
+                if (target) target.classList.add('active-section');
+                
+                // تحديث البيانات عند فتح القسم
