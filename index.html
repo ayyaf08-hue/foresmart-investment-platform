@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ForeSmart Investment - لوحة التحكم المتقدمة</title>
+    <title>ForeSmart Investment - منصة الاستثمار الذكية</title>
     <!-- مكتبة الرسم البياني -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -16,131 +16,164 @@
 
         body {
             background: #0a0e17;
-            color: #e0e0e0;
+            color: #eef2ff;
             overflow-x: hidden;
         }
 
-        /* تخطيط الصفحة */
-        .app-container {
+        /* --- التخطيط الرئيسي --- */
+        .dashboard {
             display: flex;
             min-height: 100vh;
         }
 
-        /* القائمة الجانبية (Sidebar) */
+        /* --- القائمة الجانبية (Sidebar) --- */
         .sidebar {
             width: 280px;
-            background: linear-gradient(180deg, #0c1220 0%, #070b12 100%);
+            background: linear-gradient(180deg, #0c1220 0%, #060a12 100%);
             border-left: 1px solid rgba(255,255,255,0.05);
-            padding: 25px 15px;
+            padding: 25px 12px;
             position: fixed;
             right: 0;
             top: 0;
             bottom: 0;
             overflow-y: auto;
-            z-index: 10;
+            z-index: 20;
         }
-        .logo-area {
+        .logo {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
         }
-        .logo-area h2 {
+        .logo h1 {
             color: #10b981;
             font-size: 1.8rem;
+            letter-spacing: -0.5px;
         }
-        .logo-area p {
-            font-size: 0.8rem;
-            color: #7e8aa2;
+        .logo p {
+            font-size: 0.75rem;
+            color: #7c88a8;
+            margin-top: 5px;
         }
         .nav-menu {
             list-style: none;
         }
         .nav-menu li {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .nav-menu a {
-            display: block;
-            padding: 12px 18px;
-            color: #b0bedb;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            color: #b9c3e0;
             text-decoration: none;
             border-radius: 12px;
-            transition: all 0.2s;
-            font-size: 0.95rem;
+            transition: 0.2s;
+            font-size: 0.9rem;
         }
         .nav-menu a:hover, .nav-menu .active a {
-            background: rgba(16, 185, 129, 0.15);
+            background: rgba(16, 185, 129, 0.12);
             color: #10b981;
         }
+        .nav-menu .icon {
+            font-size: 1.2rem;
+            width: 28px;
+        }
 
-        /* المحتوى الرئيسي */
+        /* --- المحتوى الرئيسي --- */
         .main-content {
             flex: 1;
             margin-right: 280px;
-            padding: 25px 35px;
+            padding: 20px 30px;
         }
 
-        /* بطاقات المؤشرات */
-        .stats-grid {
+        /* --- بطاقات المؤشرات العلوية --- */
+        .stats-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 22px;
-            margin-bottom: 35px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
-        .stat-card {
-            background: rgba(18, 25, 45, 0.65);
-            backdrop-filter: blur(8px);
+        .stat-box {
+            background: rgba(18, 25, 45, 0.7);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 24px;
-            padding: 20px;
+            padding: 18px 20px;
             transition: 0.2s;
         }
-        .stat-card:hover { border-color: #10b981; background: #0f1825; }
-        .stat-title { color: #8e9aaf; font-size: 0.85rem; margin-bottom: 12px; }
-        .stat-value { font-size: 1.9rem; font-weight: bold; color: #f0f3fa; }
-        .stat-change { font-size: 0.8rem; margin-top: 8px; }
+        .stat-box:hover {
+            border-color: #10b981;
+            background: #101826;
+        }
+        .stat-title {
+            color: #9aa6c2;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .stat-change {
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
         .positive { color: #10b981; }
         .negative { color: #ff5a67; }
 
-        /* قسم الأصول والرسم البياني */
-        .assets-chart-section {
+        /* --- قسم الأصول والرسم البياني --- */
+        .markets-chart {
             display: grid;
-            grid-template-columns: 1fr 1.6fr;
+            grid-template-columns: 1fr 1.4fr;
             gap: 25px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
-        .assets-list {
-            background: rgba(18, 25, 45, 0.65);
-            backdrop-filter: blur(8px);
+        .assets-panel {
+            background: rgba(18, 25, 45, 0.7);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 24px;
             padding: 20px;
         }
-        .asset-item {
+        .asset-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        .asset-name { font-weight: bold; }
-        .asset-price { font-family: monospace; font-size: 1.1rem; }
-        .chart-container {
-            background: rgba(18, 25, 45, 0.65);
-            backdrop-filter: blur(8px);
+        .asset-name {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .asset-price {
+            font-family: monospace;
+            font-weight: bold;
+        }
+        .chart-panel {
+            background: rgba(18, 25, 45, 0.7);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 24px;
             padding: 20px;
         }
-        canvas { max-height: 280px; width: 100% !important; }
+        canvas {
+            max-height: 250px;
+            width: 100% !important;
+        }
 
-        /* توصية الذكاء الاصطناعي */
-        .ai-card {
-            background: linear-gradient(135deg, #0e1825, #0a101c);
+        /* --- بطاقة المستشار الذكي (AI) --- */
+        .ai-advisor {
+            background: linear-gradient(135deg, #0f1828, #0a101c);
             border: 1px solid rgba(16, 185, 129, 0.3);
             border-radius: 28px;
             padding: 25px;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
         .ai-header {
             display: flex;
@@ -150,168 +183,234 @@
             gap: 15px;
             margin-bottom: 20px;
         }
-        .ai-header select, .ai-header button {
+        .ai-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .ai-controls select, .ai-controls button {
             background: #1a2335;
-            border: 1px solid #2a3448;
-            padding: 10px 20px;
+            border: 1px solid #2d374b;
+            padding: 8px 16px;
             border-radius: 40px;
             color: white;
+            font-size: 0.85rem;
             cursor: pointer;
         }
-        .ai-header button {
+        .ai-controls button {
             background: #10b981;
             border: none;
             font-weight: bold;
         }
-        .ai-result-area {
+        .ai-result {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 20px;
         }
-        .rec-box {
+        .rec-text {
             font-size: 1.8rem;
             font-weight: bold;
         }
         .buy { color: #10b981; }
         .sell { color: #ff5a67; }
         .hold { color: #f6b84b; }
+        .confidence {
+            font-size: 1.2rem;
+            background: #0e1622;
+            padding: 5px 15px;
+            border-radius: 40px;
+        }
+        .ai-reasons {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #9aa8c2;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 15px;
+        }
 
-        @media (max-width: 950px) {
-            .sidebar { width: 100%; position: relative; height: auto; }
-            .main-content { margin-right: 0; padding: 20px; }
-            .assets-chart-section { grid-template-columns: 1fr; }
+        /* --- تذييل --- */
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #5f6e8c;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            .main-content {
+                margin-right: 0;
+                padding: 15px;
+            }
+            .markets-chart {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <!-- القائمة الجانبية كما في الصورة -->
+<div class="dashboard">
+    <!-- القائمة الجانبية (جميع الخيارات من الصور) -->
     <aside class="sidebar">
-        <div class="logo-area">
-            <h2>ForeSmart</h2>
+        <div class="logo">
+            <h1>ForeSmart</h1>
             <p>منصة استثمار ذكية</p>
         </div>
         <ul class="nav-menu">
-            <li class="active"><a href="#">لوحة التحكم</a></li>
-            <li><a href="#">الأسواق</a></li>
-            <li><a href="#">خريطة حرارية</a></li>
-            <li><a href="#">التقييم الاقتصادي</a></li>
-            <li><a href="#">محاكي التداول</a></li>
-            <li><a href="#">المحفظة</a></li>
-            <li><a href="#">الاشتراك</a></li>
-            <li><a href="#">المحافظ الاستثمارية</a></li>
-            <li><a href="#">الربط الخارجي</a></li>
-            <li><a href="#">البنوك</a></li>
-            <li><a href="#">المستشار الذكي</a></li>
-            <li><a href="#">إشارات التداول</a></li>
-            <li><a href="#">خطة النمو</a></li>
+            <li class="active"><a href="#"><span class="icon">📊</span> لوحة التحكم</a></li>
+            <li><a href="#"><span class="icon">🌍</span> الأسواق</a></li>
+            <li><a href="#"><span class="icon">🔥</span> خريطة حرارية</a></li>
+            <li><a href="#"><span class="icon">📈</span> التقييم الاقتصادي</a></li>
+            <li><a href="#"><span class="icon">🎮</span> محاكي التداول</a></li>
+            <li><a href="#"><span class="icon">💼</span> المحفظة</a></li>
+            <li><a href="#"><span class="icon">⭐</span> الاشتراك</a></li>
+            <li><a href="#"><span class="icon">🏦</span> المحافظ الاستثمارية</a></li>
+            <li><a href="#"><span class="icon">🔗</span> الربط الخارجي</a></li>
+            <li><a href="#"><span class="icon">🏛️</span> البنوك</a></li>
+            <li><a href="#"><span class="icon">🧠</span> المستشار الذكي</a></li>
+            <li><a href="#"><span class="icon">📡</span> إشارات التداول</a></li>
+            <li><a href="#"><span class="icon">📈</span> خطة النمو</a></li>
         </ul>
     </aside>
 
     <!-- المحتوى الرئيسي -->
     <main class="main-content">
-        <!-- بطاقات رقمية -->
-        <div class="stats-grid">
-            <div class="stat-card"><div class="stat-title">حجم التداول</div><div class="stat-value">97.9M</div><div class="stat-change positive">▲ +2.3%</div></div>
-            <div class="stat-card"><div class="stat-title">التغير اليومي</div><div class="stat-value">+1.08%</div><div class="stat-change positive">▲ 0.11%</div></div>
-            <div class="stat-card"><div class="stat-title">أعلى سعر اليوم</div><div class="stat-value">$98,213</div><div class="stat-change">—</div></div>
-            <div class="stat-card"><div class="stat-title">أعلى أسعار البيع</div><div class="stat-value">$96,450</div><div class="stat-change negative">▼ -0.4%</div></div>
+        <!-- البطاقات العلوية -->
+        <div class="stats-row">
+            <div class="stat-box"><div class="stat-title">حجم التداول (24h)</div><div class="stat-number">$97.9M</div><div class="stat-change positive">▲ +2.3%</div></div>
+            <div class="stat-box"><div class="stat-title">التغير اليومي</div><div class="stat-number">+1.08%</div><div class="stat-change positive">▲ 0.11%</div></div>
+            <div class="stat-box"><div class="stat-title">أعلى سعر اليوم</div><div class="stat-number">$98,213</div><div class="stat-change">—</div></div>
+            <div class="stat-box"><div class="stat-title">أعلى أسعار البيع</div><div class="stat-number">$96,450</div><div class="stat-change negative">▼ -0.4%</div></div>
         </div>
 
         <!-- الأصول + الرسم البياني -->
-        <div class="assets-chart-section">
-            <div class="assets-list">
-                <div class="asset-item"><span class="asset-name">BTC • Bitcoin</span><span class="asset-price positive">$96,213 <span class="positive">▲ 1.2%</span></span></div>
-                <div class="asset-item"><span class="asset-name">ETH • Ethereum</span><span class="asset-price positive">$3,482 <span class="positive">▲ 0.8%</span></span></div>
-                <div class="asset-item"><span class="asset-name">SOL • Solana</span><span class="asset-price negative">$142 <span class="negative">▼ -0.5%</span></span></div>
-                <div class="asset-item"><span class="asset-name">BNB • BNB</span><span class="asset-price positive">$612 <span class="positive">▲ 0.3%</span></span></div>
+        <div class="markets-chart">
+            <div class="assets-panel">
+                <div class="asset-row"><div class="asset-name"><span>₿</span> Bitcoin (BTC)</div><div class="asset-price positive">$96,213 <span class="positive">▲ 1.2%</span></div></div>
+                <div class="asset-row"><div class="asset-name"><span>Ξ</span> Ethereum (ETH)</div><div class="asset-price positive">$3,482 <span class="positive">▲ 0.8%</span></div></div>
+                <div class="asset-row"><div class="asset-name"><span>◎</span> Solana (SOL)</div><div class="asset-price negative">$142 <span class="negative">▼ -0.5%</span></div></div>
+                <div class="asset-row"><div class="asset-name"><span>🔶</span> BNB (BNB)</div><div class="asset-price positive">$612 <span class="positive">▲ 0.3%</span></div></div>
             </div>
-            <div class="chart-container">
-                <canvas id="priceChart"></canvas>
+            <div class="chart-panel">
+                <canvas id="btcChart"></canvas>
             </div>
         </div>
 
-        <!-- توصية الذكاء الاصطناعي -->
-        <div class="ai-card">
+        <!-- المستشار الذكي (AI) المتصل بـ Backend -->
+        <div class="ai-advisor">
             <div class="ai-header">
-                <h3>🤖 المستشار الذكي - توقع حركة السوق</h3>
-                <div>
-                    <select id="aiAssetSelect">
-                        <option value="Bitcoin">Bitcoin</option>
-                        <option value="Ethereum">Ethereum</option>
-                        <option value="Gold">Gold</option>
-                        <option value="Oil">Oil</option>
+                <h3>🧠 المستشار الذكي - تحليل متعدد النماذج</h3>
+                <div class="ai-controls">
+                    <select id="aiAsset">
+                        <option value="Bitcoin">Bitcoin (BTC)</option>
+                        <option value="Ethereum">Ethereum (ETH)</option>
+                        <option value="Gold">الذهب (XAU)</option>
+                        <option value="Oil">النفط (WTI)</option>
                     </select>
-                    <button id="fetchAiBtn">احصل على التوصية</button>
+                    <button id="getAiBtn">تشغيل التحليل</button>
                 </div>
             </div>
-            <div id="aiDisplayArea">
-                <div class="ai-result-area">
-                    <div>📊 التوصية الحالية:</div>
-                    <div class="rec-box" id="aiRecText">--</div>
-                    <div>🎯 نسبة الثقة: <span id="aiConfidence">--%</span></div>
+            <div id="aiContent">
+                <div class="ai-result">
+                    <div>📌 التوصية:</div>
+                    <div class="rec-text" id="recText">--</div>
+                    <div class="confidence" id="confText">الثقة: --%</div>
                 </div>
-                <div id="aiReasons" style="margin-top: 15px; font-size: 0.85rem; color: #9aa8c2;"></div>
+                <div class="ai-reasons" id="reasonsText">
+                    اضغط "تشغيل التحليل" للحصول على توصية من الذكاء الاصطناعي.
+                </div>
             </div>
         </div>
-        <div style="font-size: 0.7rem; text-align: center; color: #5f6c86;">© 2026 ForeSmart Investment Corporation - بيانات تحليلية وليست نصيحة مالية</div>
+
+        <div class="footer">
+            © 2026 ForeSmart Investment Corporation | البيانات تحليلية وليست توصية مالية ملزمة
+        </div>
     </main>
 </div>
 
 <script>
-    // تكامل الذكاء الاصطناعي
+    // ------------------------------
+    // ربط الذكاء الاصطناعي بـ Backend Railway
+    // ------------------------------
     const API_BASE = "https://foresmart-intelligence-backend-production.up.railway.app";
-    const aiSelect = document.getElementById('aiAssetSelect');
-    const aiBtn = document.getElementById('fetchAiBtn');
-    const aiRecSpan = document.getElementById('aiRecText');
-    const aiConfSpan = document.getElementById('aiConfidence');
-    const aiReasonsDiv = document.getElementById('aiReasons');
+    const assetSelect = document.getElementById('aiAsset');
+    const getBtn = document.getElementById('getAiBtn');
+    const recSpan = document.getElementById('recText');
+    const confSpan = document.getElementById('confText');
+    const reasonsDiv = document.getElementById('reasonsText');
 
-    async function loadAIRecommendation() {
-        const asset = aiSelect.value;
-        aiRecSpan.innerHTML = "⏳ جاري التحليل...";
-        aiConfSpan.innerHTML = "--%";
-        aiReasonsDiv.innerHTML = "";
+    async function fetchAIRecommendation() {
+        const asset = assetSelect.value;
+        recSpan.innerHTML = "⏳ جاري...";
+        confSpan.innerHTML = "الثقة: --%";
+        reasonsDiv.innerHTML = "جلب التحليل من محرك ForeSmart...";
+        
         try {
-            const res = await fetch(`${API_BASE}/ai/recommend?asset=${encodeURIComponent(asset)}`);
-            if (!res.ok) throw new Error("API error");
-            const data = await res.json();
+            const response = await fetch(`${API_BASE}/ai/recommend?asset=${encodeURIComponent(asset)}`);
+            if (!response.ok) throw new Error("فشل الاتصال");
+            const data = await response.json();
+            
             const rec = data.recommendation === "BUY" ? "شراء ✅" : (data.recommendation === "SELL" ? "بيع 🔴" : "احتفاظ ⏸️");
             const recClass = data.recommendation === "BUY" ? "buy" : (data.recommendation === "SELL" ? "sell" : "hold");
-            aiRecSpan.innerHTML = rec;
-            aiRecSpan.className = `rec-box ${recClass}`;
-            aiConfSpan.innerHTML = `${(data.score * 100).toFixed(1)}%`;
+            recSpan.innerHTML = rec;
+            recSpan.className = `rec-text ${recClass}`;
+            confSpan.innerHTML = `الثقة: ${(data.score * 100).toFixed(1)}%`;
+            
             if (data.details) {
-                aiReasonsDiv.innerHTML = `🧠 الأسباب: ${data.details.openai.reasoning.substring(0, 100)}... | 🌍 جيوسياسي: ${(data.details.geopolitics * 100).toFixed(0)}% | 🌦️ طقس: ${(data.details.weather * 100).toFixed(0)}%`;
+                reasonsDiv.innerHTML = `
+                    🧠 OpenAI: ${data.details.openai.reasoning.substring(0, 100)}...<br>
+                    🌍 جيوسياسي: ${(data.details.geopolitics * 100).toFixed(0)}% &nbsp;&nbsp;|&nbsp;&nbsp;
+                    🌦️ طقس: ${(data.details.weather * 100).toFixed(0)}%
+                `;
+            } else {
+                reasonsDiv.innerHTML = "تم التحليل بواسطة محرك ForeSmart Intelligence.";
             }
         } catch (err) {
-            aiRecSpan.innerHTML = "خطأ في الاتصال";
-            aiReasonsDiv.innerHTML = "تأكد من تشغيل الـ Backend على Railway.";
+            recSpan.innerHTML = "خطأ";
+            confSpan.innerHTML = "الثقة: --%";
+            reasonsDiv.innerHTML = "⚠️ تعذر الاتصال بالـ Backend. تأكد من أن Railway يعمل.";
         }
     }
 
-    aiBtn.onclick = loadAIRecommendation;
-    loadAIRecommendation();
+    getBtn.onclick = fetchAIRecommendation;
+    // تحميل توصية تلقائية عند فتح الصفحة
+    fetchAIRecommendation();
 
-    // رسم بياني بسيط
-    const ctx = document.getElementById('priceChart').getContext('2d');
+    // ------------------------------
+    // رسم بياني لـ Bitcoin
+    // ------------------------------
+    const ctx = document.getElementById('btcChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+            labels: ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
             datasets: [{
                 label: 'BTC/USD',
-                data: [95200, 95800, 96000, 96300, 96600, 96850],
+                data: [95200, 95800, 96100, 95900, 96500, 96800],
                 borderColor: '#10b981',
-                backgroundColor: 'rgba(16,185,129,0.1)',
+                backgroundColor: 'rgba(16,185,129,0.08)',
+                borderWidth: 2,
                 tension: 0.3,
                 fill: true
             }]
         },
-        options: { responsive: true, plugins: { legend: { labels: { color: '#b0bedb' } } } }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#cbd5e6' } }
+            },
+            scales: {
+                x: { ticks: { color: '#9aa8c2' } },
+                y: { ticks: { color: '#9aa8c2' } }
+            }
+        }
     });
 </script>
 </body>
