@@ -17,27 +17,38 @@
         .logout-btn { background: #ff5a67; margin-top: 20px; }
         .status-active { color: #10b981; }
         .status-expired { color: #ff5a67; }
-        .status-trial { color: #f6b84b; }
+        .search-box { margin-bottom: 20px; }
+        .search-box input { width: 300px; }
+        @media (max-width: 1000px) { table { font-size: 0.7rem; } th, td { padding: 8px; } }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="card"><h1>🔐 لوحة تحكم الأدمن</h1><p>إدارة المستخدمين والاشتراكات ورموز الدعوة</p></div>
+    <div class="card"><h1>🔐 لوحة تحكم الأدمن</h1><p>إدارة المستخدمين والاشتراكات</p></div>
     
     <div class="card"><h2>📊 إحصائيات سريعة</h2><div id="stats"></div></div>
     
-    <div class="card"><h2>👥 قائمة المستخدمين</h2><div id="usersTable"></div></div>
+    <div class="card">
+        <h2>👥 قائمة المستخدمين</h2>
+        <div class="search-box"><input type="text" id="searchInput" placeholder="🔍 بحث بالبريد الإلكتروني أو الاسم أو رقم الهوية..." onkeyup="filterUsers()"></div>
+        <div id="usersTable"></div>
+    </div>
     
-    <div class="card"><h2>➕ إنشاء مستخدم جديد (رمز دعوة)</h2>
-        <input type="text" id="newEmail" placeholder="البريد الإلكتروني">
-        <input type="text" id="newName" placeholder="الاسم">
-        <select id="newPlan">
-            <option value="free_trial">تجريبي (14 يوم)</option>
-            <option value="basic">عادي - 100 ريال/شهر</option>
-            <option value="pro">برو - 200 ريال/شهر</option>
-            <option value="vip">VIP - 300 ريال/شهر</option>
-        </select>
-        <button onclick="addUserByAdmin()">إنشاء حساب وإرسال رمز دعوة</button>
+    <div class="card"><h2>➕ إنشاء مستخدم جديد</h2>
+        <div class="form-row" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px;">
+            <input type="text" id="newEmail" placeholder="البريد الإلكتروني">
+            <input type="text" id="newFirstName" placeholder="الاسم الأول">
+            <input type="text" id="newLastName" placeholder="الاسم الأخير">
+            <input type="tel" id="newPhone" placeholder="رقم الجوال">
+            <input type="text" id="newNationalId" placeholder="رقم الهوية">
+            <select id="newPlan">
+                <option value="free_trial">تجريبي (14 يوم)</option>
+                <option value="basic">عادي - 100 ريال/شهر</option>
+                <option value="pro">برو - 200 ريال/شهر</option>
+                <option value="vip">VIP - 300 ريال/شهر</option>
+            </select>
+        </div>
+        <button onclick="addUserByAdmin()">إنشاء حساب جديد</button>
     </div>
     
     <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
@@ -52,30 +63,44 @@
         const usersList = getAllUsers();
         const active = usersList.filter(u => isSubscriptionActive(u)).length;
         const trial = usersList.filter(u => u.plan === 'free_trial').length;
-        const pro = usersList.filter(u => u.plan === 'pro').length;
+        const pro = usersList.filter(u => u.plan === 'pro' || u.plan === 'vip').length;
         document.getElementById('stats').innerHTML = `
-            <div class="stats-row" style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
-                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>إجمالي المستخدمين</div><div style="font-size:2rem;">${usersList.length}</div></div>
-                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>اشتراكات نشطة</div><div style="font-size:2rem;">${active}</div></div>
-                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>فترة تجريبية</div><div style="font-size:2rem;">${trial}</div></div>
-                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>مشتركين Pro/VIP</div><div style="font-size:2rem;">${pro}</div></div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
+                <div style="background:#1a2335; padding:15px; border-radius:20px;"><div>إجمالي المستخدمين</div><div style="font-size:2rem;">${usersList.length}</div></div>
+                <div style="background:#1a2335; padding:15px; border-radius:20px;"><div>اشتراكات نشطة</div><div style="font-size:2rem;">${active}</div></div>
+                <div style="background:#1a2335; padding:15px; border-radius:20px;"><div>فترة تجريبية</div><div style="font-size:2rem;">${trial}</div></div>
+                <div style="background:#1a2335; padding:15px; border-radius:20px;"><div>مشتركين Pro/VIP</div><div style="font-size:2rem;">${pro}</div></div>
             </div>
         `;
     }
     
-    function renderUsers() {
-        const usersList = getAllUsers();
-        let html = '<table><tr><th>البريد الإلكتروني</th><th>الاسم</th><th>الخطة</th><th>تاريخ الانتهاء</th><th>الحالة</th><th>إجراءات</th></tr>';
-        for (let user of usersList) {
+    let allUsers = [];
+    function renderUsers(filter = '') {
+        allUsers = getAllUsers();
+        let filtered = allUsers;
+        if (filter) {
+            filtered = allUsers.filter(u => 
+                u.email.toLowerCase().includes(filter.toLowerCase()) ||
+                u.name.toLowerCase().includes(filter.toLowerCase()) ||
+                u.nationalId?.includes(filter)
+            );
+        }
+        
+        let html = '<table><th>البريد</th><th>الاسم</th><th>الجوال</th><th>رقم الهوية</th><th>الخطة</th><th>تاريخ الانتهاء</th><th>الحالة</th><th>إجراءات</th></tr>';
+        for (let user of filtered) {
             const isActive = isSubscriptionActive(user);
             const endDate = new Date(user.subscription_end).toLocaleDateString('ar-EG');
+            const statusClass = isActive ? 'status-active' : (user.plan === 'free_trial' ? 'status-trial' : 'status-expired');
+            const statusText = isActive ? 'نشط' : (user.plan === 'free_trial' ? 'تجريبي' : 'منتهي');
             html += `
                 <tr>
                     <td>${user.email}</td>
                     <td>${user.name}</td>
+                    <td>${user.phone || '—'}</td>
+                    <td>${user.nationalId || '—'}</td>
                     <td>${PLANS[user.plan]?.name || user.plan}</td>
                     <td>${endDate}</td>
-                    <td class="${isActive ? 'status-active' : 'status-expired'}">${isActive ? 'نشط' : 'منتهي'}</td>
+                    <td class="${statusClass}">${statusText}</td>
                     <td><button onclick="extendSubscription('${user.email}')">تمديد 30 يوم</button> <button onclick="changeUserPlan('${user.email}')">تغيير الخطة</button></td>
                 </tr>
             `;
@@ -84,25 +109,38 @@
         document.getElementById('usersTable').innerHTML = html;
     }
     
+    function filterUsers() {
+        const search = document.getElementById('searchInput').value;
+        renderUsers(search);
+    }
+    
     function addUserByAdmin() {
         const email = document.getElementById('newEmail').value;
-        const name = document.getElementById('newName').value;
+        const firstName = document.getElementById('newFirstName').value;
+        const lastName = document.getElementById('newLastName').value;
+        const phone = document.getElementById('newPhone').value;
+        const nationalId = document.getElementById('newNationalId').value;
         const plan = document.getElementById('newPlan').value;
         
-        if (!email || !name) {
-            alert('يرجى إدخال البريد الإلكتروني والاسم');
+        if (!email || !firstName || !lastName || !phone || !nationalId) {
+            alert('يرجى إدخال جميع البيانات');
             return;
         }
         
-        const result = register(email, 'Temp@123456', name);
+        const result = register(email, 'Temp@123456', firstName, lastName, phone, nationalId);
         if (result.success) {
-            // تحديث الخطة إذا لم تكن تجريبية
             if (plan !== 'free_trial') {
                 upgradeSubscription(email, plan, 'monthly');
             }
-            alert(`تم إنشاء حساب للمستخدم ${name}. يمكنه الدخول بكلمة المرور المؤقتة: Temp@123456`);
+            alert(`تم إنشاء حساب للمستخدم ${firstName} ${lastName}. يمكنه الدخول بكلمة المرور المؤقتة: Temp@123456`);
             renderUsers();
             renderStats();
+            // تفريغ الحقول
+            document.getElementById('newEmail').value = '';
+            document.getElementById('newFirstName').value = '';
+            document.getElementById('newLastName').value = '';
+            document.getElementById('newPhone').value = '';
+            document.getElementById('newNationalId').value = '';
         } else {
             alert(result.error);
         }
