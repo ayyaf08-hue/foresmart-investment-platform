@@ -1,12 +1,22 @@
-// إدارة المستخدمين
+// ========================================
+// نظام المصادقة وإدارة المستخدمين
+// منصة ForeSmart Investment
+// ========================================
+
+// تحميل المستخدمين من التخزين المحلي
 let users = JSON.parse(localStorage.getItem('fs_users') || '{}');
 let currentUser = JSON.parse(localStorage.getItem('fs_current_user') || 'null');
 
-// المستخدم الافتراضي (الأدمن الجديد)
-if (!users['Ayyaf08@hotmail.com']) {
-    users['Ayyaf08@hotmail.com'] = {
-        email: 'Ayyaf08@hotmail.com',
-        password: 'Admin@ForeSmart2025',
+// ========================================
+// حساب الأدمن الرئيسي (بريدي الإلكتروني وكلمة المرور المطلوبة)
+// ========================================
+const ADMIN_EMAIL = 'Ayyaf08@hotmail.com';
+const ADMIN_PASSWORD = 'Ayyaf08@2025';
+
+if (!users[ADMIN_EMAIL]) {
+    users[ADMIN_EMAIL] = {
+        email: ADMIN_EMAIL,
+        password: ADMIN_PASSWORD,
         firstName: 'أياف',
         lastName: 'العتيبي',
         phone: '0500000000',
@@ -17,15 +27,19 @@ if (!users['Ayyaf08@hotmail.com']) {
         subscription_start: new Date().toISOString(),
         subscription_end: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
         createdAt: new Date().toISOString(),
-        emailVerified: true
+        emailVerified: true,
+        mustChangePassword: false  // الأدمن لا يحتاج تغيير كلمة المرور فوراً
     };
     localStorage.setItem('fs_users', JSON.stringify(users));
 }
 
+// ========================================
 // دالة تسجيل الدخول
+// ========================================
 function login(email, password) {
     const normalizedEmail = email.toLowerCase().trim();
     const user = users[normalizedEmail];
+    
     if (user && user.password === password) {
         currentUser = { ...user };
         localStorage.setItem('fs_current_user', JSON.stringify(currentUser));
@@ -34,7 +48,9 @@ function login(email, password) {
     return { success: false, error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' };
 }
 
+// ========================================
 // دالة إنشاء حساب جديد (مع 14 يوم تجريبي)
+// ========================================
 function register(email, password, firstName, lastName, phone, nationalId) {
     const normalizedEmail = email.toLowerCase().trim();
     
@@ -42,9 +58,9 @@ function register(email, password, firstName, lastName, phone, nationalId) {
         return { success: false, error: 'البريد الإلكتروني مسجل مسبقاً' };
     }
     
-    // التحقق من صحة رقم الهوية (أساسي)
+    // التحقق من صحة رقم الهوية
     if (!nationalId || nationalId.length < 10) {
-        return { success: false, error: 'رقم الهوية الوطنية غير صحيح' };
+        return { success: false, error: 'رقم الهوية الوطنية غير صحيح (10 أرقام)' };
     }
     
     // التحقق من رقم الجوال
@@ -68,7 +84,8 @@ function register(email, password, firstName, lastName, phone, nationalId) {
         subscription_start: new Date().toISOString(),
         subscription_end: trialEnd.toISOString(),
         createdAt: new Date().toISOString(),
-        emailVerified: false
+        emailVerified: false,
+        mustChangePassword: false
     };
     
     users[normalizedEmail] = newUser;
@@ -77,20 +94,81 @@ function register(email, password, firstName, lastName, phone, nationalId) {
     currentUser = { ...newUser };
     localStorage.setItem('fs_current_user', JSON.stringify(currentUser));
     
-    // محاكاة إرسال بريد ترحيبي (سيتم تفعيله مع SMTP لاحقاً)
-    console.log(`📧 بريد ترحيبي مرسل إلى: ${email}`);
-    
     return { success: true, user: currentUser };
 }
 
+// ========================================
+// دالة تغيير كلمة المرور (داخل الحساب)
+// ========================================
+function changePassword(email, oldPassword, newPassword, confirmPassword) {
+    const user = users[email];
+    
+    if (!user) {
+        return { success: false, error: 'المستخدم غير موجود' };
+    }
+    
+    if (user.password !== oldPassword) {
+        return { success: false, error: 'كلمة المرور الحالية غير صحيحة' };
+    }
+    
+    if (newPassword !== confirmPassword) {
+        return { success: false, error: 'كلمة المرور الجديدة غير متطابقة' };
+    }
+    
+    if (newPassword.length < 6) {
+        return { success: false, error: 'كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل' };
+    }
+    
+    // تحديث كلمة المرور
+    user.password = newPassword;
+    user.mustChangePassword = false;
+    users[email] = user;
+    localStorage.setItem('fs_users', JSON.stringify(users));
+    
+    // تحديث المستخدم الحالي إذا كان هو نفسه
+    if (currentUser && currentUser.email === email) {
+        currentUser.password = newPassword;
+        currentUser.mustChangePassword = false;
+        localStorage.setItem('fs_current_user', JSON.stringify(currentUser));
+    }
+    
+    return { success: true, message: 'تم تغيير كلمة المرور بنجاح' };
+}
+
+// ========================================
+// دالة إعادة تعيين كلمة المرور (نسيت كلمة المرور)
+// ========================================
+function resetPassword(email) {
+    const user = users[email];
+    if (!user) {
+        return { success: false, error: 'البريد الإلكتروني غير مسجل' };
+    }
+    
+    const tempPassword = Math.random().toString(36).slice(-8);
+    user.password = tempPassword;
+    user.mustChangePassword = true;
+    users[email] = user;
+    localStorage.setItem('fs_users', JSON.stringify(users));
+    
+    // محاكاة إرسال بريد إلكتروني (سيتم ربطه بـ SMTP لاحقاً)
+    console.log(`📧 تم إرسال كلمة مرور مؤقتة إلى: ${email}`);
+    console.log(`🔑 كلمة المرور المؤقتة: ${tempPassword}`);
+    
+    return { success: true, tempPassword: tempPassword, message: 'تم إرسال كلمة مرور مؤقتة إلى بريدك الإلكتروني' };
+}
+
+// ========================================
 // دالة تسجيل الخروج
+// ========================================
 function logout() {
     localStorage.removeItem('fs_current_user');
     currentUser = null;
     window.location.href = 'login.html';
 }
 
+// ========================================
 // دالة ترقية الاشتراك
+// ========================================
 function upgradeSubscription(email, newPlan, duration) {
     const user = users[email];
     if (!user) return { success: false, error: 'المستخدم غير موجود' };
@@ -118,7 +196,9 @@ function upgradeSubscription(email, newPlan, duration) {
     return { success: true, price: price };
 }
 
+// ========================================
 // التحقق من صلاحية الاشتراك
+// ========================================
 function checkSubscriptionStatus() {
     if (!currentUser) return null;
     
@@ -133,33 +213,36 @@ function checkSubscriptionStatus() {
     return { expired: false, daysLeft: daysLeft, plan: currentUser.plan };
 }
 
-// دالة الحصول على قائمة المستخدمين (للأدمن فقط)
+// ========================================
+// الحصول على قائمة المستخدمين (للأدمن فقط)
+// ========================================
 function getAllUsers() {
     if (currentUser?.role !== 'admin') return [];
     return Object.values(users);
 }
 
-// دالة إرسال بريد إلكتروني (للإعداد المستقبلي مع SMTP)
-function sendEmail(to, subject, body) {
-    // هذه الدالة جاهزة للربط مع SMTP بعد نقل الموقع للدومين
-    console.log(`📧 إلى: ${to}`);
-    console.log(`📧 الموضوع: ${subject}`);
-    console.log(`📧 المحتوى: ${body}`);
-    return { success: true, message: 'تم إرسال البريد (محاكاة)' };
+// ========================================
+// الحصول على خطة المستخدم الحالية
+// ========================================
+function getUserPlan(user) {
+    if (!isSubscriptionActive(user)) {
+        return PLANS.free_trial;
+    }
+    return PLANS[user.plan] || PLANS.free_trial;
 }
 
-// دالة إعادة تعيين كلمة المرور (جاهزة للتطوير)
-function resetPassword(email) {
-    const user = users[email];
-    if (!user) return { success: false, error: 'البريد الإلكتروني غير مسجل' };
-    
-    const tempPassword = Math.random().toString(36).slice(-8);
-    user.password = tempPassword;
-    users[email] = user;
-    localStorage.setItem('fs_users', JSON.stringify(users));
-    
-    sendEmail(email, 'إعادة تعيين كلمة المرور - ForeSmart', 
-        `تم إعادة تعيين كلمة المرور الخاصة بك. كلمة المرور الجديدة: ${tempPassword}\nيرجى تغييرها بعد تسجيل الدخول.`);
-    
-    return { success: true, message: 'تم إرسال كلمة المرور الجديدة إلى بريدك الإلكتروني' };
+// ========================================
+// التحقق من صلاحية الاشتراك
+// ========================================
+function isSubscriptionActive(user) {
+    if (!user || !user.subscription_end) return false;
+    return new Date(user.subscription_end) > new Date();
+}
+
+// ========================================
+// التحقق من وجود ميزة معينة
+// ========================================
+function hasFeature(user, featureName) {
+    const plan = getUserPlan(user);
+    return plan.features[featureName] === true;
 }
