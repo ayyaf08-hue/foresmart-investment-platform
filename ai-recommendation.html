@@ -26,7 +26,7 @@
             margin-bottom: 20px;
         }
 
-        .selector select, input {
+        .selector select {
             padding: 12px;
             border-radius: 10px;
             border: none;
@@ -57,6 +57,7 @@
         .score-number {
             font-size: 34px;
             color: #10b981;
+            font-weight: bold;
         }
 
         .recommend-box {
@@ -70,6 +71,7 @@
         .recommend-text {
             font-size: 24px;
             font-weight: bold;
+            color: #f59e0b;
         }
 
         .reason-box {
@@ -82,12 +84,58 @@
         .reason-box ul {
             line-height: 2;
         }
+
+        .status-message {
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .refresh-btn {
+            margin-top: 15px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #10b981;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .refresh-btn:hover {
+            background: #0d9668;
+        }
+
+        .risk-low {
+            color: #10b981;
+        }
+
+        .risk-medium {
+            color: #f59e0b;
+        }
+
+        .risk-high {
+            color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .ai-container {
+                padding: 18px;
+            }
+
+            .recommend-text {
+                font-size: 20px;
+            }
+
+            .score-number {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h2 class="logo">ForeSmart</h2>
         <ul>
@@ -108,7 +156,6 @@
         </ul>
     </div>
 
-    <!-- MAIN -->
     <div class="main">
 
         <div class="topbar">
@@ -118,76 +165,71 @@
 
         <div class="ai-container">
 
-            <!-- SELECTORS -->
             <div class="selector">
-                <select>
-                    <option>Bitcoin</option>
-                    <option>Ethereum</option>
-                    <option>Gold</option>
-                    <option>Oil</option>
-                    <option>NASDAQ</option>
-                    <option>S&P 500</option>
-                    <option>USD/JPY</option>
+                <select id="assetSelect">
+                    <option value="Bitcoin">Bitcoin</option>
+                    <option value="Ethereum">Ethereum</option>
+                    <option value="Gold">Gold</option>
+                    <option value="Oil">Oil</option>
+                    <option value="NASDAQ">NASDAQ</option>
+                    <option value="S&P500">S&P 500</option>
                 </select>
 
-                <select>
+                <select id="periodSelect">
                     <option>تحليل اليوم</option>
                     <option>تحليل أسبوعي</option>
                     <option>تحليل شهري</option>
                 </select>
             </div>
 
-            <!-- AI SCORE & TREND -->
-            <div class="grid-2">
+            <button class="refresh-btn" onclick="loadAIRecommendation()">
+                تحديث التحليل الآن
+            </button>
+
+            <div class="status-message" id="statusMessage">
+                جاري تحميل التحليل من محرك ForeSmart Intelligence...
+            </div>
+
+            <div class="grid-2" style="margin-top: 25px;">
                 <div class="score-box">
                     <h3>نسبة ثقة الذكاء الاصطناعي</h3>
-                    <div class="score-number">82%</div>
+                    <div class="score-number" id="confidenceScore">--%</div>
                 </div>
 
                 <div class="score-box">
                     <h3>اتجاه السوق</h3>
-                    <div class="score-number" style="color:#3b82f6">⬆ صاعد</div>
+                    <div class="score-number" id="marketTrend">--</div>
                 </div>
             </div>
 
-            <!-- AI RECOMMENDATION -->
             <div class="recommend-box">
-                <div class="recommend-text" style="color:#10b981;">✔ توصية: شراء</div>
-                <p>قوة التوصية: 8.5 / 10</p>
+                <div class="recommend-text" id="recommendationText">
+                    جاري قراءة التوصية...
+                </div>
+                <p id="recommendationStrength">قوة التوصية: -- / 10</p>
             </div>
 
-            <!-- CHART -->
             <div class="ai-panel">
                 <h2 class="ai-title">الرسم البياني الذكي</h2>
                 <canvas id="aiChart"></canvas>
             </div>
 
-            <!-- REASONING -->
             <div class="reason-box">
-                <h3>الأسباب التي بُني عليها القرار (Explainable AI):</h3>
-                <ul>
-                    <li>ارتفاع المعنويات في الأخبار العامة بنسبة +12%</li>
-                    <li>انخفاض التوتر الجيوسياسي في أوروبا</li>
-                    <li>إشارات شراء قوية على مؤشرات RSI وMACD</li>
-                    <li>زيادة الطلب المؤسسي Institutional Demand</li>
-                    <li>استقرار أسعار النفط مما يقلل الضغط على الأسواق</li>
-                    <li>تحسن الطقس في مناطق الإنتاج العالمية</li>
-                    <li>تراجع مؤشر Fear & Greed من 70 إلى 55</li>
+                <h3>الأسباب التي بُني عليها القرار:</h3>
+                <ul id="reasonList">
+                    <li>جاري تحميل أسباب القرار من محرك الذكاء الاصطناعي...</li>
                 </ul>
             </div>
 
-            <!-- Geo + Weather -->
             <div class="grid-2">
                 <div class="ai-panel">
                     <h2>تحليل الطقس Weather Impact</h2>
-                    <p>تأثير الطقس على الأسواق: منخفض</p>
-                    <p>تحسن ملحوظ في إنتاج الطاقة</p>
+                    <p id="weatherImpact">جاري التحليل...</p>
                 </div>
 
                 <div class="ai-panel">
                     <h2>المخاطر الجيوسياسية</h2>
-                    <p>مستوى التوتر العالمي: متوسط</p>
-                    <p>توقع انخفاض التوتر خلال أسبوع</p>
+                    <p id="geoRisk">جاري التحليل...</p>
                 </div>
             </div>
 
@@ -195,25 +237,160 @@
 
     </div>
 
-<script src="assets/js/app.js"></script>
+    <script src="assets/js/app.js"></script>
 
-<script>
-new Chart(document.getElementById("aiChart"), {
-    type: "line",
-    data: {
-        labels: ["1","2","3","4","5","6","7","8","9","10"],
-        datasets: [{
-            label: "AI Forecast",
-            data: [10,12,15,14,18,20,22,25,23,27],
-            borderColor: "#10b981",
-            borderWidth: 3,
-            fill: true,
-            backgroundColor: "rgba(16,185,129,.2)",
-            tension: .4
-        }]
-    }
-});
-</script>
+    <script>
+        const API_BASE_URL = "[foresmart-intelligence-backend-production.up.railway.app](https://foresmart-intelligence-backend-production.up.railway.app)";
+        let aiChart = null;
+
+        function recommendationToArabic(recommendation) {
+            if (recommendation === "BUY") return "شراء";
+            if (recommendation === "SELL") return "بيع";
+            return "احتفاظ";
+        }
+
+        function recommendationColor(recommendation) {
+            if (recommendation === "BUY") return "#10b981";
+            if (recommendation === "SELL") return "#ef4444";
+            return "#f59e0b";
+        }
+
+        function trendFromScore(score) {
+            if (score >= 0.7) return "⬆ صاعد";
+            if (score <= 0.3) return "⬇ هابط";
+            return "↔ متذبذب";
+        }
+
+        function updateChart(score) {
+            const ctx = document.getElementById("aiChart");
+
+            const base = Math.round(score * 100);
+            const values = [
+                Math.max(10, base - 15),
+                Math.max(10, base - 10),
+                Math.max(10, base - 5),
+                base,
+                Math.min(100, base + 3),
+                Math.min(100, base + 6),
+                Math.min(100, base + 8)
+            ];
+
+            if (aiChart) {
+                aiChart.destroy();
+            }
+
+            aiChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: ["1", "2", "3", "4", "5", "6", "7"],
+                    datasets: [{
+                        label: "AI Forecast",
+                        data: values,
+                        borderColor: "#10b981",
+                        borderWidth: 3,
+                        fill: true,
+                        backgroundColor: "rgba(16,185,129,.2)",
+                        tension: .4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: "#aaa"
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: "#aaa"
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: "#aaa"
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function loadAIRecommendation() {
+            const asset = document.getElementById("assetSelect").value;
+            const statusMessage = document.getElementById("statusMessage");
+
+            statusMessage.textContent = "جاري الاتصال بمحرك ForeSmart Intelligence...";
+            statusMessage.style.color = "#aaa";
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/ai/recommend?asset=${encodeURIComponent(asset)}`);
+
+                if (!response.ok) {
+                    throw new Error("API response was not OK");
+                }
+
+                const data = await response.json();
+
+                const score = Number(data.score || 0);
+                const percent = Math.round(score * 100);
+                const recommendation = data.recommendation || "HOLD";
+                const arabicRecommendation = recommendationToArabic(recommendation);
+                const color = recommendationColor(recommendation);
+
+                document.getElementById("confidenceScore").textContent = `${percent}%`;
+                document.getElementById("marketTrend").textContent = trendFromScore(score);
+
+                const recommendationText = document.getElementById("recommendationText");
+                recommendationText.textContent = `✔ توصية: ${arabicRecommendation}`;
+                recommendationText.style.color = color;
+
+                document.getElementById("recommendationStrength").textContent =
+                    `قوة التوصية: ${(score * 10).toFixed(1)} / 10`;
+
+                if (data.details) {
+                    document.getElementById("reasonList").innerHTML = `
+                        <li>تحليل OpenAI: ${data.details.openai.reasoning}</li>
+                        <li>تحليل Gemini: ${data.details.gemini.reasoning}</li>
+                        <li>تحليل Claude: ${data.details.claude.reasoning}</li>
+                        <li>تحليل المشاعر السوقية: ${Math.round(data.details.sentiment * 100)}%</li>
+                        <li>تأثير الطقس: ${Math.round(data.details.weather * 100)}%</li>
+                        <li>المخاطر الجيوسياسية: ${Math.round(data.details.geopolitics * 100)}%</li>
+                    `;
+
+                    document.getElementById("weatherImpact").textContent =
+                        `تأثير الطقس على ${asset}: ${Math.round(data.details.weather * 100)}%`;
+
+                    document.getElementById("geoRisk").textContent =
+                        `مؤشر الاستقرار الجيوسياسي: ${Math.round(data.details.geopolitics * 100)}%`;
+                }
+
+                updateChart(score);
+
+                statusMessage.textContent = "تم تحديث التحليل بنجاح من Railway API.";
+                statusMessage.style.color = "#10b981";
+
+            } catch (error) {
+                console.error(error);
+
+                document.getElementById("recommendationText").textContent =
+                    "تعذر الاتصال بمحرك الذكاء الاصطناعي";
+
+                document.getElementById("recommendationText").style.color = "#ef4444";
+
+                statusMessage.textContent =
+                    "حدث خطأ في الاتصال. تأكد أن رابط Railway يعمل.";
+
+                statusMessage.style.color = "#ef4444";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadAIRecommendation);
+
+        document.getElementById("assetSelect").addEventListener("change", loadAIRecommendation);
+    </script>
 
 </body>
 </html>
