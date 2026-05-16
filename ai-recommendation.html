@@ -1,651 +1,248 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ForeSmart AI Intelligence</title>
-
-    <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/chart.js)"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل الذكاء الاصطناعي - ForeSmart AI</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, Tahoma, sans-serif;
             background: #05070d;
             color: #ffffff;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
         }
-
-        .layout {
-            display: flex;
-            min-height: 100vh;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .sidebar {
-            width: 270px;
-            background: linear-gradient(180deg, #07111f, #03050a);
-            border-left: 1px solid rgba(255,255,255,0.08);
-            padding: 24px 18px;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            right: 0;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 32px;
-        }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #12d18e, #246bfe);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #00140c;
-        }
-
-        .brand h2 {
-            font-size: 19px;
-        }
-
-        .brand span {
-            display: block;
-            font-size: 12px;
-            color: #8fa3bd;
-            margin-top: 3px;
-        }
-
-        .nav a {
-            display: block;
-            color: #aebbd0;
-            text-decoration: none;
-            padding: 13px 14px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            transition: 0.2s;
-            font-size: 15px;
-        }
-
-        .nav a:hover,
-        .nav a.active {
-            background: rgba(18, 209, 142, 0.14);
-            color: #12d18e;
-        }
-
-        .main {
-            margin-right: 270px;
-            width: calc(100% - 270px);
-            padding: 26px;
-        }
-
-        .topbar {
-            background: rgba(255,255,255,0.045);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 22px;
-            backdrop-filter: blur(10px);
-        }
-
-        .topbar h1 {
-            font-size: 25px;
-            margin-bottom: 6px;
-        }
-
-        .topbar p {
-            color: #8fa3bd;
-            font-size: 14px;
-        }
-
-        .status-pill {
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: rgba(18, 209, 142, 0.12);
-            color: #12d18e;
-            border: 1px solid rgba(18, 209, 142, 0.25);
-            font-size: 13px;
-        }
-
-        .control-panel {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr auto;
-            gap: 14px;
-            margin-bottom: 22px;
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 18px;
-        }
-
-        select,
-        button {
-            width: 100%;
-            padding: 14px 15px;
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.09);
-            background: #0b1220;
-            color: white;
-            font-size: 15px;
-            outline: none;
-        }
-
-        button {
-            background: linear-gradient(135deg, #12d18e, #1f7bff);
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            opacity: 0.92;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 22px;
-        }
-
         .card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025));
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 20px;
-            min-height: 135px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
         }
-
-        .card h3 {
-            font-size: 14px;
-            color: #8fa3bd;
-            margin-bottom: 14px;
+        h1 { color: #10b981; margin-bottom: 10px; }
+        h2 { color: #ccc; font-size: 1.3rem; margin-bottom: 15px; border-right: 3px solid #10b981; padding-right: 12px; }
+        select, button {
+            background: #1a1f2e;
+            color: white;
+            padding: 12px 20px;
+            border: 1px solid #2a3040;
+            border-radius: 8px;
+            margin-left: 10px;
+            margin-bottom: 10px;
         }
-
-        .card .value {
-            font-size: 31px;
+        button {
+            background: #10b981;
+            border: none;
+            cursor: pointer;
             font-weight: bold;
         }
-
-        .green { color: #12d18e; }
-        .blue { color: #4d8dff; }
-        .yellow { color: #f6b84b; }
-        .red { color: #ff5a67; }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1.4fr 0.9fr;
-            gap: 18px;
+        button:hover { opacity: 0.8; }
+        .result-box {
+            display: inline-block;
+            background: #0a0e17;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-left: 15px;
+            margin-bottom: 10px;
         }
-
-        .panel {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 22px;
-            padding: 22px;
-            margin-bottom: 18px;
-        }
-
-        .panel h2 {
-            font-size: 19px;
-            margin-bottom: 16px;
-        }
-
         .recommendation {
-            display: flex;
-            justify-content: space-between;
-            gap: 14px;
-            align-items: center;
-            padding: 20px;
-            border-radius: 18px;
-            background: #08111e;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .recommendation-main {
-            font-size: 32px;
+            font-size: 2rem;
             font-weight: bold;
+            margin: 15px 0;
         }
-
-        .confidence-ring {
-            width: 118px;
-            height: 118px;
-            border-radius: 50%;
-            background: conic-gradient(#12d18e 0deg, #12d18e 270deg, #1c2535 270deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .confidence-inner {
-            width: 88px;
-            height: 88px;
-            background: #05070d;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 22px;
-        }
-
-        .reason-list {
-            list-style: none;
-            margin-top: 12px;
-        }
-
-        .reason-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            color: #c7d2e4;
-            line-height: 1.6;
-        }
-
-        .small-grid {
+        .green { color: #10b981; }
+        .red { color: #ff5a67; }
+        .yellow { color: #f6b84b; }
+        .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 20px;
         }
-
-        .mini-box {
-            background: #08111e;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 18px;
-            padding: 18px;
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
         }
-
-        .mini-box span {
-            display: block;
-            color: #8fa3bd;
-            margin-bottom: 8px;
-            font-size: 13px;
+        .status-box {
+            background: #0f1420;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            word-break: break-all;
         }
-
-        .mini-box strong {
-            font-size: 22px;
-        }
-
-        .notice {
-            margin-top: 12px;
-            color: #8fa3bd;
-            font-size: 13px;
-            line-height: 1.8;
-        }
-
-        .loading {
-            opacity: 0.65;
-        }
-
-        @media (max-width: 950px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                height: auto;
-            }
-
-            .layout {
-                display: block;
-            }
-
-            .main {
-                margin-right: 0;
-                width: 100%;
-                padding: 16px;
-            }
-
-            .control-panel,
-            .cards,
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .topbar {
-                display: block;
-            }
-
-            .status-pill {
-                display: inline-block;
-                margin-top: 14px;
-            }
-        }
+        .error-text { color: #ff5a67; }
+        .success-text { color: #10b981; }
     </style>
 </head>
-
 <body>
-    <div class="layout">
 
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-icon">FS</div>
-                <div>
-                    <h2>ForeSmart</h2>
-                    <span>AI Investment Platform</span>
-                </div>
-            </div>
-
-            <nav class="nav">
-                <a href="index.html">لوحة التحكم</a>
-                <a class="active" href="ai-recommendation.html">تحليل AI شامل</a>
-                <a href="ai-trading.html">التداول الذكي</a>
-                <a href="analytics.html">التحليلات</a>
-                <a href="trades.html">الصفقات</a>
-                <a href="transactions.html">العمليات</a>
-                <a href="wallet.html">الإيداع والسحب</a>
-                <a href="security.html">مركز الحماية</a>
-                <a href="support.html">الدعم الفني</a>
-            </nav>
-        </aside>
-
-        <main class="main">
-
-            <section class="topbar">
-                <div>
-                    <h1>ForeSmart Intelligence Engine</h1>
-                    <p>تحليل متعدد النماذج يجمع إشارات السوق، المخاطر، الأخبار، العوامل الجيوسياسية والطقس.</p>
-                </div>
-                <div class="status-pill" id="connectionStatus">جاري فحص الاتصال...</div>
-            </section>
-
-            <section class="control-panel">
-                <select id="assetSelect">
-                    <option value="Bitcoin">Bitcoin</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="Gold">Gold</option>
-                    <option value="Oil">Oil</option>
-                    <option value="NASDAQ">NASDAQ</option>
-                    <option value="S&P500">S&P 500</option>
-                </select>
-
-                <select id="periodSelect">
-                    <option value="today">تحليل اليوم</option>
-                    <option value="week">تحليل أسبوعي</option>
-                    <option value="month">تحليل شهري</option>
-                </select>
-
-                <select id="riskMode">
-                    <option value="balanced">مخاطر متوازنة</option>
-                    <option value="conservative">مخاطر منخفضة</option>
-                    <option value="aggressive">نمو مرتفع</option>
-                </select>
-
-                <button onclick="runAnalysis()">تشغيل التحليل</button>
-            </section>
-
-            <section class="cards">
-                <div class="card">
-                    <h3>التوصية الحالية</h3>
-                    <div class="value" id="quickRecommendation">--</div>
-                </div>
-
-                <div class="card">
-                    <h3>نسبة الثقة</h3>
-                    <div class="value green" id="quickConfidence">--%</div>
-                </div>
-
-                <div class="card">
-                    <h3>اتجاه السوق</h3>
-                    <div class="value blue" id="quickTrend">--</div>
-                </div>
-
-                <div class="card">
-                    <h3>درجة المخاطر</h3>
-                    <div class="value yellow" id="quickRisk">--</div>
-                </div>
-            </section>
-
-            <section class="dashboard-grid">
-                <div>
-                    <div class="panel">
-                        <h2>قرار الذكاء الاصطناعي</h2>
-
-                        <div class="recommendation">
-                            <div>
-                                <div class="recommendation-main" id="mainRecommendation">جاري التحليل...</div>
-                                <p class="notice" id="analysisSummary">اضغط تشغيل التحليل أو غيّر الأصل للحصول على قراءة جديدة.</p>
-                            </div>
-
-                            <div class="confidence-ring" id="confidenceRing">
-                                <div class="confidence-inner" id="confidenceInner">--%</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel">
-                        <h2>الرسم البياني الذكي</h2>
-                        <canvas id="aiChart"></canvas>
-                    </div>
-
-                    <div class="panel">
-                        <h2>أسباب القرار</h2>
-                        <ul class="reason-list" id="reasonList">
-                            <li>بانتظار تشغيل التحليل...</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="panel">
-                        <h2>تفاصيل النماذج</h2>
-
-                        <div class="small-grid">
-                            <div class="mini-box">
-                                <span>OpenAI</span>
-                                <strong id="openaiScore">--%</strong>
-                            </div>
-
-                            <div class="mini-box">
-                                <span>Gemini</span>
-                                <strong id="geminiScore">--%</strong>
-                            </div>
-
-                            <div class="mini-box">
-                                <span>Claude</span>
-                                <strong id="claudeScore">--%</strong>
-                            </div>
-
-                            <div class="mini-box">
-                                <span>Sentiment</span>
-                                <strong id="sentimentScore">--%</strong>
-                            </div>
-
-                            <div class="mini-box">
-                                <span>Weather</span>
-                                <strong id="weatherScore">--%</strong>
-                            </div>
-
-                            <div class="mini-box">
-                                <span>Geo Risk</span>
-                                <strong id="geoScore">--%</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel">
-                        <h2>تنبيه مهم</h2>
-                        <p class="notice">
-                            هذه النتائج تحليلية وتجريبية ولا تُعد وعدًا بالربح أو توصية مالية ملزمة.
-                            يجب استخدام إدارة المخاطر ووقف الخسارة دائمًا.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+<div class="container">
+    <div class="card">
+        <h1>🧠 ForeSmart Intelligence Engine</h1>
+        <p>تحليل متعدد النماذج (AI + السوق + الطقس + الجيوسياسية)</p>
     </div>
 
-    <script>
-        const API_BASE_URL = "[foresmart-intelligence-backend-production.up.railway.app](https://foresmart-intelligence-backend-production.up.railway.app)";
-        let chartInstance = null;
+    <!-- اختيار الأصل -->
+    <div class="card">
+        <h2>📊 1. اختر الأصل للتحليل</h2>
+        <select id="assetSelect">
+            <option value="Bitcoin">Bitcoin</option>
+            <option value="Ethereum">Ethereum</option>
+            <option value="Gold">Gold</option>
+            <option value="Oil">Oil</option>
+            <option value="NASDAQ">NASDAQ</option>
+            <option value="S&P500">S&P500</option>
+        </select>
+        <button id="analyzeBtn">🚀 تشغيل التحليل الآن</button>
+    </div>
 
-        function toArabicRecommendation(value) {
-            if (value === "BUY") return "شراء";
-            if (value === "SELL") return "بيع";
-            return "احتفاظ";
-        }
+    <!-- حالة الاتصال -->
+    <div class="card">
+        <h2>🔌 2. حالة الاتصال بالذكاء الاصطناعي</h2>
+        <div id="connectionStatus" class="status-box">جاري فحص الاتصال...</div>
+        <div id="apiUrlDisplay" class="status-box" style="font-size: 12px;"></div>
+    </div>
 
-        function getColor(value) {
-            if (value === "BUY") return "#12d18e";
-            if (value === "SELL") return "#ff5a67";
-            return "#f6b84b";
-        }
+    <!-- نتيجة التحليل -->
+    <div class="card" id="resultsSection" style="display: none;">
+        <h2>🤖 3. قرار الذكاء الاصطناعي</h2>
+        <div id="recommendationText" class="recommendation">--</div>
+        
+        <div class="grid-2">
+            <div>
+                <div class="result-box">🎯 نسبة الثقة: <span id="confidenceScore" class="green">--%</span></div>
+                <div class="result-box">📈 اتجاه السوق: <span id="marketTrend">--</span></div>
+                <div class="result-box">⚠️ درجة المخاطر: <span id="riskLevel">--</span></div>
+            </div>
+            <div>
+                <div class="result-box">🤖 OpenAI: <span id="openaiScore">--%</span></div>
+                <div class="result-box">🔮 Gemini: <span id="geminiScore">--%</span></div>
+                <div class="result-box">📊 Claude: <span id="claudeScore">--%</span></div>
+            </div>
+        </div>
 
-        function percent(value) {
-            return Math.round(Number(value || 0) * 100);
-        }
+        <h2>📝 أسباب القرار</h2>
+        <ul id="reasonList" style="padding-right: 20px; line-height: 1.8;">
+            <li>سيتم عرض الأسباب بعد تشغيل التحليل...</li>
+        </ul>
+    </div>
 
-        function trend(score) {
-            if (score >= 0.7) return "صاعد";
-            if (score <= 0.3) return "هابط";
-            return "متذبذب";
-        }
+    <div class="card">
+        <p style="color: #888; font-size: 12px;">⚠️ هذه النتائج تحليلية وتجريبية ولا تُعد توصية مالية ملزمة.</p>
+    </div>
+</div>
 
-        function riskFromScore(score) {
-            if (score >= 0.7) return "منخفضة";
-            if (score >= 0.45) return "متوسطة";
-            return "مرتفعة";
-        }
+<script>
+    // الرابط الصحيح لـ Backend على Railway (تم التأكد من عمله)
+    const API_BASE_URL = "https://foresmart-intelligence-backend-production.up.railway.app";
+    
+    // عناصر الصفحة
+    const assetSelect = document.getElementById('assetSelect');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const connectionStatusDiv = document.getElementById('connectionStatus');
+    const apiUrlDisplay = document.getElementById('apiUrlDisplay');
+    const resultsSection = document.getElementById('resultsSection');
+    
+    // عرض الرابط الذي سيتم استخدامه
+    apiUrlDisplay.innerHTML = `🚀 محاولة الاتصال بـ: <strong>${API_BASE_URL}</strong><br>📍 مثال رابط التوصية: ${API_BASE_URL}/ai/recommend?asset=Bitcoin`;
 
-        function updateChart(score) {
-            const ctx = document.getElementById("aiChart");
-            const base = percent(score);
-
-            const data = [
-                Math.max(5, base - 18),
-                Math.max(5, base - 11),
-                Math.max(5, base - 7),
-                base,
-                Math.min(98, base + 4),
-                Math.min(98, base + 8),
-                Math.min(98, base + 11)
+    // دالة لعرض النتائج في الصفحة
+    function displayResults(data) {
+        const score = (data.score * 100).toFixed(1);
+        const recommendation = data.recommendation === "BUY" ? "✅ شراء" : (data.recommendation === "SELL" ? "🔴 بيع" : "⏸️ احتفاظ");
+        const recColor = data.recommendation === "BUY" ? "green" : (data.recommendation === "SELL" ? "red" : "yellow");
+        
+        document.getElementById('recommendationText').innerHTML = `<span class="${recColor}">${recommendation}</span>`;
+        document.getElementById('confidenceScore').innerHTML = `${score}%`;
+        
+        let trend = "متذبذب";
+        if (data.score >= 0.7) trend = "صاعد 📈";
+        else if (data.score <= 0.3) trend = "هابط 📉";
+        document.getElementById('marketTrend').innerHTML = trend;
+        
+        let risk = "متوسطة";
+        if (data.score >= 0.7) risk = "منخفضة 🟢";
+        else if (data.score <= 0.3) risk = "مرتفعة 🔴";
+        document.getElementById('riskLevel').innerHTML = risk;
+        
+        if (data.details) {
+            document.getElementById('openaiScore').innerHTML = `${(data.details.openai.score * 100).toFixed(1)}%`;
+            document.getElementById('geminiScore').innerHTML = `${(data.details.gemini.score * 100).toFixed(1)}%`;
+            document.getElementById('claudeScore').innerHTML = `${(data.details.claude.score * 100).toFixed(1)}%`;
+            
+            const reasons = [
+                `🧠 OpenAI: ${data.details.openai.reasoning}`,
+                `🔮 Gemini: ${data.details.gemini.reasoning}`,
+                `📊 Claude: ${data.details.claude.reasoning}`,
+                `💬 المشاعر السوقية: ${(data.details.sentiment * 100).toFixed(1)}%`,
+                `🌦️ تأثير الطقس: ${(data.details.weather * 100).toFixed(1)}%`,
+                `🌍 المخاطر الجيوسياسية: ${(data.details.geopolitics * 100).toFixed(1)}%`,
             ];
-
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
-            chartInstance = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: ["الآن", "+1", "+2", "+3", "+4", "+5", "+6"],
-                    datasets: [{
-                        label: "AI Forecast",
-                        data,
-                        borderColor: "#12d18e",
-                        backgroundColor: "rgba(18,209,142,0.16)",
-                        borderWidth: 3,
-                        tension: 0.42,
-                        fill: true
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            labels: { color: "#9fb0c8" }
-                        }
-                    },
-                    scales: {
-                        x: { ticks: { color: "#9fb0c8" } },
-                        y: { ticks: { color: "#9fb0c8" } }
-                    }
-                }
+            document.getElementById('reasonList').innerHTML = reasons.map(r => `<li>${r}</li>`).join('');
+        }
+        
+        resultsSection.style.display = 'block';
+    }
+    
+    // دالة جلب التوصية من Backend
+    async function fetchAIRec() {
+        const asset = assetSelect.value;
+        connectionStatusDiv.innerHTML = `⏳ جاري الاتصال بـ ${API_BASE_URL}/ai/recommend?asset=${asset} ...`;
+        connectionStatusDiv.style.color = "#f6b84b";
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/ai/recommend?asset=${encodeURIComponent(asset)}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
             });
-        }
-
-        async function runAnalysis() {
-            const asset = document.getElementById("assetSelect").value;
-            const period = document.getElementById("periodSelect").value;
-            const status = document.getElementById("connectionStatus");
-
-            status.textContent = "جاري الاتصال بالذكاء الاصطناعي...";
-            status.style.color = "#f6b84b";
-
-            document.body.classList.add("loading");
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/ai/recommend?asset=${encodeURIComponent(asset)}&period=${encodeURIComponent(period)}`);
-
-                if (!response.ok) {
-                    throw new Error("API error");
-                }
-
-                const data = await response.json();
-
-                const score = Number(data.score || 0);
-                const rec = data.recommendation || "HOLD";
-                const recArabic = toArabicRecommendation(rec);
-                const recColor = getColor(rec);
-                const confidence = percent(score);
-
-                document.getElementById("quickRecommendation").textContent = recArabic;
-                document.getElementById("quickRecommendation").style.color = recColor;
-
-                document.getElementById("quickConfidence").textContent = confidence + "%";
-                document.getElementById("quickTrend").textContent = trend(score);
-                document.getElementById("quickRisk").textContent = riskFromScore(score);
-
-                document.getElementById("mainRecommendation").textContent = "توصية: " + recArabic;
-                document.getElementById("mainRecommendation").style.color = recColor;
-
-                document.getElementById("analysisSummary").textContent =
-                    `تم تحليل ${asset} بناءً على الإطار: ${period === "today" ? "تحليل اليوم" : period === "week" ? "تحليل أسبوعي" : "تحليل شهري"}.`;
-
-                document.getElementById("confidenceInner").textContent = confidence + "%";
-                document.getElementById("confidenceRing").style.background =
-                    `conic-gradient(${recColor} 0deg, ${recColor} ${confidence * 3.6}deg, #1c2535 ${confidence * 3.6}deg)`;
-
-                if (data.details) {
-                    document.getElementById("openaiScore").textContent = percent(data.details.openai.score) + "%";
-                    document.getElementById("geminiScore").textContent = percent(data.details.gemini.score) + "%";
-                    document.getElementById("claudeScore").textContent = percent(data.details.claude.score) + "%";
-                    document.getElementById("sentimentScore").textContent = percent(data.details.sentiment) + "%";
-                    document.getElementById("weatherScore").textContent = percent(data.details.weather) + "%";
-                    document.getElementById("geoScore").textContent = percent(data.details.geopolitics) + "%";
-
-                    document.getElementById("reasonList").innerHTML = `
-                        <li>${data.details.openai.reasoning}</li>
-                        <li>${data.details.gemini.reasoning}</li>
-                        <li>${data.details.claude.reasoning}</li>
-                        <li>المشاعر السوقية الحالية: ${percent(data.details.sentiment)}%</li>
-                        <li>تأثير الطقس على الأصل: ${percent(data.details.weather)}%</li>
-                        <li>مؤشر المخاطر الجيوسياسية: ${percent(data.details.geopolitics)}%</li>
-                    `;
-                }
-
-                updateChart(score);
-
-                status.textContent = "متصل بمحرك ForeSmart Intelligence";
-                status.style.color = "#12d18e";
-
-            } catch (error) {
-                console.error(error);
-                status.textContent = "فشل الاتصال بمحرك الذكاء الاصطناعي";
-                status.style.color = "#ff5a67";
-
-                document.getElementById("mainRecommendation").textContent = "تعذر تشغيل التحليل";
-                document.getElementById("analysisSummary").textContent =
-                    "تأكد أن Railway يعمل وأن رابط API صحيح.";
-            } finally {
-                document.body.classList.remove("loading");
+            
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
             }
+            
+            const data = await response.json();
+            console.log("✅ البيانات المستلمة:", data);
+            
+            connectionStatusDiv.innerHTML = `✅ تم الاتصال بنجاح! آخر تحديث: ${new Date().toLocaleTimeString()}`;
+            connectionStatusDiv.style.color = "#10b981";
+            displayResults(data);
+            
+        } catch (error) {
+            console.error("❌ خطأ في الاتصال:", error);
+            connectionStatusDiv.innerHTML = `❌ فشل الاتصال: ${error.message}<br>🔍 تأكد أن الرابط صحيح: ${API_BASE_URL}/health`;
+            connectionStatusDiv.style.color = "#ff5a67";
+            resultsSection.style.display = 'none';
         }
-
-        document.addEventListener("DOMContentLoaded", runAnalysis);
-        document.getElementById("assetSelect").addEventListener("change", runAnalysis);
-        document.getElementById("periodSelect").addEventListener("change", runAnalysis);
-    </script>
+    }
+    
+    // اختبار الاتصال أولاً عند تحميل الصفحة
+    async function testConnection() {
+        connectionStatusDiv.innerHTML = `⏳ اختبار الاتصال بـ ${API_BASE_URL}/health ...`;
+        try {
+            const res = await fetch(`${API_BASE_URL}/health`);
+            if (res.ok) {
+                const data = await res.json();
+                connectionStatusDiv.innerHTML = `✅ الاتصال ناجح! الخادم يعمل (status: ${data.status})`;
+                connectionStatusDiv.style.color = "#10b981";
+                // بعد التأكد من الاتصال، نجلب التوصية تلقائياً
+                await fetchAIRec();
+            } else {
+                throw new Error("استجابة غير صحيحة");
+            }
+        } catch (err) {
+            connectionStatusDiv.innerHTML = `❌ فشل الاتصال بالخادم. الرابط: ${API_BASE_URL}/health<br>خطأ: ${err.message}`;
+            connectionStatusDiv.style.color = "#ff5a67";
+        }
+    }
+    
+    // ربط الأحداث
+    analyzeBtn.onclick = fetchAIRec;
+    
+    // بدء التشغيل: اختبار الاتصال أولاً
+    testConnection();
+</script>
 </body>
 </html>
