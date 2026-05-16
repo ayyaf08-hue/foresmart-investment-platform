@@ -8,4 +8,132 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui; }
         body { background: #0a0e17; color: #eef2ff; padding: 30px; }
         .container { max-width: 1400px; margin: 0 auto; }
-        .card { background: rgba(18, 25, 45, 0.8); border-radius: 28px; padding: 25px;
+        .card { background: rgba(18, 25, 45, 0.8); border-radius: 28px; padding: 25px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        h1, h2 { color: #10b981; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: right; padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        input, select, button { background: #1a2335; border: 1px solid #2d374b; padding: 10px 16px; border-radius: 40px; color: white; margin: 5px; }
+        button { background: #10b981; cursor: pointer; }
+        .logout-btn { background: #ff5a67; margin-top: 20px; }
+        .status-active { color: #10b981; }
+        .status-expired { color: #ff5a67; }
+        .status-trial { color: #f6b84b; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card"><h1>🔐 لوحة تحكم الأدمن</h1><p>إدارة المستخدمين والاشتراكات ورموز الدعوة</p></div>
+    
+    <div class="card"><h2>📊 إحصائيات سريعة</h2><div id="stats"></div></div>
+    
+    <div class="card"><h2>👥 قائمة المستخدمين</h2><div id="usersTable"></div></div>
+    
+    <div class="card"><h2>➕ إنشاء مستخدم جديد (رمز دعوة)</h2>
+        <input type="text" id="newEmail" placeholder="البريد الإلكتروني">
+        <input type="text" id="newName" placeholder="الاسم">
+        <select id="newPlan">
+            <option value="free_trial">تجريبي (14 يوم)</option>
+            <option value="basic">عادي - 100 ريال/شهر</option>
+            <option value="pro">برو - 200 ريال/شهر</option>
+            <option value="vip">VIP - 300 ريال/شهر</option>
+        </select>
+        <button onclick="addUserByAdmin()">إنشاء حساب وإرسال رمز دعوة</button>
+    </div>
+    
+    <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
+</div>
+
+<script src="assets/plans.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+    if (currentUser?.role !== 'admin') window.location.href = 'login.html';
+    
+    function renderStats() {
+        const usersList = getAllUsers();
+        const active = usersList.filter(u => isSubscriptionActive(u)).length;
+        const trial = usersList.filter(u => u.plan === 'free_trial').length;
+        const pro = usersList.filter(u => u.plan === 'pro').length;
+        document.getElementById('stats').innerHTML = `
+            <div class="stats-row" style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
+                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>إجمالي المستخدمين</div><div style="font-size:2rem;">${usersList.length}</div></div>
+                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>اشتراكات نشطة</div><div style="font-size:2rem;">${active}</div></div>
+                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>فترة تجريبية</div><div style="font-size:2rem;">${trial}</div></div>
+                <div class="stat-box" style="background:#1a2335; padding:15px; border-radius:20px;"><div>مشتركين Pro/VIP</div><div style="font-size:2rem;">${pro}</div></div>
+            </div>
+        `;
+    }
+    
+    function renderUsers() {
+        const usersList = getAllUsers();
+        let html = '<table><tr><th>البريد الإلكتروني</th><th>الاسم</th><th>الخطة</th><th>تاريخ الانتهاء</th><th>الحالة</th><th>إجراءات</th></tr>';
+        for (let user of usersList) {
+            const isActive = isSubscriptionActive(user);
+            const endDate = new Date(user.subscription_end).toLocaleDateString('ar-EG');
+            html += `
+                <tr>
+                    <td>${user.email}</td>
+                    <td>${user.name}</td>
+                    <td>${PLANS[user.plan]?.name || user.plan}</td>
+                    <td>${endDate}</td>
+                    <td class="${isActive ? 'status-active' : 'status-expired'}">${isActive ? 'نشط' : 'منتهي'}</td>
+                    <td><button onclick="extendSubscription('${user.email}')">تمديد 30 يوم</button> <button onclick="changeUserPlan('${user.email}')">تغيير الخطة</button></td>
+                </tr>
+            `;
+        }
+        html += '</table>';
+        document.getElementById('usersTable').innerHTML = html;
+    }
+    
+    function addUserByAdmin() {
+        const email = document.getElementById('newEmail').value;
+        const name = document.getElementById('newName').value;
+        const plan = document.getElementById('newPlan').value;
+        
+        if (!email || !name) {
+            alert('يرجى إدخال البريد الإلكتروني والاسم');
+            return;
+        }
+        
+        const result = register(email, 'Temp@123456', name);
+        if (result.success) {
+            // تحديث الخطة إذا لم تكن تجريبية
+            if (plan !== 'free_trial') {
+                upgradeSubscription(email, plan, 'monthly');
+            }
+            alert(`تم إنشاء حساب للمستخدم ${name}. يمكنه الدخول بكلمة المرور المؤقتة: Temp@123456`);
+            renderUsers();
+            renderStats();
+        } else {
+            alert(result.error);
+        }
+    }
+    
+    function extendSubscription(email) {
+        const user = users[email];
+        if (user) {
+            const newEnd = new Date(user.subscription_end);
+            newEnd.setDate(newEnd.getDate() + 30);
+            user.subscription_end = newEnd.toISOString();
+            users[email] = user;
+            localStorage.setItem('fs_users', JSON.stringify(users));
+            renderUsers();
+            renderStats();
+            alert(`تم تمديد اشتراك ${user.name} لمدة 30 يوم`);
+        }
+    }
+    
+    function changeUserPlan(email) {
+        const newPlan = prompt('اختر الخطة الجديدة (basic, pro, vip, free_trial):');
+        if (newPlan && PLANS[newPlan]) {
+            upgradeSubscription(email, newPlan, 'monthly');
+            renderUsers();
+            renderStats();
+            alert(`تم تغيير خطة المستخدم إلى ${PLANS[newPlan].name}`);
+        }
+    }
+    
+    renderStats();
+    renderUsers();
+</script>
+</body>
+</html>
