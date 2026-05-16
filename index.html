@@ -9,7 +9,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, 'Cairo', sans-serif; }
         body { background: #0a0e17; color: #eef2ff; overflow-x: hidden; }
         .dashboard { display: flex; min-height: 100vh; }
-        /* القائمة الجانبية */
         .sidebar {
             width: 280px; background: linear-gradient(180deg, #0c1220, #060a12);
             border-left: 1px solid rgba(255,255,255,0.05); padding: 25px 12px;
@@ -17,10 +16,10 @@
         }
         .logo { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .logo h1 { color: #10b981; font-size: 1.8rem; }
-        .logo p { font-size: 0.75rem; color: #7c88a8; margin-top: 5px; }
         .user-info { background: rgba(16,185,129,0.1); border-radius: 20px; padding: 15px; margin-bottom: 25px; text-align: center; }
-        .user-info .name { font-weight: bold; font-size: 1rem; }
-        .user-info .badge { background: #10b981; font-size: 0.7rem; padding: 3px 8px; border-radius: 30px; display: inline-block; margin-top: 8px; }
+        .user-info .name { font-weight: bold; }
+        .subscription-badge { background: #10b981; font-size: 0.7rem; padding: 3px 8px; border-radius: 30px; display: inline-block; margin-top: 8px; }
+        .trial-warning { background: rgba(255,90,103,0.2); color: #ff5a67; border-radius: 16px; padding: 10px; margin-bottom: 20px; text-align: center; font-size: 0.8rem; }
         .logout-btn { background: rgba(255,90,103,0.2); color: #ff5a67; border: none; width: 100%; padding: 10px; border-radius: 40px; cursor: pointer; margin-top: 20px; font-weight: bold; }
         .nav-menu { list-style: none; margin-top: 20px; }
         .nav-menu li { margin-bottom: 6px; }
@@ -29,7 +28,7 @@
             color: #b9c3e0; text-decoration: none; border-radius: 12px; transition: 0.2s;
         }
         .nav-menu a:hover, .nav-menu .active a { background: rgba(16, 185, 129, 0.12); color: #10b981; }
-        /* المحتوى الرئيسي */
+        .nav-menu a.disabled { opacity: 0.4; pointer-events: none; }
         .main-content { flex: 1; margin-right: 280px; padding: 20px 30px; }
         .section { display: none; }
         .active-section { display: block; }
@@ -37,15 +36,15 @@
         .stat-box { background: rgba(18, 25, 45, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 18px 20px; }
         .stat-number { font-size: 1.8rem; font-weight: bold; color: white; }
         .positive { color: #10b981; }
-        .negative { color: #ff5a67; }
         .assets-panel, .chart-panel, .ai-advisor, .card-panel {
             background: rgba(18, 25, 45, 0.7); border-radius: 24px; padding: 20px;
             border: 1px solid rgba(255,255,255,0.08); margin-bottom: 25px;
         }
         .asset-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
         canvas { max-height: 250px; width: 100%; }
-        input, select, button { background: #1a2335; border: 1px solid #2d374b; padding: 10px 16px; border-radius: 40px; color: white; margin: 5px; }
-        button { background: #10b981; border: none; cursor: pointer; font-weight: bold; }
+        .upgrade-btn { background: #10b981; padding: 12px 24px; border-radius: 40px; border: none; color: white; cursor: pointer; margin-top: 15px; }
+        .feature-locked { opacity: 0.5; pointer-events: none; position: relative; }
+        .feature-locked::after { content: "🔒"; position: absolute; left: 10px; top: 10px; }
         @media (max-width: 900px) { .sidebar { width: 100%; position: relative; } .main-content { margin-right: 0; } }
     </style>
 </head>
@@ -54,35 +53,111 @@
     <aside class="sidebar">
         <div class="logo"><h1>ForeSmart</h1><p>منصة استثمار ذكية</p></div>
         <div class="user-info" id="userInfo"></div>
+        <div id="trialWarning" class="trial-warning" style="display: none;"></div>
         <ul class="nav-menu" id="navMenu">
             <li data-section="dashboard"><a href="#">📊 لوحة التحكم</a></li>
             <li data-section="markets"><a href="#">🌍 الأسواق</a></li>
             <li data-section="ai"><a href="#">🧠 المستشار الذكي</a></li>
             <li data-section="simulator"><a href="#">🎮 محاكي التداول</a></li>
             <li data-section="portfolio"><a href="#">💼 المحفظة</a></li>
-            <li data-section="subscription"><a href="#">⭐ الاشتراك</a></li>
+            <li data-section="subscription"><a href="#">⭐ الاشتراك والخطط</a></li>
             <li data-section="banks"><a href="#">🏛️ البنوك</a></li>
-            <li data-section="growth"><a href="#">📈 خطة النمو</a></li>
+            <li data-section="upgrade"><a href="#" id="upgradeLink">🚀 ترقية الاشتراك</a></li>
         </ul>
         <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
     </aside>
-    <main class="main-content" id="mainContent">
-        <div id="dashboard" class="section active-section"><div class="stats-row" id="statsRow"></div><div class="assets-panel"><h3>⚡ أبرز الأصول</h3><div id="topAssets"></div></div><div class="chart-panel"><canvas id="btcChart"></canvas></div></div>
+    <main class="main-content">
+        <div id="dashboard" class="section active-section">
+            <div class="stats-row" id="statsRow"></div>
+            <div class="assets-panel"><h3>⚡ أبرز الأصول</h3><div id="topAssets"></div></div>
+            <div class="chart-panel"><canvas id="btcChart"></canvas></div>
+        </div>
         <div id="markets" class="section"><h2>🌍 الأسواق العالمية</h2><div id="fullMarketTable" class="assets-panel"></div></div>
-        <div id="ai" class="section"><h2>🧠 المستشار الذكي</h2><div class="ai-advisor" id="aiPanel">جاري تحميل التحليل...</div></div>
-        <div id="simulator" class="section"><h2>🎮 محاكي التداول</h2><div class="card-panel"><label>الأصل: <select id="simAsset"><option>Bitcoin</option><option>Ethereum</option><option>Gold</option></select></label><label>الكمية: <input type="number" id="simQty" value="0.01"></label><button id="simBuy">شراء وهمي</button><button id="simSell">بيع وهمي</button><p id="simResult"></p></div></div>
-        <div id="portfolio" class="section"><h2>💼 محفظتي</h2><div class="card-panel" id="portfolioDisplay">رصيد المحفظة: 10,000 ريال (وهمي)</div></div>
-        <div id="subscription" class="section"><h2>⭐ الاشتراك</h2><div class="card-panel">الباقة الحالية: Pro | يدعم Moyasar قريباً</div></div>
-        <div id="banks" class="section"><h2>🏛️ البنوك والتحويلات</h2><div class="card-panel">🔹 ربط مع Moyasar (قريباً) | 🔹 تحويل بنكي محلي | 🔹 بطاقات مدى وفيزا</div></div>
-        <div id="growth" class="section"><h2>📈 خطة النمو</h2><div class="card-panel">تحليل الذكاء الاصطناعي يوصي بزيادة التعرض للذهب وتقليل العملات الرقمية عالية التقلب.</div></div>
+        <div id="ai" class="section"><h2>🧠 المستشار الذكي</h2><div class="ai-advisor" id="aiPanel"></div></div>
+        <div id="simulator" class="section"><h2>🎮 محاكي التداول</h2><div class="card-panel" id="simulatorPanel"></div></div>
+        <div id="portfolio" class="section"><h2>💼 محفظتي</h2><div class="card-panel" id="portfolioPanel"></div></div>
+        <div id="subscription" class="section"><h2>⭐ خطط الاشتراك</h2><div class="card-panel" id="plansPanel"></div></div>
+        <div id="banks" class="section"><h2>🏛️ البنوك والتحويلات</h2><div class="card-panel" id="banksPanel"></div></div>
+        <div id="upgrade" class="section"><h2>🚀 ترقية الاشتراك</h2><div class="card-panel" id="upgradePanel"></div></div>
     </main>
 </div>
+
+<script src="assets/plans.js"></script>
+<script src="assets/auth.js"></script>
 <script>
     const API_AI = "https://foresmart-intelligence-backend-production.up.railway.app";
-    const user = JSON.parse(localStorage.getItem('fs_user') || '{}');
-    if (!user.code) window.location.href = 'login.html';
-    document.getElementById('userInfo').innerHTML = `<div class="name">👋 مرحباً ${user.name}</div><div class="badge">${user.type === 'admin' ? 'مدير النظام' : 'عميل معتمد'}</div>`;
-    function logout() { localStorage.removeItem('fs_user'); window.location.href = 'login.html'; }
+    let currentUserData = currentUser;
+    
+    if (!currentUserData) window.location.href = 'login.html';
+    
+    // عرض معلومات المستخدم
+    const userPlan = getUserPlan(currentUserData);
+    const subscriptionStatus = checkSubscriptionStatus();
+    
+    document.getElementById('userInfo').innerHTML = `
+        <div class="name">👋 مرحباً ${currentUserData.name}</div>
+        <div class="subscription-badge">${userPlan.name}</div>
+        <div style="font-size:0.7rem; margin-top:5px;">${subscriptionStatus.expired ? 'انتهت الفترة التجريبية' : subscriptionStatus.daysLeft + ' يوم متبقي'}</div>
+    `;
+    
+    if (subscriptionStatus.expired && currentUserData.plan === 'free_trial') {
+        document.getElementById('trialWarning').style.display = 'block';
+        document.getElementById('trialWarning').innerHTML = '⚠️ انتهت الفترة التجريبية. يرجى الاشتراك في إحدى الباقات للاستمرار في استخدام المنصة.';
+    }
+    
+    // تقييد المميزات بناءً على الخطة
+    function applyFeatureRestrictions() {
+        const hasAdvancedMarkets = hasFeature(currentUserData, 'advanced_markets');
+        const hasBankIntegration = hasFeature(currentUserData, 'bank_integration');
+        const hasAPIAccess = hasFeature(currentUserData, 'api_access');
+        const maxPortfolio = userPlan.features.max_portfolio_size;
+        
+        if (!hasAdvancedMarkets) {
+            document.querySelector('[data-section="markets"] a').classList.add('disabled');
+        }
+        if (!hasBankIntegration) {
+            document.querySelector('[data-section="banks"] a').classList.add('disabled');
+            document.getElementById('banksPanel').innerHTML = '<div class="asset-row">🔒 هذه الميزة متاحة فقط لمشتركي Pro و VIP.<br><a href="#" onclick="showUpgrade()">قم بترقية اشتراكك</a></div>';
+        }
+        
+        document.getElementById('portfolioPanel').innerHTML = `<div class="asset-row">💰 رصيد المحفظة: 10,000 ريال (وهمي)<br>📊 الحد الأقصى للأصول: ${maxPortfolio === 999 ? 'غير محدود' : maxPortfolio}</div>`;
+    }
+    
+    // عرض خطط الاشتراك
+    function renderPlans() {
+        let html = '<div class="stats-row">';
+        for (const [key, plan] of Object.entries(PLANS)) {
+            if (key === 'free_trial') continue;
+            html += `
+                <div class="stat-box">
+                    <h3>${plan.name}</h3>
+                    <div class="stat-number">${plan.price_monthly} ريال</div>
+                    <div>شهرياً</div>
+                    <div style="margin-top:10px;">أو ${plan.price_yearly} ريال سنوياً</div>
+                    <button class="upgrade-btn" onclick="upgradeTo('${key}')">اشتراك</button>
+                </div>
+            `;
+        }
+        html += '</div>';
+        document.getElementById('plansPanel').innerHTML = html;
+        document.getElementById('upgradePanel').innerHTML = html;
+    }
+    
+    function upgradeTo(plan) {
+        if (confirm(`هل تريد الترقية إلى خطة ${PLANS[plan].name}؟`)) {
+            const result = upgradeSubscription(currentUserData.email, plan, 'monthly');
+            if (result.success) {
+                alert(`تم الترقية بنجاح. المبلغ: ${result.price} ريال. سيتم ربط بوابة الدفع قريباً.`);
+                window.location.reload();
+            }
+        }
+    }
+    
+    function showUpgrade() {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+        document.getElementById('upgrade').classList.add('active-section');
+    }
+    
     // الأسواق الحية
     async function fetchPrices() {
         try {
@@ -93,33 +168,39 @@
             new Chart(document.getElementById('btcChart'), { type: 'line', data: { labels: ['10:00','12:00','14:00','16:00','18:00','20:00'], datasets: [{ label: 'BTC/USD', data: [btc.price-300, btc.price-100, btc.price+50, btc.price+80, btc.price+120, btc.price], borderColor: '#10b981', fill: true }] } });
         } catch(e) { console.warn(e); }
     }
+    
     async function loadAI() {
         try {
             let res = await fetch(`${API_AI}/ai/recommend?asset=Bitcoin`);
             let data = await res.json();
-            document.getElementById('aiPanel').innerHTML = `<div class="flex-between"><span>🤖 التوصية: ${data.recommendation === "BUY" ? "شراء ✅" : data.recommendation === "SELL" ? "بيع 🔴" : "احتفاظ ⏸️"}</span><span>🎯 الثقة: ${(data.score*100).toFixed(1)}%</span></div><div class="asset-row">الأسباب: تحليل متعدد النماذج (OpenAI, Gemini, طقس, جيوسياسي)</div>`;
-        } catch(e) { document.getElementById('aiPanel').innerHTML = "✅ الذكاء الاصطناعي جاهز (تأكد من اتصال Railway)"; }
+            document.getElementById('aiPanel').innerHTML = `<div><span>🤖 التوصية: ${data.recommendation === "BUY" ? "شراء ✅" : data.recommendation === "SELL" ? "بيع 🔴" : "احتفاظ ⏸️"}</span><span>🎯 الثقة: ${(data.score*100).toFixed(1)}%</span></div><div class="asset-row">تحليل متعدد النماذج (OpenAI, Gemini, طقس, جيوسياسي)</div>`;
+        } catch(e) { document.getElementById('aiPanel').innerHTML = "✅ الذكاء الاصطناعي جاهز"; }
     }
+    
     async function fetchMarkets() {
         let data = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=8&page=1').then(r=>r.json());
         document.getElementById('fullMarketTable').innerHTML = `<div class="asset-row"><span>العملة</span><span>السعر</span><span>التغير 24h</span></div>` + data.map(c=>`<div class="asset-row"><span>${c.name}</span><span>$${c.current_price}</span><span class="${c.price_change_percentage_24h>0?'positive':'negative'}">${c.price_change_percentage_24h?.toFixed(2)}%</span></div>`).join('');
     }
-    // محاكي التداول
-    document.getElementById('simBuy')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = `✅ تم شراء ${document.getElementById('simQty').value} من ${document.getElementById('simAsset').value} (محاكاة)`; });
-    document.getElementById('simSell')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = `🔴 تم بيع ${document.getElementById('simQty').value} من ${document.getElementById('simAsset').value} (محاكاة)`; });
+    
     // التنقل بين الأقسام
     const sections = document.querySelectorAll('.section');
     document.querySelectorAll('#navMenu li').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const sectionId = link.getAttribute('data-section');
+            if (link.querySelector('a')?.classList.contains('disabled')) return;
             sections.forEach(sec => sec.classList.remove('active-section'));
             document.getElementById(sectionId).classList.add('active-section');
             if(sectionId === 'markets') fetchMarkets();
             if(sectionId === 'ai') loadAI();
         });
     });
-    fetchPrices(); loadAI();
+    
+    fetchPrices(); loadAI(); renderPlans(); applyFeatureRestrictions();
+    document.getElementById('simulatorPanel').innerHTML = `<label>الأصل: <select id="simAsset"><option>Bitcoin</option><option>Ethereum</option><option>Gold</option></select></label><label>الكمية: <input type="number" id="simQty" value="0.01"></label><button id="simBuy">شراء وهمي</button><button id="simSell">بيع وهمي</button><p id="simResult"></p>`;
+    document.getElementById('simBuy')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = `✅ تم شراء ${document.getElementById('simQty').value} من ${document.getElementById('simAsset').value} (محاكاة)`; });
+    document.getElementById('simSell')?.addEventListener('click',()=>{ document.getElementById('simResult').innerHTML = `🔴 تم بيع ${document.getElementById('simQty').value} من ${document.getElementById('simAsset').value} (محاكاة)`; });
+    document.getElementById('upgradeLink')?.addEventListener('click', (e) => { e.preventDefault(); showUpgrade(); });
 </script>
 </body>
 </html>
