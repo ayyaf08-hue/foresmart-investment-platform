@@ -299,7 +299,7 @@
                 </tr>`;
             });
             
-            html += `</tbody></tr></div>`;
+            html += `</tbody></table></div>`;
             contentArea.innerHTML = html;
             
         } catch (error) {
@@ -335,7 +335,7 @@
                 return;
             }
             
-            let html = `<div class="table-container"><table><thead><tr><th>الشركة</th><th>القطاع</th><th>السعر</th><th>درجة الفرصة</th><th>التوصية</th><th>الأسباب</th></tr></thead><tbody>`;
+            let html = `<div class="table-container"><tr><thead><tr><th>الشركة</th><th>القطاع</th><th>السعر</th><th>درجة الفرصة</th><th>التوصية</th><th>الأسباب</th></tr></thead><tbody>`;
             
             opportunities.slice(0, 15).forEach(opp => {
                 html += `<tr>
@@ -465,7 +465,7 @@
                     </tr>`;
                 });
                 
-                html += `</tbody><tr></div>`;
+                html += `</tbody></table></div>`;
                 contentArea.innerHTML = html;
             } catch (error) {
                 contentArea.innerHTML = '<div class="error-state">❌ خطأ في تحميل الأرشيف</div>';
@@ -485,7 +485,7 @@
         }
         
         let totalValue = 0;
-        let html = `<div class="table-container"><table><thead><tr><th>الأصل</th><th>النوع</th><th>الكمية</th><th>سعر الشراء</th><th>القيمة</th><th>التاريخ</th></tr></thead><tbody>`;
+        let html = `<div class="table-container"></table><thead><tr><th>الأصل</th><th>النوع</th><th>الكمية</th><th>سعر الشراء</th><th>القيمة</th><th>التاريخ</th></tr></thead><tbody>`;
         
         userPortfolio.forEach(trade => {
             totalValue += trade.amount * trade.price;
@@ -579,4 +579,4 @@
                 📊 اتجاه السوق: ${data.indicators?.sma_20 > data.indicators?.sma_50 ? 'صاعد' : 'متذبذب'}
             `;
         } catch (error) {
-            document.getElementById('aiAdvice').innerHTML = '🤖 الذكاء الاصطناعي جاهز - يوصى بتنويع الاستث
+            document.getElementById
