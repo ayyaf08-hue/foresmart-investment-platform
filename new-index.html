@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForeSmart | منصة التداول</title>
+    <style>
+        body { margin: 0; background: #0a0e17; font-family: 'Segoe UI', Tahoma, sans-serif; color: white; padding: 20px; }
+        .chart-box { background: #0f1420; border-radius: 20px; overflow: hidden; height: 550px; margin-bottom: 20px; }
+        .footer { text-align: center; margin-top: 20px; color: #8e9aaf; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <h1 style="color:#10b981; margin-bottom:10px;">ForeSmart</h1>
+    <p style="margin-bottom:20px;">تحليلات لحظية - شارت احترافي متكامل</p>
+
+    <!-- TradingView Widget -->
+    <div class="chart-box">
+        <div class="tradingview-widget-container" style="height:100%;">
+            <div id="tradingview_chart" style="height:100%;"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        ⚡ بيانات فورية بواسطة TradingView | © 2026 ForeSmart
+    </div>
+
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+        new TradingView.widget({
+            "width": "100%",
+            "height": "100%",
+            "symbol": "BITSTAMP:BTCUSD",
+            "interval": "60",
+            "timezone": "Asia/Riyadh",
+            "theme": "dark",
+            "style": "1",
+            "locale": "ar",
+            "toolbar_bg": "#0a0e17",
+            "enable_publishing": false,
+            "container_id": "tradingview_chart"
+        });
+    </script>
+</body>
+</html>
