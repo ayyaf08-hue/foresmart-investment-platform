@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ForeSmart | منصة التداول الذكية</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0e17;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #eef2ff;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: rgba(12,18,32,0.9);
+            backdrop-filter: blur(12px);
+            padding: 15px 25px;
+            border-radius: 28px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+        .logo h1 { color: #10b981; font-size: 1.6rem; }
+        .logo p { font-size: 0.7rem; color: #8e9aaf; }
+        .live-time { background: #1a2335; padding: 6px 14px; border-radius: 30px; font-size: 0.7rem; font-family: monospace; }
+        .chart-container {
+            background: #0f1420;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            height: 550px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.7rem;
+            color: #5f6e8c;
+            border-top: 1px solid #1f2a3e;
+            padding-top: 20px;
+        }
+        @media (max-width: 700px) {
+            body { padding: 12px; }
+            .header { flex-direction: column; text-align: center; gap: 10px; }
+            .chart-container { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <h1>ForeSmart</h1>
+            <p>تحليلات فورية • تداول ذكي</p>
+        </div>
+        <div class="live-time" id="liveTime">🕒 --:--:--</div>
+    </div>
+
+    <!-- شارت TradingView الاحترافي -->
+    <div class="chart-container">
+        <div class="tradingview-widget-container" style="height:100%;">
+            <div id="tradingview_chart" style="height:100%;"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        ⚡ بيانات فورية بواسطة TradingView | © 2026 ForeSmart Investment Corporation
+    </div>
+</div>
+
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script type="text/javascript">
+    // شارت TradingView
+    new TradingView.widget({
+        "width": "100%",
+        "height": "100%",
+        "symbol": "BITSTAMP:BTCUSD",
+        "interval": "60",
+        "timezone": "Asia/Riyadh",
+        "theme": "dark",
+        "style": "1",
+        "locale": "ar",
+        "toolbar_bg": "#0a0e17",
+        "enable_publishing": false,
+        "container_id": "tradingview_chart"
+    });
+
+    // ساعة حية
+    function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('ar-SA', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        document.getElementById('liveTime').innerText = `🕒 ${timeStr}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+</body>
+</html>
