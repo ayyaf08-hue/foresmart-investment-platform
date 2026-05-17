@@ -1,23 +1,332 @@
-<!-- TradingView Widget BEGIN -->
-<div class="tradingview-widget-container">
-  <div id="tradingview_abcde"></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-  <script type="text/javascript">
-    new TradingView.widget({
-      "width": "100%",
-      "height": 610,
-      "symbol": "BITSTAMP:BTCUSD",
-      "interval": "60",
-      "timezone": "Asia/Riyadh",
-      "theme": "dark",
-      "style": "1",
-      "locale": "ar",
-      "toolbar_bg": "#0a0e17",
-      "enable_publishing": false,
-      "hide_top_toolbar": false,
-      "save_image": false,
-      "container_id": "tradingview_abcde"
-    });
-  </script>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForeSmart - منصة الاستثمار الذكية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0e17;
+            color: #eef2ff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* القائمة الجانبية */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 260px;
+            height: 100%;
+            background: #0f1420;
+            padding: 25px;
+            overflow-y: auto;
+            border-right: 1px solid #1f2a3e;
+        }
+
+        .logo h2 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .nav-links li {
+            margin: 15px 0;
+        }
+
+        .nav-links a {
+            color: #8e9aaf;
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover, .nav-links .active {
+            color: #10b981;
+        }
+
+        /* المحتوى الرئيسي */
+        .main-content {
+            margin-right: 280px;
+            padding: 20px;
+        }
+
+        /* بطاقات الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #1a2335;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #10b981;
+            margin: 10px 0;
+        }
+
+        .positive {
+            color: #10b981;
+        }
+
+        .negative {
+            color: #ff5a67;
+        }
+
+        /* الشارت والجداول */
+        .chart-container {
+            background: #1a2335;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            height: 400px;
+        }
+
+        .markets-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a2335;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .markets-table th, .markets-table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #2d374b;
+        }
+
+        .markets-table th {
+            background: #0f1420;
+            color: #10b981;
+        }
+
+        .btn {
+            background: #10b981;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #5f6e8c;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            .main-content {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <h2>ForeSmart</h2>
+        <p>منصة استثمار ذكية</p>
+    </div>
+    <ul class="nav-links">
+        <li><a href="#" class="active" data-section="dashboard">📊 لوحة التحكم</a></li>
+        <li><a href="#" data-section="markets">🌍 الأسواق</a></li>
+        <li><a href="#" data-section="portfolio">💼 محفظتي</a></li>
+        <li><a href="#" data-section="ai">🧠 المستشار الذكي</a></li>
+        <li><a href="#" data-section="settings">⚙️ الإعدادات</a></li>
+    </ul>
 </div>
-<!-- TradingView Widget END -->
+
+<div class="main-content">
+    <div id="dashboardSection">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>💰 إجمالي المحفظة</div>
+                <div class="stat-value">124,500 ريال</div>
+                <div class="positive">▲ +12.5%</div>
+            </div>
+            <div class="stat-card">
+                <div>📈 أرباح اليوم</div>
+                <div class="stat-value">+2.45%</div>
+                <div class="positive">▲ +312 ريال</div>
+            </div>
+            <div class="stat-card">
+                <div>🔄 الصفقات النشطة</div>
+                <div class="stat-value">7</div>
+                <div>4 مربحة</div>
+            </div>
+            <div class="stat-card">
+                <div>⭐ الباقة الحالية</div>
+                <div class="stat-value">Pro</div>
+                <div>يجدد بعد 20 يوم</div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="portfolioChart"></canvas>
+        </div>
+    </div>
+
+    <div id="marketsSection" style="display: none;">
+        <table class="markets-table">
+            <thead>
+                <tr><th>الشركة</th><th>السعر</th><th>التغير</th><th></th></tr>
+            </thead>
+            <tbody id="marketsTableBody"></tbody>
+        </table>
+    </div>
+
+    <div id="portfolioSection" style="display: none;">
+        <div id="portfolioList">جاري تحميل محفظتك...</div>
+    </div>
+
+    <div id="aiSection" style="display: none;">
+        <div class="stat-card" style="text-align: right;">
+            <h3>🤖 توصية الذكاء الاصطناعي</h3>
+            <p id="aiRecommendation">جاري تحليل السوق...</p>
+        </div>
+    </div>
+
+    <div id="settingsSection" style="display: none;">
+        <div class="stat-card" style="text-align: right;">
+            <h3>⚙️ إعدادات الحساب</h3>
+            <p>سيتم إضافة إعدادات المستخدم قريباً</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 ForeSmart Investment Corporation | البيانات تحليلية وليست توصية مالية ملزمة
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // بيانات وهمية للأسواق
+    const marketsData = [
+        { name: "Bitcoin", price: 64213, change: 2.3 },
+        { name: "Ethereum", price: 3482, change: 1.1 },
+        { name: "Solana", price: 142, change: -0.5 },
+        { name: "BNB", price: 612, change: 0.8 },
+        { name: "الذهب", price: 2345, change: 0.42 },
+        { name: "الفضة", price: 28.15, change: 0.35 }
+    ];
+
+    // عرض الأسواق
+    const marketsBody = document.getElementById('marketsTableBody');
+    marketsData.forEach(m => {
+        const row = marketsBody.insertRow();
+        row.insertCell(0).innerHTML = m.name;
+        row.insertCell(1).innerHTML = `$${m.price.toLocaleString()}`;
+        row.insertCell(2).innerHTML = `<span class="${m.change >= 0 ? 'positive' : 'negative'}">${m.change >= 0 ? '▲' : '▼'} ${Math.abs(m.change)}%</span>`;
+        row.insertCell(3).innerHTML = `<button class="btn" onclick="alert('تداول ${m.name}')">تداول</button>`;
+    });
+
+    // الرسم البياني
+    const ctx = document.getElementById('portfolioChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+            datasets: [{
+                label: 'عائد المحفظة',
+                data: [5, 8, 7, 12, 15, 18],
+                borderColor: '#10b981',
+                tension: 0.3,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { color: '#eef2ff' } }
+            }
+        }
+    });
+
+    // التنقل بين الأقسام
+    const sections = {
+        dashboard: document.getElementById('dashboardSection'),
+        markets: document.getElementById('marketsSection'),
+        portfolio: document.getElementById('portfolioSection'),
+        ai: document.getElementById('aiSection'),
+        settings: document.getElementById('settingsSection')
+    };
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.dataset.section;
+            Object.values(sections).forEach(s => s.style.display = 'none');
+            sections[section].style.display = 'block';
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
+    });
+
+    // محاكاة المحفظة والذكاء الاصطناعي
+    const portfolioList = document.getElementById('portfolioList');
+    const userPortfolio = JSON.parse(localStorage.getItem('fs_portfolio') || '[]');
+    if (userPortfolio.length === 0) {
+        portfolioList.innerHTML = '<div class="stat-card">📭 لا توجد أصول في محفظتك. قم بشراء أصول من قسم الأسواق.</div>';
+    } else {
+        let html = '<div class="stats-grid">';
+        userPortfolio.forEach(trade => {
+            html += `
+                <div class="stat-card">
+                    <div>${trade.asset}</div>
+                    <div class="stat-value">${trade.qty} وحدة</div>
+                    <div>سعر الشراء: ${trade.price}</div>
+                    <div class="positive">القيمة: ${(trade.qty * trade.price).toLocaleString()} ريال</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        portfolioList.innerHTML = html;
+    }
+
+    // توصية AI
+    const aiRecommendation = document.getElementById('aiRecommendation');
+    const rsi = (Math.random() * 100).toFixed(1);
+    if (rsi > 70) {
+        aiRecommendation.innerHTML = `⚠️ مؤشر القوة النسبية (RSI) عند ${rsi} - منطقة ذروة شراء. ينصح بتقليل المراكز وجني الأرباح.`;
+    } else if (rsi < 30) {
+        aiRecommendation.innerHTML = `📈 مؤشر القوة النسبية (RSI) عند ${rsi} - منطقة ذروة بيع. ينصح بالدخول تدريجياً.`;
+    } else {
+        aiRecommendation.innerHTML = `➖ مؤشر القوة النسبية (RSI) عند ${rsi} - منطقة محايدة. ينصح بالمتابعة والصبر.`;
+    }
+</script>
+</body>
+</html>
